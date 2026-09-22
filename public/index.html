@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bingo Master Pro</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f3f0;
+  --surface: #ffffff;
+  --surface-alt: #faf9f7;
+  --surface-glass: rgba(255,255,255,0.7);
+  --primary: #2d2a6e;
+  --primary-mid: #4940a0;
+  --primary-light: #eeedfc;
+  --primary-glow: rgba(73,64,160,0.15);
+  --gold: #c9952d;
+  --gold-light: #fdf6e3;
+  --gold-dark: #9a7320;
+  --accent-rose: #c44569;
+  --accent-teal: #0d9488;
+  --accent-sky: #2563eb;
+  --danger: #dc2626;
+  --danger-light: #fef2f2;
+  --success: #16a34a;
+  --success-light: #f0fdf4;
+  --text: #1a1a2e;
+  --text-secondary: #555568;
+  --text-muted: #8e8ea0;
+  --border: #e4e2de;
+  --border-strong: #d0cec8;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.12);
+  --shadow-glow: 0 0 40px rgba(73,64,160,0.12);
+  /* Bingo column colors */
+  --col-b: #2563eb;
+  --col-i: #dc2626;
+  --col-n: #ca8a04;
+  --col-g: #16a34a;
+  --col-o: #7c3aed;
+}
+[data-theme="dark"] {
+  --bg: #0c0a1a;
+  --surface: #16142a;
+  --surface-alt: #1c1a32;
+  --surface-glass: rgba(22,20,42,0.85);
+  --primary: #a5a0f3;
+  --primary-mid: #7b74d4;
+  --primary-light: #1e1b3a;
+  --primary-glow: rgba(165,160,243,0.1);
+  --gold: #eab308;
+  --gold-light: #1c1a05;
+  --gold-dark: #fbbf24;
+  --accent-rose: #fb7185;
+  --accent-teal: #2dd4bf;
+  --accent-sky: #60a5fa;
+  --danger: #f87171;
+  --danger-light: #1f0a0a;
+  --success: #4ade80;
+  --success-light: #052e16;
+  --text: #eeeef2;
+  --text-secondary: #a0a0b8;
+  --text-muted: #6b6b82;
+  --border: #2a283e;
+  --border-strong: #3a384e;
+  --shadow: 0 1px 3px rgba(0,0,0,0.4);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.5);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.6);
+  --shadow-glow: 0 0 60px rgba(165,160,243,0.08);
+  --col-b: #60a5fa; --col-i: #f87171; --col-n: #fbbf24; --col-g: #4ade80; --col-o: #a78bfa;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0)}
+.display{font-family:'Outfit','DM Sans',sans-serif}
+
+/* ===== HEADER ===== */
+.header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:env(safe-area-inset-top,0);z-index:100;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-mark{width:42px;height:42px;background:linear-gradient(135deg,var(--primary),var(--primary-mid));border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:800;letter-spacing:-1px;box-shadow:0 2px 8px rgba(45,42,110,0.25)}
+.logo h1{font-family:'Outfit',sans-serif;font-size:20px;font-weight:700;background:linear-gradient(135deg,var(--primary),var(--primary-mid));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.logo h1 span{font-weight:400;opacity:0.6;-webkit-text-fill-color:var(--text-muted);font-size:14px;margin-left:4px}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:38px;height:38px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface-alt);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:17px;transition:all 0.2s}
+.theme-toggle:hover{border-color:var(--border-strong);background:var(--surface)}
+
+/* ===== NAV ===== */
+.nav{display:flex;background:var(--surface);border-bottom:1px solid var(--border);padding:0 28px;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:2px}
+.nav-tab{padding:14px 18px;font-size:14px;font-weight:500;color:var(--text-muted);border:none;background:none;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.2s;letter-spacing:-0.01em}
+.nav-tab:hover{color:var(--text)}
+.nav-tab.active{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
+
+/* ===== LAYOUT ===== */
+.main{max-width:1100px;margin:0 auto;padding:28px}
+.page{display:none}.page.active{display:block}
+
+/* ===== PANELS ===== */
+.panel{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);padding:28px;margin-bottom:24px}
+.panel-title{font-size:15px;font-weight:600;margin-bottom:18px;display:flex;align-items:center;gap:8px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;font-family:'Outfit',sans-serif}
+.panel-title .icon{width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:14px}
+.icon-purple{background:var(--primary-light);color:var(--primary)}
+.icon-gold{background:var(--gold-light);color:var(--gold)}
+.icon-teal{background:#ccfbf1;color:var(--accent-teal)}
+[data-theme="dark"] .icon-teal{background:#042f2e}
+
+/* ===== FORM ===== */
+.form-row{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:14px;align-items:end}
+.field{display:flex;flex-direction:column;gap:5px;flex:1;min-width:130px}
+.field label{font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em}
+input,select,textarea{padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:inherit;background:var(--surface-alt);color:var(--text);transition:all 0.2s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary-mid);box-shadow:0 0 0 3px var(--primary-glow)}
+textarea{resize:vertical;min-height:80px}
+input[type="checkbox"]{width:16px;height:16px;accent-color:var(--primary-mid)}
+
+/* ===== BUTTONS ===== */
+.btn{padding:10px 20px;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:all 0.15s;white-space:nowrap;letter-spacing:-0.01em}
+.btn:active{transform:scale(0.97)}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-mid));color:#fff;box-shadow:0 2px 8px var(--primary-glow)}
+.btn-primary:hover{filter:brightness(1.1);box-shadow:0 4px 16px var(--primary-glow)}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#fff;box-shadow:0 2px 8px rgba(201,149,45,0.25)}
+.btn-gold:hover{filter:brightness(1.1)}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-danger:hover{filter:brightness(1.1)}
+.btn-success{background:var(--success);color:#fff}
+.btn-success:hover{filter:brightness(1.1)}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text-secondary)}
+.btn-ghost:hover{background:var(--surface-alt);border-color:var(--border-strong)}
+.btn-sm{padding:6px 12px;font-size:12px;font-weight:500}
+.btn-lg{padding:14px 28px;font-size:15px;border-radius:12px}
+
+/* ===== BINGO CARDS — PREMIUM ===== */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px}
+
+.bingo-card{
+  background:var(--surface);
+  border:2px solid var(--border);
+  border-radius:var(--radius);
+  padding:20px;
+  page-break-inside:avoid;
+  position:relative;
+  overflow:hidden;
+  box-shadow:var(--shadow-md);
+}
+.bingo-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:4px;
+  background:linear-gradient(90deg,var(--col-b),var(--col-i),var(--col-n),var(--col-g),var(--col-o));
+}
+
+.bingo-card-header{text-align:center;margin-bottom:14px;padding-top:4px}
+.bingo-card-header h3{
+  font-family:'Outfit',sans-serif;font-size:28px;font-weight:800;
+  letter-spacing:10px;text-transform:uppercase;
+  background:linear-gradient(135deg,var(--primary),var(--primary-mid));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.bingo-card-header h3.custom-title{
+  font-size:22px;letter-spacing:2px;line-height:1.3;
+}
+.bingo-card-header .card-id{
+  font-size:11px;color:var(--text-muted);margin-top:3px;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;
+}
+
+.bingo-table{width:100%;border-collapse:separate;border-spacing:3px;table-layout:fixed}
+.bingo-table th{
+  color:#fff;font-family:'Outfit',sans-serif;font-size:17px;font-weight:700;
+  padding:8px 0;text-align:center;border-radius:8px;letter-spacing:1px;
+}
+.bingo-table th:nth-child(1){background:var(--col-b)}
+.bingo-table th:nth-child(2){background:var(--col-i)}
+.bingo-table th:nth-child(3){background:var(--col-n)}
+.bingo-table th:nth-child(4){background:var(--col-g)}
+.bingo-table th:nth-child(5){background:var(--col-o)}
+/* 3 and 4 col fallbacks */
+.grid3 .bingo-table th:nth-child(1){background:var(--col-b)}
+.grid3 .bingo-table th:nth-child(2){background:var(--col-n)}
+.grid3 .bingo-table th:nth-child(3){background:var(--col-g)}
+.grid4 .bingo-table th:nth-child(3){background:var(--col-n)}
+.grid4 .bingo-table th:nth-child(4){background:var(--col-g)}
+
+.bingo-table td{
+  border:1.5px solid var(--border);text-align:center;
+  font-family:'Outfit',sans-serif;font-size:20px;font-weight:600;
+  padding:12px 0;color:var(--text);border-radius:6px;
+  background:var(--surface-alt);transition:background 0.2s;
+}
+.bingo-table td.free-cell{
+  background:linear-gradient(135deg,var(--gold-light),#fef9ef);
+  border-color:var(--gold);
+  color:var(--gold-dark);font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:1px;
+}
+[data-theme="dark"] .bingo-table td.free-cell{background:linear-gradient(135deg,#2a2205,#1a1805);color:var(--gold)}
+
+.bingo-card-footer{
+  text-align:center;margin-top:10px;
+  font-size:10px;color:var(--text-muted);letter-spacing:0.05em;text-transform:uppercase;
+  border-top:1px dashed var(--border);padding-top:8px;
+}
+
+/* Word mode */
+.word-bingo-table td{font-size:13px;padding:10px 4px;word-break:break-word;line-height:1.2;font-weight:500}
+
+/* ===== SORTEADOR ===== */
+.draw-display{text-align:center;padding:32px 20px}
+.current-ball{
+  width:150px;height:150px;border-radius:50%;margin:0 auto 28px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-family:'Outfit',sans-serif;
+  box-shadow:var(--shadow-lg),inset 0 -6px 12px rgba(0,0,0,0.15),inset 0 2px 4px rgba(255,255,255,0.2);
+  transition:all 0.3s;position:relative;overflow:hidden;
+}
+.current-ball::before{
+  content:'';position:absolute;top:12%;left:18%;width:28%;height:18%;
+  background:rgba(255,255,255,0.35);border-radius:50%;transform:rotate(-25deg);
+}
+.current-ball .ball-letter{font-size:18px;font-weight:700;opacity:0.85;text-transform:uppercase;letter-spacing:2px}
+.current-ball .ball-number{font-size:52px;font-weight:900;line-height:1}
+
+.ball-b{background:linear-gradient(145deg,#3b82f6,#1d4ed8);color:#fff}
+.ball-i{background:linear-gradient(145deg,#ef4444,#b91c1c);color:#fff}
+.ball-n{background:linear-gradient(145deg,#eab308,#a16207);color:#fff}
+.ball-g{background:linear-gradient(145deg,#22c55e,#15803d);color:#fff}
+.ball-o{background:linear-gradient(145deg,#8b5cf6,#6d28d9);color:#fff}
+
+.drawn-numbers{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:24px}
+.mini-ball{
+  width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;color:#fff;font-family:'Outfit',sans-serif;
+  transition:all 0.3s;
+}
+.mini-ball.latest{transform:scale(1.25);box-shadow:0 0 16px rgba(73,64,160,0.4)}
+
+.draw-board{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:4px}
+.draw-board .num-cell{
+  aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+  border-radius:8px;font-size:13px;font-weight:600;font-family:'Outfit',sans-serif;
+  background:var(--surface-alt);color:var(--text-muted);border:1px solid var(--border);transition:all 0.3s;
+}
+.draw-board .num-cell.drawn{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 1px 4px var(--primary-glow)}
+
+/* ===== SCOREBOARD ===== */
+.score-table{width:100%;border-collapse:collapse}
+.score-table th{text-align:left;padding:10px 12px;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;border-bottom:2px solid var(--border)}
+.score-table td{padding:12px;font-size:14px;border-bottom:1px solid var(--border)}
+.score-table tr:hover td{background:var(--surface-alt)}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600}
+.badge-winner{background:var(--success-light);color:var(--success)}
+.badge-playing{background:var(--primary-light);color:var(--primary)}
+
+/* ===== STATS ===== */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:24px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;text-align:center;box-shadow:var(--shadow)}
+.stat-card .stat-value{font-family:'Outfit',sans-serif;font-size:32px;font-weight:800;color:var(--primary)}
+.stat-card .stat-label{font-size:12px;color:var(--text-muted);margin-top:2px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em}
+
+.empty-state{text-align:center;padding:48px 20px;color:var(--text-muted)}
+.empty-state .empty-icon{font-size:48px;margin-bottom:12px}
+
+/* ===== LIVE TRACKER ===== */
+#liveTracker{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+.tracker-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px;transition:all 0.3s;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.tracker-card:hover{box-shadow:var(--shadow-md);border-color:var(--border-strong)}
+.tracker-card.is-winner{border-color:var(--success);background:var(--success-light);box-shadow:0 0 20px rgba(22,163,74,0.15);animation:popIn 0.5s ease-out}
+.tracker-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.tracker-name{font-weight:700;font-size:14px;font-family:'Outfit',sans-serif;display:flex;align-items:center;gap:6px}
+.tracker-name .player-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.tracker-pct{font-family:'Outfit',sans-serif;font-weight:800;font-size:20px;color:var(--primary)}
+.tracker-card.is-winner .tracker-pct{color:var(--success);font-size:22px}
+.progress-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;border-radius:3px;transition:width 0.5s ease;background:linear-gradient(90deg,var(--primary),var(--primary-mid))}
+.tracker-card.is-winner .progress-fill{background:linear-gradient(90deg,var(--success),#22c55e)}
+.tracker-detail{font-size:11px;color:var(--text-muted);margin-top:6px;display:flex;justify-content:space-between;align-items:center}
+.tracker-cards-list{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px}
+.tracker-card-chip{padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600;font-family:'Outfit',sans-serif;background:var(--primary-light);color:var(--primary);border:1px solid transparent}
+.tracker-card-chip.best{border-color:var(--primary);background:var(--primary);color:#fff}
+.tracker-actions{display:flex;gap:4px;margin-top:8px;justify-content:flex-end}
+
+/* Mini-cartela visual */
+.mini-cartela-wrap{margin-top:8px;border-top:1px dashed var(--border);padding-top:8px;flex:1}
+.mini-cartela-label{font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px;font-family:'Outfit',sans-serif}
+.mini-cartelas-row{display:flex;gap:8px;flex-wrap:wrap}
+.mini-cartela{background:var(--surface-alt);border:1px solid var(--border);border-radius:6px;padding:6px;min-width:0;flex:1;max-width:100%}
+.mini-cartela-code{font-size:9px;font-weight:600;color:var(--text-muted);text-align:center;margin-bottom:3px;font-family:'Outfit',sans-serif;letter-spacing:0.03em}
+.mini-grid{display:grid;gap:1.5px}
+.mini-grid.g5{grid-template-columns:repeat(5,1fr)}
+.mini-grid.g4{grid-template-columns:repeat(4,1fr)}
+.mini-grid.g3{grid-template-columns:repeat(3,1fr)}
+.mini-grid-header{font-size:7px;font-weight:700;color:#fff;text-align:center;padding:1.5px 0;border-radius:2px}
+.mini-grid-cell{font-size:9px;font-weight:600;text-align:center;padding:3px 0;border-radius:2px;background:var(--surface);border:1px solid var(--border);color:var(--text);transition:all 0.3s;font-family:'Outfit',sans-serif;line-height:1.2}
+.mini-grid-cell.hit{background:var(--primary);color:#fff;border-color:var(--primary);font-weight:700}
+.mini-grid-cell.free{background:var(--gold-light);color:var(--gold-dark);font-size:6px;font-weight:700}
+.mini-grid-cell.hit.free{background:var(--gold);color:#fff;border-color:var(--gold)}
+.tracker-card.is-winner .mini-grid-cell.hit{background:var(--success);border-color:var(--success)}
+.tracker-card.is-winner .mini-cartela{border-color:var(--success)}
+
+.lot-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--radius-sm);background:var(--primary-light);color:var(--primary);font-family:'Outfit',sans-serif;font-weight:700;font-size:15px;letter-spacing:0.05em}
+
+/* Draw input area */
+.draw-input-area{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:20px;box-shadow:var(--shadow)}
+.draw-input-row{display:flex;gap:10px;align-items:center}
+.draw-input-row input{flex:1;font-size:20px;font-family:'Outfit',sans-serif;font-weight:600;padding:14px 18px;text-align:center;letter-spacing:2px}
+.draw-input-row .btn{padding:14px 24px;font-size:15px}
+
+/* Drawn numbers strip */
+.drawn-strip{display:flex;flex-wrap:wrap;gap:5px;margin-top:14px;padding-top:14px;border-top:1px dashed var(--border)}
+.drawn-strip .mini-ball{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;font-family:'Outfit',sans-serif}
+.drawn-strip .mini-ball.latest{transform:scale(1.2);box-shadow:0 0 12px rgba(73,64,160,0.35)}
+
+/* Bingo alert */
+@keyframes bingoFlash{0%,100%{box-shadow:0 0 20px rgba(22,163,74,0.2)}50%{box-shadow:0 0 40px rgba(22,163,74,0.5)}}
+.bingo-alert{background:linear-gradient(135deg,var(--success),#22c55e);color:#fff;border-radius:var(--radius);padding:24px;text-align:center;margin-bottom:16px;animation:bingoFlash 1.5s ease-in-out infinite}
+.bingo-alert h3{font-family:'Outfit',sans-serif;font-size:28px;font-weight:900;letter-spacing:4px;margin-bottom:4px}
+.bingo-alert p{font-size:14px;opacity:0.9}
+
+/* Game Over state */
+.game-over-banner{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1a1a2e;border-radius:var(--radius);padding:32px;text-align:center;margin-bottom:20px;box-shadow:0 8px 32px rgba(245,158,11,0.3)}
+.game-over-banner h2{font-family:'Outfit',sans-serif;font-size:32px;font-weight:900;letter-spacing:2px;margin-bottom:6px}
+.game-over-banner .champion-name{font-family:'Outfit',sans-serif;font-size:22px;font-weight:700;margin-bottom:16px}
+.game-over-banner .btn{font-size:16px;padding:14px 32px;background:#1a1a2e;color:#fbbf24;border-radius:12px;font-weight:700}
+.game-over-banner .btn:hover{background:#2d2a6e}
+.draw-disabled{opacity:0.5;pointer-events:none}
+.draw-disabled input,.draw-disabled .btn{pointer-events:none;opacity:0.6}
+
+/* Add player inline */
+.add-player-row{display:flex;gap:10px;align-items:end;flex-wrap:wrap;padding:16px 20px;background:var(--surface-alt);border:1px dashed var(--border);border-radius:var(--radius-sm)}
+.add-player-row .field{margin-bottom:0}
+.add-player-row .chip-select{display:flex;flex-wrap:wrap;gap:6px}
+.card-chip-option{padding:6px 14px;border-radius:8px;font-size:13px;font-weight:600;font-family:'Outfit',sans-serif;background:var(--surface);border:1.5px solid var(--border);color:var(--text-secondary);cursor:pointer;transition:all 0.15s;user-select:none}
+.card-chip-option:hover{border-color:var(--primary);color:var(--primary)}
+.card-chip-option.selected{background:var(--primary);border-color:var(--primary);color:#fff}
+.card-chip-option.taken{opacity:0.4;cursor:not-allowed;text-decoration:line-through}
+
+/* ===== ANIMATIONS ===== */
+@keyframes popIn{0%{transform:scale(0.3);opacity:0}60%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+@keyframes shake{0%,100%{transform:rotate(0)}25%{transform:rotate(-8deg)}75%{transform:rotate(8deg)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.animate-pop{animation:popIn 0.4s ease-out}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:640px){
+  .header{padding:0 16px;height:56px}
+  .main{padding:16px}
+  .nav-tab{padding:12px 14px;font-size:13px}
+  .form-row{flex-direction:column}
+  .field{min-width:unset}
+  .current-ball{width:120px;height:120px}
+  .current-ball .ball-number{font-size:40px}
+  .cards-grid{grid-template-columns:1fr}
+  #liveTracker{grid-template-columns:1fr}
+  .panel{padding:20px}
+}
+
+/* ===== PRINT ===== */
+@media print{
+  body{background:#fff!important;color:#000!important}
+  .header,.nav,.no-print{display:none!important}
+  .page{display:block!important}
+  .page:not(#pageCards){display:none!important}
+  .main{padding:0;max-width:none}
+  .panel{box-shadow:none;border:none;padding:0}
+  .bingo-card{border:2px solid #333;box-shadow:none;page-break-inside:avoid;background:#fff!important}
+  .bingo-card::before{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .bingo-table th{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .bingo-table td.free-cell{-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#fef9ef!important}
+  .bingo-card-header h3{-webkit-text-fill-color:#2d2a6e!important;color:#2d2a6e!important}
+  .cards-grid.print-4{display:grid!important;grid-template-columns:1fr 1fr!important;gap:14px!important}
+  .cards-grid.print-6{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important}
+  .cards-grid.print-6 .bingo-card{padding:10px}
+  .cards-grid.print-6 .bingo-card-header h3{font-size:18px;letter-spacing:4px}
+  .cards-grid.print-6 .bingo-card-header h3.custom-title{font-size:14px;letter-spacing:1px}
+  .cards-grid.print-6 .bingo-table td{padding:6px 0;font-size:14px}
+  .cards-grid.print-6 .bingo-table th{padding:5px 0;font-size:14px}
+}
+</style>
+</head>
+<body>
+
+<div class="header no-print">
+  <div class="logo">
+    <div class="logo-mark display">B!</div>
+    <h1>Bingo Master <span>pro</span></h1>
+  </div>
+  <div class="header-actions">
+    <button class="theme-toggle" onclick="toggleTheme()" title="Alternar tema">🌙</button>
+  </div>
+</div>
+
+<nav class="nav no-print">
+  <button class="nav-tab active" data-page="pageCards">🎴 Cartelas</button>
+  <button class="nav-tab" data-page="pageDraw">🎱 Sorteador</button>
+  <button class="nav-tab" data-page="pagePlayers">👥 Jogadores</button>
+  <button class="nav-tab" data-page="pageWords">📝 Palavras</button>
+</nav>
+
+<div class="main">
+
+<!-- ====== PAGE: CARTELAS ====== -->
+<div id="pageCards" class="page active">
+  <div class="panel no-print">
+    <div class="panel-title"><span class="icon icon-purple">⚙</span> Configurar cartelas</div>
+    <div class="form-row">
+      <div class="field">
+        <label>Título da cartela</label>
+        <input type="text" id="cardTitle" placeholder="Ex: Bingo do Miguel">
+      </div>
+      <div class="field" style="max-width:160px">
+        <label>Modo</label>
+        <select id="cardMode" onchange="updateModeUI()">
+          <option value="numbers">Números</option>
+          <option value="words">Palavras</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="field" id="grpMaxNum">
+        <label>Nº máximo</label>
+        <select id="maxNum">
+          <option value="75">75 (padrão)</option>
+          <option value="90">90</option>
+          <option value="100">100</option>
+        </select>
+      </div>
+      <div class="field" id="grpWordList" style="display:none">
+        <label>Lista</label>
+        <select id="wordListSelect"><option value="custom">Personalizada</option></select>
+      </div>
+      <div class="field">
+        <label>Grade</label>
+        <select id="gridSize">
+          <option value="5">5×5</option>
+          <option value="4">4×4</option>
+          <option value="3">3×3</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Quantidade</label>
+        <input type="number" id="cardQty" value="4" min="1" max="50">
+      </div>
+      <div class="field">
+        <label>Layout PDF/Impressão</label>
+        <select id="printLayout">
+          <option value="4">4 por folha A4</option>
+          <option value="6">6 por folha A4</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="field" style="flex:none">
+        <label style="display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-weight:500;color:var(--text-secondary)">
+          <input type="checkbox" id="freeCell" checked> Espaço livre no centro (5×5)
+        </label>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px">
+      <button class="btn btn-primary btn-lg" onclick="generateCards()">🎲 Gerar cartelas</button>
+      <button class="btn btn-ghost" onclick="printCards()">🖨️ Imprimir</button>
+      <button class="btn btn-gold" onclick="exportPDF()">📄 Exportar PDF</button>
+    </div>
+  </div>
+  <div id="cardsOutput"></div>
+</div>
+
+<!-- ====== PAGE: SORTEADOR ====== -->
+<div id="pageDraw" class="page">
+  <div class="stats-row no-print">
+    <div class="stat-card"><div class="stat-value" id="statDrawn">0</div><div class="stat-label">Sorteados</div></div>
+    <div class="stat-card"><div class="stat-value" id="statRemaining">75</div><div class="stat-label">Restantes</div></div>
+    <div class="stat-card"><div class="stat-value" id="statTotal">75</div><div class="stat-label">Total</div></div>
+  </div>
+  <div class="panel">
+    <div class="draw-display">
+      <div class="current-ball ball-n" id="currentBall">
+        <span class="ball-letter" id="ballLetter">?</span>
+        <span class="ball-number" id="ballNumber">--</span>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap" class="no-print">
+        <button class="btn btn-primary btn-lg" onclick="drawNumber()" id="drawBtn">🎱 Sortear</button>
+        <button class="btn btn-ghost" onclick="undoLast()">↩️ Desfazer</button>
+        <button class="btn btn-danger btn-sm" onclick="resetDraw()">🔄 Reiniciar</button>
+      </div>
+      <div class="drawn-numbers" id="drawnBalls"></div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-title"><span class="icon icon-gold">📋</span> Painel completo</div>
+    <div class="draw-board" id="drawBoard"></div>
+  </div>
+</div>
+
+<!-- ====== PAGE: JOGADORES (lote + tracking ao vivo) ====== -->
+<div id="pagePlayers" class="page">
+  <div id="lotInfoPanel" style="margin-bottom:20px">
+    <div id="lotInfo">
+      <div class="panel"><div class="empty-state" style="padding:28px"><div class="empty-icon">🎴</div><p style="font-size:15px">Gere cartelas na aba <strong>Cartelas</strong> para iniciar uma sessão de jogo.</p></div></div>
+    </div>
+  </div>
+
+  <div id="bingoAlertArea"></div>
+
+  <div id="drawInputArea" style="display:none">
+    <div class="draw-input-area">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <span style="font-family:Outfit,sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-secondary)">🎱 Sorteio</span>
+      </div>
+      <div id="drawMiniDash" style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+        <div style="flex:1;min-width:80px;background:var(--primary-light);border-radius:10px;padding:10px 14px;text-align:center">
+          <div style="font-family:Outfit,sans-serif;font-size:24px;font-weight:800;color:var(--primary)" id="dashDrawn">0</div>
+          <div style="font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em">Sorteados</div>
+        </div>
+        <div style="flex:1;min-width:80px;background:var(--surface-alt);border:1px solid var(--border);border-radius:10px;padding:10px 14px;text-align:center">
+          <div style="font-family:Outfit,sans-serif;font-size:24px;font-weight:800;color:var(--accent-rose)" id="dashRemain">75</div>
+          <div style="font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em">Restantes</div>
+        </div>
+        <div style="flex:1;min-width:80px;background:var(--surface-alt);border:1px solid var(--border);border-radius:10px;padding:10px 14px;text-align:center">
+          <div style="font-family:Outfit,sans-serif;font-size:24px;font-weight:800;color:var(--gold)" id="dashTotal">75</div>
+          <div style="font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em">Total</div>
+        </div>
+        <div style="flex:1;min-width:80px;background:var(--surface-alt);border:1px solid var(--border);border-radius:10px;padding:10px 14px;text-align:center">
+          <div style="font-family:Outfit,sans-serif;font-size:24px;font-weight:800;color:var(--accent-teal)" id="dashPct">0%</div>
+          <div style="font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em">Progresso</div>
+        </div>
+      </div>
+      <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:14px">
+        <div id="dashBar" style="height:100%;border-radius:3px;background:linear-gradient(90deg,var(--primary),var(--primary-mid));transition:width 0.4s ease;width:0%"></div>
+      </div>
+      <div class="draw-input-row">
+        <input type="number" id="manualDrawInput" placeholder="Nº" min="1" onkeydown="if(event.key==='Enter')manualDraw()">
+        <button class="btn btn-primary" onclick="manualDraw()">Registrar</button>
+        <button class="btn btn-ghost" onclick="undoManualDraw()" title="Desfazer">↩️</button>
+        <button class="btn btn-ghost btn-sm" onclick="resetDraw()" title="Reiniciar" style="color:var(--danger)">🔄</button>
+      </div>
+      <div class="drawn-strip" id="playerDrawnBalls"></div>
+    </div>
+  </div>
+
+  <div id="addPlayerArea" style="display:none;margin-bottom:20px">
+    <div class="add-player-row">
+      <div class="field" style="min-width:160px;flex:1">
+        <label>Nome</label>
+        <input type="text" id="playerName" placeholder="Nome do jogador" onkeydown="if(event.key==='Enter')addPlayer()">
+      </div>
+      <div class="field" style="flex:2;min-width:200px">
+        <label>Cartelas</label>
+        <div class="chip-select" id="cardChipSelect"></div>
+      </div>
+      <div style="flex:none">
+        <button class="btn btn-primary" onclick="addPlayer()">➕ Adicionar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="trackingPanel" style="display:none">
+    <div class="panel" style="padding:16px;margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <span style="font-family:Outfit,sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-secondary)">🎁 Prêmios da rodada</span>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-ghost btn-sm" onclick="resetPlayerStatus()">🔄 Resetar</button>
+          <button class="btn btn-ghost btn-sm" onclick="clearPlayers()" style="color:var(--danger)">Limpar</button>
+        </div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px" id="prizeConfig">
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--text-secondary);cursor:pointer">
+          <input type="checkbox" id="prize1line" checked onchange="saveState();updateLiveTracker()"> 🥇 1ª Linha completa
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--text-secondary);cursor:pointer">
+          <input type="checkbox" id="prize2line" onchange="saveState();updateLiveTracker()"> 🥈 2ª Linha completa
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--text-secondary);cursor:pointer">
+          <input type="checkbox" id="prize3line" onchange="saveState();updateLiveTracker()"> 🥉 3ª Linha completa
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--text-secondary);cursor:pointer">
+          <input type="checkbox" id="prizeFull" checked onchange="saveState();updateLiveTracker()"> 🏆 Cartela cheia
+        </label>
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <span style="font-family:Outfit,sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-secondary)">🏆 Ranking ao vivo</span>
+    </div>
+    <div id="prizeAlerts" style="margin-bottom:14px"></div>
+    <div id="liveTracker"></div>
+  </div>
+</div>
+
+<!-- ====== PAGE: PALAVRAS ====== -->
+<div id="pageWords" class="page">
+  <div class="panel">
+    <div class="panel-title"><span class="icon icon-purple">📝</span> Gerenciar listas</div>
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:16px">Crie listas temáticas para usar no modo de cartelas por palavras.</p>
+    <div class="form-row">
+      <div class="field"><label>Nome da lista</label><input type="text" id="listName" placeholder="Ex: Animais, Frutas..."></div>
+    </div>
+    <div class="field" style="margin-bottom:16px">
+      <label>Palavras (uma por linha ou separadas por vírgula)</label>
+      <textarea id="listWords" rows="5" placeholder="cachorro&#10;gato&#10;elefante&#10;..."></textarea>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="saveWordList()">💾 Salvar lista</button>
+      <button class="btn btn-ghost" onclick="loadSampleList()">📦 Carregar exemplos</button>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-title"><span class="icon icon-gold">📚</span> Listas salvas</div>
+    <div id="savedLists"><div class="empty-state"><div class="empty-icon">📝</div><p>Nenhuma lista criada ainda.</p></div></div>
+  </div>
+</div>
+
+</div><!-- .main -->
+
+<script>
+// ===== STATE =====
+let state={drawnNumbers:[],players:[],wordLists:{},maxNum:75,mode:'numbers',gridSize:5,lots:{},currentLot:null,_lastCards:[]};
+try{const s=localStorage.getItem('bmp3');if(s){state={...state,...JSON.parse(s)};}}catch(e){}
+function saveState(){try{localStorage.setItem('bmp3',JSON.stringify(state));}catch(e){}}
+
+// ===== THEME =====
+function toggleTheme(){
+  const d=document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme',d?'':'dark');
+  document.querySelector('.theme-toggle').textContent=d?'🌙':'☀️';
+  try{localStorage.setItem('bingoTheme',d?'light':'dark');}catch(e){}
+}
+try{if(localStorage.getItem('bingoTheme')==='dark'){document.documentElement.setAttribute('data-theme','dark');document.querySelector('.theme-toggle').textContent='☀️';}}catch(e){}
+
+// ===== NAV =====
+document.querySelectorAll('.nav-tab').forEach(function(t){
+  t.addEventListener('click',function(){
+    document.querySelectorAll('.nav-tab').forEach(function(x){x.classList.remove('active');});
+    document.querySelectorAll('.page').forEach(function(x){x.classList.remove('active');});
+    t.classList.add('active');
+    document.getElementById(t.dataset.page).classList.add('active');
+  });
+});
+
+// ===== UTILS =====
+function escHtml(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var tmp=b[i];b[i]=b[j];b[j]=tmp;}return b;}
+function genLotCode(){var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',c='';for(var i=0;i<4;i++)c+=chars[Math.floor(Math.random()*chars.length)];return c;}
+
+// ===== CARD MODE UI =====
+function updateModeUI(){
+  var m=document.getElementById('cardMode').value;
+  document.getElementById('grpMaxNum').style.display=m==='numbers'?'':'none';
+  document.getElementById('grpWordList').style.display=m==='words'?'':'none';
+  refreshWordListDropdown();
+}
+function refreshWordListDropdown(){
+  var s=document.getElementById('wordListSelect');
+  s.innerHTML='<option value="custom">Personalizada</option>';
+  Object.keys(state.wordLists).forEach(function(n){var o=document.createElement('option');o.value=n;o.textContent=n+' ('+state.wordLists[n].length+')';s.appendChild(o);});
+}
+
+// ===== CARD GENERATION =====
+function generateNumberCard(maxNum,gridSize){
+  var card=[],range=Math.floor(maxNum/gridSize);
+  for(var c=0;c<gridSize;c++){
+    var min=c*range+1,max=c===gridSize-1?maxNum:(c+1)*range;
+    var pool=[];for(var n=min;n<=max;n++)pool.push(n);
+    card.push(shuffle(pool).slice(0,gridSize));
+  }
+  return card;
+}
+function generateWordCard(words,gridSize){
+  var needed=gridSize*gridSize;if(words.length<needed)return null;
+  var picked=shuffle(words).slice(0,needed),card=[];
+  for(var c=0;c<gridSize;c++)card.push(picked.slice(c*gridSize,(c+1)*gridSize));
+  return card;
+}
+
+function renderCard(card,idx,gridSize,mode,hasFreeCell,customTitle,lotCode){
+  var mid=Math.floor(gridSize/2);
+  var showFree=hasFreeCell&&gridSize===5&&mode==='numbers';
+  var headers={3:['B','I','G'],4:['B','I','N','G'],5:['B','I','N','G','O']};
+  var isWord=mode==='words';
+  var title=customTitle||'BINGO';
+  var gridClass=gridSize===3?'grid3':gridSize===4?'grid4':'';
+  var code=lotCode+'-'+String(idx+1).padStart(2,'0');
+
+  var h='<div class="bingo-card '+gridClass+'">';
+  h+='<div class="bingo-card-header">';
+  h+='<h3 class="display'+(customTitle?' custom-title':'')+'">'+escHtml(title)+'</h3>';
+  h+='<div class="card-id">'+code+'</div>';
+  h+='</div>';
+  h+='<table class="bingo-table'+(isWord?' word-bingo-table':'')+'">';
+  if(!isWord){h+='<thead><tr>';(headers[gridSize]||headers[5]).forEach(function(l){h+='<th>'+l+'</th>';});h+='</tr></thead>';}
+  h+='<tbody>';
+  for(var r=0;r<gridSize;r++){
+    h+='<tr>';
+    for(var c=0;c<gridSize;c++){
+      if(showFree&&r===mid&&c===mid)h+='<td class="free-cell">\u2605 livre</td>';
+      else h+='<td>'+card[c][r]+'</td>';
+    }
+    h+='</tr>';
+  }
+  h+='</tbody></table>';
+  h+='<div class="bingo-card-footer">Bingo Master Pro \u00B7 '+code+'</div>';
+  h+='</div>';
+  return h;
+}
+
+function generateCards(){
+  var mode=document.getElementById('cardMode').value;
+  var gridSize=parseInt(document.getElementById('gridSize').value);
+  var qty=Math.min(50,Math.max(1,parseInt(document.getElementById('cardQty').value)||4));
+  var hasFreeCell=document.getElementById('freeCell').checked;
+  var maxNum=parseInt(document.getElementById('maxNum').value);
+  var words=[];
+  if(mode==='words'){
+    var ln=document.getElementById('wordListSelect').value;
+    if(ln==='custom'){alert('Selecione uma lista salva na aba "Palavras".');return;}
+    words=state.wordLists[ln]||[];
+    if(words.length<gridSize*gridSize){alert('A lista precisa de pelo menos '+(gridSize*gridSize)+' palavras.');return;}
+  }
+  state.mode=mode;state.gridSize=gridSize;state.maxNum=maxNum;
+  var customTitle=document.getElementById('cardTitle').value.trim()||'';
+  var printLayout=document.getElementById('printLayout').value;
+  var lotCode=genLotCode();
+
+  var lot={code:lotCode,title:customTitle||'BINGO',mode:mode,gridSize:gridSize,maxNum:maxNum,hasFreeCell:hasFreeCell,cards:[],createdAt:new Date().toLocaleString('pt-BR')};
+
+  state._lastCards=[];
+  var html='<div class="cards-grid print-'+printLayout+'" id="cardsGrid">';
+  for(var i=0;i<qty;i++){
+    var card=mode==='numbers'?generateNumberCard(maxNum,gridSize):generateWordCard(words,gridSize);
+    var cardCode=lotCode+'-'+String(i+1).padStart(2,'0');
+    lot.cards.push({index:i,code:cardCode,data:card});
+    state._lastCards.push(card);
+    html+=renderCard(card,i,gridSize,mode,hasFreeCell,customTitle,lotCode);
+  }
+  html+='</div>';
+
+  state.lots[lotCode]=lot;
+  state.currentLot=lotCode;
+  state.drawnNumbers=[];
+
+  document.getElementById('cardsOutput').innerHTML=
+    '<div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap" class="no-print">'+
+    '<span class="lot-badge">\uD83C\uDCCF Lote: '+lotCode+'</span>'+
+    '<span style="font-size:13px;color:var(--text-secondary)">'+qty+' cartelas \u00B7 '+lot.createdAt+'</span>'+
+    '</div>'+html;
+
+  if(mode==='numbers')initDrawBoard(maxNum);
+  updateLotUI();
+  saveState();
+}
+
+// ===== DRAW (Sorteador page) =====
+function getBallClass(n,m){var r=Math.floor(m/5);return['ball-b','ball-i','ball-n','ball-g','ball-o'][Math.min(Math.floor((n-1)/r),4)];}
+function getBallLetter(n,m){var r=Math.floor(m/5);return['B','I','N','G','O'][Math.min(Math.floor((n-1)/r),4)];}
+
+function initDrawBoard(m){
+  m=m||state.maxNum||75;state.maxNum=m;
+  var b=document.getElementById('drawBoard'),h='';
+  for(var i=1;i<=m;i++)h+='<div class="num-cell'+(state.drawnNumbers.includes(i)?' drawn':'')+'" data-num="'+i+'">'+i+'</div>';
+  b.innerHTML=h;updateDrawStats();
+}
+
+function updateBallDisplay(num){
+  var ball=document.getElementById('currentBall');
+  ball.className='current-ball '+getBallClass(num,state.maxNum)+' animate-pop';
+  document.getElementById('ballLetter').textContent=getBallLetter(num,state.maxNum);
+  document.getElementById('ballNumber').textContent=num;
+  setTimeout(function(){ball.classList.remove('animate-pop');},400);
+}
+
+function resetBallDisplay(){
+  document.getElementById('currentBall').className='current-ball ball-n';
+  document.getElementById('ballLetter').textContent='?';
+  document.getElementById('ballNumber').textContent='--';
+}
+
+function updateDrawStats(){
+  var m=state.maxNum||75,d=state.drawnNumbers.length;
+  document.getElementById('statDrawn').textContent=d;
+  document.getElementById('statRemaining').textContent=m-d;
+  document.getElementById('statTotal').textContent=m;
+  var h='';state.drawnNumbers.forEach(function(n,i){
+    h+='<div class="mini-ball '+getBallClass(n,state.maxNum)+(i===state.drawnNumbers.length-1?' latest':'')+'">'+n+'</div>';
+  });
+  document.getElementById('drawnBalls').innerHTML=h;
+  document.querySelectorAll('#drawBoard .num-cell').forEach(function(c){
+    c.classList.toggle('drawn',state.drawnNumbers.includes(parseInt(c.dataset.num)));
+  });
+  var btn=document.getElementById('drawBtn');
+  if(d>=m){btn.disabled=true;btn.textContent='\u2705 Completo';}
+  else{btn.disabled=false;btn.textContent='\uD83C\uDFB1 Sortear';}
+  updateLiveTracker();
+  if(typeof updateDrawnStrip==='function')updateDrawnStrip();
+}
+
+function playSound(){
+  try{var c=new(window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.setValueAtTime(523,c.currentTime);o.frequency.exponentialRampToValueAtTime(784,c.currentTime+0.08);g.gain.setValueAtTime(0.12,c.currentTime);g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.25);o.start();o.stop(c.currentTime+0.25);}catch(e){}
+}
+
+function addDrawnNumber(num){
+  if(state.drawnNumbers.includes(num))return false;
+  if(num<1||num>state.maxNum)return false;
+  state.drawnNumbers.push(num);
+  updateBallDisplay(num);
+  playSound();
+  updateDrawStats();
+  saveState();
+  return true;
+}
+
+function drawNumber(){
+  if(isGameOver()){alert('Jogo finalizado! Uma cartela foi completada. Clique em Resetar para novo jogo.');return;}
+  var m=state.maxNum||75,rem=[];
+  for(var i=1;i<=m;i++)if(!state.drawnNumbers.includes(i))rem.push(i);
+  if(!rem.length)return;
+  addDrawnNumber(rem[Math.floor(Math.random()*rem.length)]);
+}
+
+function undoLast(){
+  if(!state.drawnNumbers.length)return;
+  state.drawnNumbers.pop();
+  state.gameOver=false;
+  if(state.drawnNumbers.length){updateBallDisplay(state.drawnNumbers[state.drawnNumbers.length-1]);}
+  else{resetBallDisplay();}
+  updateDrawStats();saveState();
+}
+
+function resetDraw(){
+  if(state.drawnNumbers.length&&!confirm('Reiniciar o sorteio? Todos os n\u00FAmeros ser\u00E3o perdidos.'))return;
+  state.drawnNumbers=[];
+  state.gameOver=false;
+  resetBallDisplay();
+  updateDrawStats();saveState();
+}
+
+// ===== MANUAL DRAW (from Players page) =====
+function manualDraw(){
+  if(isGameOver()){alert('Jogo finalizado! Uma cartela foi completada. Clique em \uD83D\uDD04 para novo jogo.');return;}
+  var inp=document.getElementById('manualDrawInput');
+  var num=parseInt(inp.value);
+  if(!num||num<1||num>state.maxNum){alert('N\u00FAmero inv\u00E1lido (1-'+state.maxNum+').');return;}
+  if(state.drawnNumbers.includes(num)){alert('N\u00FAmero '+num+' j\u00E1 foi sorteado.');inp.value='';return;}
+  addDrawnNumber(num);
+  inp.value='';inp.focus();
+}
+function undoManualDraw(){undoLast();}
+
+function isGameOver(){
+  if(state.gameOver)return true;
+  var lot=state.currentLot?state.lots[state.currentLot]:null;
+  if(!lot)return false;
+  var prizes=getPrizeConfig();
+  if(!prizes.full)return false;
+  var lotPlayers=state.players.filter(function(p){return p.lotCode===lot.code;});
+  for(var pi=0;pi<lotPlayers.length;pi++){
+    var p=lotPlayers[pi];
+    for(var ci=0;ci<p.cardCodes.length;ci++){
+      var cardObj=lot.cards.find(function(c){return c.code===p.cardCodes[ci];});
+      if(!cardObj)continue;
+      var info=getCardHits(cardObj.data,lot.gridSize,lot.hasFreeCell);
+      if(info.pct===100){state.gameOver=true;return true;}
+    }
+  }
+  return false;
+}
+
+function resetGame(){
+  if(!confirm('Reiniciar o jogo? Os n\u00FAmeros sorteados ser\u00E3o zerados. Jogadores e cartelas permanecem.'))return;
+  state.drawnNumbers=[];
+  state.gameOver=false;
+  resetBallDisplay();
+  updateDrawStats();saveState();
+}
+
+// ===== LOT & PLAYERS =====
+// ===== LOT & PLAYERS =====
+var avatarColors=['#2563eb','#dc2626','#ca8a04','#16a34a','#7c3aed','#0d9488','#c44569','#ea580c'];
+function getAvatarColor(i){return avatarColors[i%avatarColors.length];}
+function getInitials(name){var parts=name.trim().split(/\s+/);if(parts.length>=2)return(parts[0][0]+parts[1][0]).toUpperCase();return name.substring(0,2).toUpperCase();}
+
+function updateLotUI(){
+  var lot=state.currentLot?state.lots[state.currentLot]:null;
+  var infoEl=document.getElementById('lotInfo');
+  var addArea=document.getElementById('addPlayerArea');
+  var drawArea=document.getElementById('drawInputArea');
+  var trackPanel=document.getElementById('trackingPanel');
+
+  if(!lot){
+    infoEl.innerHTML='<div class="panel"><div class="empty-state" style="padding:28px"><div class="empty-icon">\uD83C\uDCCF</div><p style="font-size:15px">Gere cartelas na aba <strong>Cartelas</strong> para iniciar.</p></div></div>';
+    addArea.style.display='none';drawArea.style.display='none';trackPanel.style.display='none';
+    return;
+  }
+
+  infoEl.innerHTML='<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:4px 0">'+
+    '<span class="lot-badge">\uD83C\uDCCF '+lot.code+'</span>'+
+    '<span style="font-size:14px;color:var(--text-secondary)"><strong style="color:var(--text)">'+escHtml(lot.title)+'</strong> \u00B7 '+lot.cards.length+' cartelas \u00B7 '+lot.gridSize+'\u00D7'+lot.gridSize+'</span></div>';
+
+  addArea.style.display='';drawArea.style.display='';trackPanel.style.display='';
+
+  var chipContainer=document.getElementById('cardChipSelect');
+  chipContainer.innerHTML='';
+  var assignedCodes={};
+  state.players.forEach(function(p){if(p.lotCode===lot.code)p.cardCodes.forEach(function(c){assignedCodes[c]=true;});});
+  lot.cards.forEach(function(c){
+    var chip=document.createElement('span');
+    chip.className='card-chip-option'+(assignedCodes[c.code]?' taken':'');
+    chip.textContent=c.code;chip.dataset.code=c.code;
+    if(!assignedCodes[c.code])chip.addEventListener('click',function(){this.classList.toggle('selected');});
+    chipContainer.appendChild(chip);
+  });
+  updateDrawnStrip();updateLiveTracker();
+}
+
+function updateDrawnStrip(){
+  var strip=document.getElementById('playerDrawnBalls');
+  if(!strip)return;
+  var d=state.drawnNumbers.length;
+  var m=state.maxNum||75;
+  var rem=m-d;
+  var pct=m>0?Math.round((d/m)*100):0;
+
+  // Update mini-dashboard
+  var elD=document.getElementById('dashDrawn');if(elD)elD.textContent=d;
+  var elR=document.getElementById('dashRemain');if(elR)elR.textContent=rem;
+  var elT=document.getElementById('dashTotal');if(elT)elT.textContent=m;
+  var elP=document.getElementById('dashPct');if(elP)elP.textContent=pct+'%';
+  var elB=document.getElementById('dashBar');if(elB)elB.style.width=pct+'%';
+
+  var h='';
+  state.drawnNumbers.forEach(function(n,i){
+    h+='<div class="mini-ball '+getBallClass(n,state.maxNum)+(i===state.drawnNumbers.length-1?' latest':'')+'">'+n+'</div>';
+  });
+  strip.innerHTML=h||'<span style="font-size:13px;color:var(--text-muted);padding:4px">Nenhum n\u00FAmero sorteado ainda</span>';
+}
+
+function addPlayer(){
+  var lot=state.currentLot?state.lots[state.currentLot]:null;if(!lot)return;
+  var name=document.getElementById('playerName').value.trim();
+  var chips=document.querySelectorAll('#cardChipSelect .card-chip-option.selected');
+  var selected=[];chips.forEach(function(c){selected.push(c.dataset.code);});
+  if(!name){alert('Digite o nome do jogador.');return;}
+  if(!selected.length){alert('Clique nas cartelas para selecionar.');return;}
+  state.players.push({id:Date.now(),name:name,lotCode:lot.code,cardCodes:selected,wins:0,status:'playing'});
+  document.getElementById('playerName').value='';
+  updateLotUI();saveState();
+}
+
+function toggleWinner(id){
+  var p=state.players.find(function(x){return x.id===id;});if(!p)return;
+  if(p.status==='winner'){p.status='playing';p.wins=Math.max(0,p.wins-1);}
+  else{p.status='winner';p.wins++;}
+  updateLiveTracker();saveState();
+}
+function removePlayer(id){state.players=state.players.filter(function(x){return x.id!==id;});updateLotUI();saveState();}
+function clearPlayers(){if(!confirm('Remover todos?'))return;var lc=state.currentLot;state.players=state.players.filter(function(p){return p.lotCode!==lc;});updateLotUI();saveState();}
+function resetPlayerStatus(){state.players.forEach(function(p){if(p.lotCode===state.currentLot)p.status='playing';});updateLiveTracker();saveState();}
+
+// ===== BINGO DETECTION =====
+function getCardHits(cardData,gridSize,hasFreeCell){
+  var mid=Math.floor(gridSize/2),total=0,hits=0;
+  for(var c=0;c<gridSize;c++){for(var r=0;r<gridSize;r++){
+    if(hasFreeCell&&gridSize===5&&r===mid&&c===mid){hits++;total++;continue;}
+    total++;if(state.drawnNumbers.includes(cardData[c][r]))hits++;
+  }}return{hits:hits,total:total,pct:Math.round((hits/total)*100)};
+}
+function countCompletedLines(cardData,gridSize,hasFreeCell){
+  var mid=Math.floor(gridSize/2),count=0;
+  function isHit(r,c){if(hasFreeCell&&gridSize===5&&r===mid&&c===mid)return true;return state.drawnNumbers.includes(cardData[c][r]);}
+  for(var i=0;i<gridSize;i++){var w=true;for(var j=0;j<gridSize;j++){if(!isHit(i,j)){w=false;break;}}if(w)count++;}
+  for(var j2=0;j2<gridSize;j2++){var w2=true;for(var i2=0;i2<gridSize;i2++){if(!isHit(i2,j2)){w2=false;break;}}if(w2)count++;}
+  var d1=true,d2=true;
+  for(var k=0;k<gridSize;k++){if(!isHit(k,k))d1=false;if(!isHit(k,gridSize-1-k))d2=false;}
+  if(d1)count++;if(d2)count++;
+  return count;
+}
+function getPrizeConfig(){
+  var e1=document.getElementById('prize1line'),e2=document.getElementById('prize2line'),e3=document.getElementById('prize3line'),eF=document.getElementById('prizeFull');
+  return{line1:e1?e1.checked:true,line2:e2?e2.checked:false,line3:e3?e3.checked:false,full:eF?eF.checked:true};
+}
+
+// ===== LIVE TRACKER =====
+function updateLiveTracker(){
+  var lot=state.currentLot?state.lots[state.currentLot]:null;
+  var container=document.getElementById('liveTracker');
+  var alertArea=document.getElementById('bingoAlertArea');
+  var prizeAlerts=document.getElementById('prizeAlerts');
+  if(!container)return;
+  if(!lot){container.innerHTML='';if(alertArea)alertArea.innerHTML='';if(prizeAlerts)prizeAlerts.innerHTML='';return;}
+
+  var lotPlayers=state.players.filter(function(p){return p.lotCode===lot.code;});
+  if(!lotPlayers.length){
+    container.innerHTML='<div style="text-align:center;padding:24px;color:var(--text-muted);font-size:14px;border:1px dashed var(--border);border-radius:var(--radius-sm)">Adicione jogadores acima para ver o ranking.</div>';
+    if(alertArea)alertArea.innerHTML='';if(prizeAlerts)prizeAlerts.innerHTML='';return;
+  }
+
+  var prizes=getPrizeConfig();
+  var playerData=lotPlayers.map(function(p,idx){
+    var bestPct=0,bestHits=0,bestTotal=0,maxLines=0,bestCode='',cardResults=[];
+    p.cardCodes.forEach(function(code){
+      var cardObj=lot.cards.find(function(c){return c.code===code;});if(!cardObj)return;
+      var info=getCardHits(cardObj.data,lot.gridSize,lot.hasFreeCell);
+      var lines=lot.mode==='numbers'?countCompletedLines(cardObj.data,lot.gridSize,lot.hasFreeCell):0;
+      cardResults.push({code:code,pct:info.pct,hits:info.hits,total:info.total,lines:lines,data:cardObj.data});
+      if(info.pct>bestPct){bestPct=info.pct;bestHits=info.hits;bestTotal=info.total;bestCode=code;}
+      if(lines>maxLines)maxLines=lines;
+    });
+    return{id:p.id,name:p.name,status:p.status,wins:p.wins,cardCodes:p.cardCodes,bestPct:bestPct,bestHits:bestHits,bestTotal:bestTotal,maxLines:maxLines,bestCode:bestCode,cardResults:cardResults,colorIdx:idx};
+  });
+  playerData.sort(function(a,b){return b.bestPct-a.bestPct;});
+
+  // Prize winners (first player to reach each milestone)
+  var byLines=playerData.slice().sort(function(a,b){if(b.maxLines!==a.maxLines)return b.maxLines-a.maxLines;return b.bestPct-a.bestPct;});
+  var p1=prizes.line1?byLines.find(function(p){return p.maxLines>=1;}):null;
+  var p2=prizes.line2?byLines.find(function(p){return p.maxLines>=2;}):null;
+  var p3=prizes.line3?byLines.find(function(p){return p.maxLines>=3;}):null;
+  var pF=prizes.full?playerData.find(function(p){return p.bestPct===100;}):null;
+  var prizeIds={};
+  if(p1)prizeIds[p1.id]=(prizeIds[p1.id]||0)+1;
+  if(pF)prizeIds[pF.id]=(prizeIds[pF.id]||0)+1;
+
+  // Prize alerts panel
+  if(prizeAlerts){
+    var pa='';
+    if(pF)pa+='<div class="bingo-alert" style="background:linear-gradient(135deg,var(--gold),var(--gold-dark));padding:14px;margin-bottom:10px"><h3 style="font-size:20px">\uD83C\uDFC6 CARTELA CHEIA!</h3><p>'+escHtml(pF.name)+' completou 100%!</p></div>';
+    if(p1)pa+='<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--success-light);border:1px solid var(--success);border-radius:var(--radius-sm);margin-bottom:6px"><span style="font-size:18px">\uD83E\uDD47</span><span style="font-weight:600;font-size:13px;color:var(--success)">1\u00AA Linha: '+escHtml(p1.name)+'</span><span style="font-size:11px;color:var(--text-muted);margin-left:auto">'+p1.maxLines+' linha(s)</span></div>';
+    if(p2)pa+='<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--primary-light);border:1px solid var(--primary);border-radius:var(--radius-sm);margin-bottom:6px"><span style="font-size:18px">\uD83E\uDD48</span><span style="font-weight:600;font-size:13px;color:var(--primary)">2\u00AA Linha: '+escHtml(p2.name)+'</span><span style="font-size:11px;color:var(--text-muted);margin-left:auto">'+p2.maxLines+' linhas</span></div>';
+    if(p3)pa+='<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--gold-light);border:1px solid var(--gold);border-radius:var(--radius-sm);margin-bottom:6px"><span style="font-size:18px">\uD83E\uDD49</span><span style="font-weight:600;font-size:13px;color:var(--gold-dark)">3\u00AA Linha: '+escHtml(p3.name)+'</span><span style="font-size:11px;color:var(--text-muted);margin-left:auto">'+p3.maxLines+' linhas</span></div>';
+    prizeAlerts.innerHTML=pa;
+  }
+
+  // Game Over: disable draw inputs when full card achieved
+  var gameOver=!!pF;
+  var drawInput=document.getElementById('drawInputArea');
+  if(drawInput){
+    var drawBox=drawInput.querySelector('.draw-input-area');
+    if(drawBox){if(gameOver)drawBox.classList.add('draw-disabled');else drawBox.classList.remove('draw-disabled');}
+  }
+  var drawBtn=document.getElementById('drawBtn');
+  if(drawBtn&&gameOver){drawBtn.disabled=true;drawBtn.textContent='\u2705 Finalizado';}
+
+  // Game over banner in alertArea
+  if(alertArea){
+    if(gameOver&&pF){
+      alertArea.innerHTML='<div class="game-over-banner"><div style="font-size:48px;margin-bottom:8px">\uD83C\uDFC6</div><h2>JOGO FINALIZADO!</h2><div class="champion-name">\uD83E\uDD47 Campe\u00E3o: '+escHtml(pF.name)+'</div><p style="font-size:14px;opacity:0.8;margin-bottom:16px">Cartela '+escHtml(pF.bestCode)+' completada com '+state.drawnNumbers.length+' n\u00FAmeros sorteados</p><button class="btn" onclick="resetGame()">\uD83D\uDD04 Novo Jogo</button></div>';
+    }else{alertArea.innerHTML='';}
+  }
+
+  var html='';
+  playerData.forEach(function(p,rank){
+    var hasPrize=!!prizeIds[p.id];
+    var color=getAvatarColor(p.colorIdx);
+    html+='<div class="tracker-card'+(hasPrize?' is-winner':'')+'">';
+    html+='<div class="tracker-header">';
+    html+='<span class="tracker-name"><span class="player-avatar" style="background:'+color+'">'+getInitials(p.name)+'</span>';
+    if(rank===0&&state.drawnNumbers.length>0)html+='<span style="font-size:14px">\uD83E\uDD47</span>';
+    html+=escHtml(p.name);
+    if(p.maxLines>0)html+=' <span style="font-size:9px;padding:2px 6px;border-radius:8px;background:var(--success);color:#fff;font-weight:700">'+p.maxLines+'L</span>';
+    if(p.bestPct===100)html+=' <span style="font-size:9px;padding:2px 6px;border-radius:8px;background:var(--gold);color:#fff;font-weight:700">CHEIA</span>';
+    html+='</span>';
+    html+='<span class="tracker-pct">'+p.bestPct+'%</span>';
+    html+='</div>';
+    html+='<div class="progress-bar"><div class="progress-fill" style="width:'+p.bestPct+'%"></div></div>';
+    html+='<div class="tracker-detail"><span>'+p.bestHits+'/'+p.bestTotal+' \u00B7 '+p.maxLines+' linha'+(p.maxLines!==1?'s':'')+'</span><span>'+p.cardCodes.length+' cartela'+(p.cardCodes.length>1?'s':'')+'</span></div>';
+
+    // Mini-cartelas
+    if(p.cardResults.length>0){
+      var gs=lot.gridSize,mid2=Math.floor(gs/2);
+      var hdrs={3:['B','I','G'],4:['B','I','N','G'],5:['B','I','N','G','O']};
+      var hc5=['#2563eb','#dc2626','#ca8a04','#16a34a','#7c3aed'];
+      var hc3=['#2563eb','#ca8a04','#16a34a'];
+      var hc4=['#2563eb','#dc2626','#ca8a04','#16a34a'];
+      var useHc=gs===3?hc3:gs===4?hc4:hc5;
+      html+='<div class="mini-cartela-wrap"><div class="mini-cartelas-row">';
+      p.cardResults.forEach(function(cr){
+        var cStyle='';
+        if(cr.pct===100)cStyle='border-color:var(--gold)';
+        else if(cr.lines>=1&&p1&&p1.id===p.id)cStyle='border-color:var(--success)';
+        html+='<div class="mini-cartela"'+(cStyle?' style="'+cStyle+'"':'')+'>';
+        html+='<div class="mini-cartela-code">'+cr.code+' \u00B7 '+cr.pct+'% \u00B7 '+cr.lines+'L</div>';
+        html+='<div class="mini-grid g'+gs+'">';
+        if(lot.mode==='numbers'){var hd=hdrs[gs]||hdrs[5];for(var hi=0;hi<gs;hi++){html+='<div class="mini-grid-header" style="background:'+useHc[hi]+'">'+hd[hi]+'</div>';}}
+        for(var rr=0;rr<gs;rr++){for(var c2=0;c2<gs;c2++){
+          var isFree=lot.hasFreeCell&&gs===5&&rr===mid2&&c2===mid2;
+          if(isFree){html+='<div class="mini-grid-cell free hit">LIVRE</div>';}
+          else{var v=cr.data[c2][rr];html+='<div class="mini-grid-cell'+(state.drawnNumbers.includes(v)?' hit':'')+'">'+v+'</div>';}
+        }}
+        html+='</div></div>';
+      });
+      html+='</div></div>';
+    }
+    html+='<div class="tracker-actions"><button class="btn btn-sm btn-ghost" onclick="removePlayer('+p.id+')" style="color:var(--danger)">\u2715 Remover</button></div>';
+    html+='</div>';
+  });
+  container.innerHTML=html;
+}
+
+// ===== WORD LISTS =====
+function saveWordList(){
+  var name=document.getElementById('listName').value.trim(),raw=document.getElementById('listWords').value.trim();
+  if(!name){alert('Digite o nome da lista.');return;}if(!raw){alert('Adicione palavras.');return;}
+  var words=raw.split(/[\n,]+/).map(function(w){return w.trim();}).filter(function(w){return w.length>0;});
+  if(words.length<9){alert('M\u00EDnimo 9 palavras. Atual: '+words.length);return;}
+  state.wordLists[name]=words;document.getElementById('listName').value='';document.getElementById('listWords').value='';
+  renderWordLists();refreshWordListDropdown();saveState();
+}
+function deleteWordList(n){if(!confirm('Excluir "'+n+'"?'))return;delete state.wordLists[n];renderWordLists();refreshWordListDropdown();saveState();}
+function loadSampleList(){
+  var s={'Animais':['Cachorro','Gato','Elefante','Le\u00E3o','Girafa','Cobra','\u00C1guia','Tubar\u00E3o','Pinguim','Borboleta','Cavalo','Coelho','Tartaruga','Baleia','Papagaio','Macaco','Zebra','Coruja','Jacar\u00E9','Abelha','Formiga','Lobo','Urso','Pato','Galinha'],'Frutas':['Ma\u00E7\u00E3','Banana','Laranja','Uva','Morango','Abacaxi','Manga','Melancia','Goiaba','P\u00EAssego','Ameixa','Caju','Acerola','Mam\u00E3o','Maracuj\u00E1','Lim\u00E3o','Pitanga','Jambo','Jabuticaba','Framboesa','Cereja','Figo','Kiwi','Coco','Abacate'],'Matem\u00E1tica':['Soma','Subtra\u00E7\u00E3o','Multiplica\u00E7\u00E3o','Divis\u00E3o','Fra\u00E7\u00E3o','Decimal','Geometria','Tri\u00E2ngulo','Quadrado','C\u00EDrculo','Ret\u00E2ngulo','\u00C2ngulo','Per\u00EDmetro','\u00C1rea','Volume','Equa\u00E7\u00E3o','Pot\u00EAncia','Raiz','Par','\u00CDmpar','Dezena','Centena','Milhar','Dobro','Metade']};
+  Object.keys(s).forEach(function(n){state.wordLists[n]=s[n];});
+  renderWordLists();refreshWordListDropdown();saveState();
+}
+function renderWordLists(){
+  var c=document.getElementById('savedLists'),k=Object.keys(state.wordLists);
+  if(!k.length){c.innerHTML='<div class="empty-state"><div class="empty-icon">\uD83D\uDCDD</div><p>Nenhuma lista criada ainda.</p></div>';return;}
+  var h='';k.forEach(function(name){
+    var w=state.wordLists[name];
+    h+='<div style="border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;margin-bottom:12px">';
+    h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">';
+    h+='<strong style="font-size:15px;font-family:Outfit,sans-serif">'+escHtml(name)+'</strong>';
+    h+='<div style="display:flex;gap:8px;align-items:center"><span style="font-size:12px;color:var(--text-muted);font-weight:600">'+w.length+' palavras</span>';
+    h+='<button class="btn btn-sm btn-ghost" onclick="deleteWordList(\''+name.replace(/'/g,"\\'")+'\')" style="color:var(--danger)">\u2715</button></div></div>';
+    h+='<div style="display:flex;flex-wrap:wrap;gap:5px">';
+    w.slice(0,15).forEach(function(x){h+='<span style="padding:4px 12px;background:var(--surface-alt);border:1px solid var(--border);border-radius:20px;font-size:12px;color:var(--text-secondary);font-weight:500">'+escHtml(x)+'</span>';});
+    if(w.length>15)h+='<span style="padding:4px 12px;font-size:12px;color:var(--text-muted)">+'+(w.length-15)+' mais</span>';
+    h+='</div></div>';
+  });c.innerHTML=h;
+}
+
+// ===== PRINT & PDF =====
+function printCards(){if(!document.getElementById('cardsGrid')){alert('Gere as cartelas primeiro.');return;}window.print();}
+
+async function exportPDF(){
+  if(!state._lastCards||!state._lastCards.length){alert('Gere as cartelas primeiro.');return;}
+  if(typeof window.jspdf==='undefined'){alert('Biblioteca jsPDF n\u00E3o carregou. Recarregue a p\u00E1gina e tente novamente.');return;}
+  var downloads=await claude.use('downloads');
+  if(!downloads){alert('Downloads n\u00E3o dispon\u00EDvel neste ambiente. Use o bot\u00E3o Imprimir.');return;}
+  await drawPDF(downloads);
+}
+
+async function drawPDF(dl){
+  try{
+    var jsPDF=window.jspdf.jsPDF;
+    var pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+    var layout=parseInt(document.getElementById('printLayout').value);
+    var gridSize=parseInt(document.getElementById('gridSize').value);
+    var mode=document.getElementById('cardMode').value;
+    var hasFreeCell=document.getElementById('freeCell').checked;
+    var customTitle=document.getElementById('cardTitle').value.trim()||'';
+    var lot=state.currentLot?state.lots[state.currentLot]:null;
+    var lotCode=lot?lot.code:'????';
+    var cards=state._lastCards;
+    var headers={3:['B','I','G'],4:['B','I','N','G'],5:['B','I','N','G','O']};
+    var cc5=[[37,99,235],[220,38,38],[202,138,4],[22,163,74],[124,58,237]];
+    var cc4=[[37,99,235],[220,38,38],[202,138,4],[22,163,74]];
+    var cc3=[[37,99,235],[202,138,4],[22,163,74]];
+    var colColors=gridSize===3?cc3:gridSize===4?cc4:cc5;
+    var cols=2,rows=layout===6?3:2;
+    var mg=10,gp=6;
+    var cW=(210-mg*2-gp)/cols;
+    var cH=(297-mg*2-gp*(rows-1))/rows;
+    var perPage=cols*rows;
+
+    for(var pg=0;pg<Math.ceil(cards.length/perPage);pg++){
+      if(pg>0)pdf.addPage();
+      var start=pg*perPage,end=Math.min(start+perPage,cards.length);
+      for(var i=start;i<end;i++){
+        var card=cards[i];var idx=i-start;
+        var cx=mg+(idx%cols)*(cW+gp);var cy=mg+Math.floor(idx/cols)*(cH+gp);
+        var cardCode=lotCode+'-'+String(i+1).padStart(2,'0');
+
+        pdf.setDrawColor(180);pdf.setLineWidth(0.4);pdf.roundedRect(cx,cy,cW,cH,3,3,'S');
+        var barSegW=cW/5;
+        cc5.forEach(function(co,ci){pdf.setFillColor(co[0],co[1],co[2]);pdf.rect(cx+ci*barSegW,cy,barSegW+(ci===4?0.5:0),1.5,'F');});
+
+        var title=customTitle||'BINGO';var titleY=cy+8;
+        pdf.setFont('helvetica','bold');pdf.setFontSize(customTitle?14:18);pdf.setTextColor(45,42,110);
+        pdf.text(title,cx+cW/2,titleY,{align:'center'});
+        pdf.setFont('helvetica','normal');pdf.setFontSize(8);pdf.setTextColor(130);
+        pdf.text(cardCode,cx+cW/2,titleY+4,{align:'center'});
+
+        var tableTop=titleY+7,tableW=cW-8,tableX=cx+4;
+        var cellW=tableW/gridSize;
+        var headerH=layout===6?5:6;
+        var cellH=layout===6?Math.min((cH-tableTop+cy-14)/gridSize,9):Math.min((cH-tableTop+cy-14)/gridSize,12);
+        var isWord=mode==='words';
+
+        if(!isWord){
+          var hd=headers[gridSize]||headers[5];
+          for(var c=0;c<gridSize;c++){
+            var hx=tableX+c*cellW;var cc=colColors[c]||colColors[0];
+            pdf.setFillColor(cc[0],cc[1],cc[2]);
+            if(c===0){pdf.roundedRect(hx,tableTop,cellW,headerH,2,2,'F');pdf.rect(hx+cellW-2,tableTop,2,headerH,'F');}
+            else if(c===gridSize-1){pdf.roundedRect(hx,tableTop,cellW,headerH,2,2,'F');pdf.rect(hx,tableTop,2,headerH,'F');}
+            else{pdf.rect(hx,tableTop,cellW,headerH,'F');}
+            pdf.setFont('helvetica','bold');pdf.setFontSize(layout===6?10:12);pdf.setTextColor(255);
+            pdf.text(hd[c],hx+cellW/2,tableTop+headerH-1.5,{align:'center'});
+          }
+        }
+
+        var bodyTop=isWord?tableTop:tableTop+headerH+1;
+        var mid=Math.floor(gridSize/2);
+        for(var r=0;r<gridSize;r++){for(var c2=0;c2<gridSize;c2++){
+          var cellX=tableX+c2*cellW,cellY=bodyTop+r*cellH;
+          var isFree=hasFreeCell&&gridSize===5&&mode==='numbers'&&r===mid&&c2===mid;
+          if(isFree){pdf.setFillColor(254,249,239);pdf.setDrawColor(201,149,45);}
+          else{pdf.setFillColor(250,249,247);pdf.setDrawColor(210);}
+          pdf.setLineWidth(0.2);pdf.roundedRect(cellX+0.3,cellY+0.3,cellW-0.6,cellH-0.6,1,1,'FD');
+          if(isFree){pdf.setFont('helvetica','bold');pdf.setFontSize(layout===6?5:6);pdf.setTextColor(154,115,32);pdf.text('LIVRE',cellX+cellW/2,cellY+cellH/2+1,{align:'center'});}
+          else{var val=String(card[c2][r]);pdf.setFont('helvetica','bold');
+            var fSize=isWord?(val.length>10?(layout===6?5:6):(layout===6?6:7)):(layout===6?10:12);
+            pdf.setFontSize(fSize);pdf.setTextColor(30,30,46);pdf.text(val,cellX+cellW/2,cellY+cellH/2+(isWord?1:1.5),{align:'center',maxWidth:cellW-2});}
+        }}
+
+        pdf.setFont('helvetica','normal');pdf.setFontSize(5);pdf.setTextColor(180);
+        pdf.text('Bingo Master Pro \u00B7 '+cardCode,cx+cW/2,cy+cH-2,{align:'center'});
+      }
+    }
+
+    var fname=customTitle?customTitle.replace(/[^a-zA-Z0-9\u00C0-\u024F\s-]/g,'').replace(/\s+/g,'_'):'bingo';
+    var filename=fname+'_'+lotCode+'_'+cards.length+'_cartelas.pdf';
+    var blob=pdf.output('blob');
+    await dl.save({filename:filename,data:blob});
+  }catch(e){console.error(e);if(e.code==='declined'){return;}alert('Erro ao gerar PDF: '+(e.message||e.code||e));}
+}
+
+// ===== INIT =====
+(function(){initDrawBoard(state.maxNum);updateLotUI();renderWordLists();refreshWordListDropdown();})();
+</script>
+</body>
+</html>

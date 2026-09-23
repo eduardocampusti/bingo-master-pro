@@ -75,7 +75,7 @@
   --col-b: #60a5fa; --col-i: #f87171; --col-n: #fbbf24; --col-g: #4ade80; --col-o: #a78bfa;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0)}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0)}
 .display{font-family:'Outfit','DM Sans',sans-serif}
 
 /* ===== HEADER ===== */
@@ -348,18 +348,87 @@ input[type="checkbox"]{width:16px;height:16px;accent-color:var(--primary-mid)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
 .animate-pop{animation:popIn 0.4s ease-out}
 
-/* ===== RESPONSIVE ===== */
+/* ===== RESPONSIVE - TABLET ===== */
+@media(max-width:1024px){
+  .main{padding:20px}
+  .cards-grid{grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+  #liveTracker{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+  .current-ball{width:130px;height:130px}
+  .current-ball .ball-number{font-size:44px}
+  .draw-board{grid-template-columns:repeat(auto-fill,minmax(40px,1fr))}
+}
+
+/* ===== RESPONSIVE - MOBILE ===== */
 @media(max-width:640px){
-  .header{padding:0 16px;height:56px}
-  .main{padding:16px}
-  .nav-tab{padding:12px 14px;font-size:13px}
-  .form-row{flex-direction:column}
+  .header{padding:0 12px;height:52px}
+  .logo-mark{width:34px;height:34px;font-size:14px;border-radius:9px}
+  .logo h1{font-size:17px}
+  .logo h1 span{font-size:12px}
+  .main{padding:12px}
+  .nav{padding:0 12px;gap:0}
+  .nav-tab{padding:11px 12px;font-size:12px}
+  .form-row{flex-direction:column;gap:10px}
   .field{min-width:unset}
-  .current-ball{width:120px;height:120px}
-  .current-ball .ball-number{font-size:40px}
-  .cards-grid{grid-template-columns:1fr}
+  .panel{padding:16px;margin-bottom:16px;border-radius:12px}
+  .panel-title{font-size:13px;margin-bottom:14px}
+  .btn{padding:9px 16px;font-size:13px}
+  .btn-lg{padding:12px 22px;font-size:14px;border-radius:10px}
+  .current-ball{width:100px;height:100px;margin-bottom:20px}
+  .current-ball .ball-number{font-size:36px}
+  .current-ball .ball-letter{font-size:14px}
+  .cards-grid{grid-template-columns:1fr;gap:16px}
+  .bingo-card{padding:14px}
+  .bingo-card-header h3{font-size:22px;letter-spacing:6px}
+  .bingo-card-header h3.custom-title{font-size:18px;letter-spacing:1px}
+  .bingo-table td{padding:9px 0;font-size:17px}
+  .bingo-table th{padding:6px 0;font-size:14px}
   #liveTracker{grid-template-columns:1fr}
-  .panel{padding:20px}
+  .tracker-card{padding:12px}
+  .mini-ball{width:34px;height:34px;font-size:11px}
+  .drawn-numbers{gap:4px}
+  .draw-board{grid-template-columns:repeat(auto-fill,minmax(38px,1fr));gap:3px}
+  .draw-board .num-cell{font-size:11px}
+  .drawn-strip .mini-ball{width:30px;height:30px;font-size:10px}
+  .draw-input-row{flex-wrap:wrap}
+  .draw-input-row input{font-size:16px;padding:12px 14px}
+  .add-player-row{flex-direction:column;padding:12px}
+  .lot-btn{padding:6px 12px;font-size:12px}
+  .lot-btn .lot-btn-title{font-size:10px}
+  .mini-cartela{padding:4px}
+  .mini-grid-cell{font-size:7px;padding:2px 0}
+  .mini-grid-header{font-size:6px}
+  .mini-cartela-code{font-size:7px}
+  .stats-row{grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .stat-card{padding:12px}
+  .stat-card .stat-value{font-size:24px}
+  .stat-card .stat-label{font-size:10px}
+  #drawMiniDash{gap:6px}
+  #drawMiniDash > div{padding:8px 10px;border-radius:8px;min-width:60px}
+  #drawMiniDash > div > div:first-child{font-size:20px}
+  #drawMiniDash > div > div:last-child{font-size:8px}
+  .card-chip-option{padding:4px 10px;font-size:11px}
+  .game-over-banner{padding:20px}
+  .game-over-banner h2{font-size:24px}
+  .game-over-banner .champion-name{font-size:18px}
+  .bingo-alert h3{font-size:20px}
+}
+
+/* ===== RESPONSIVE - SMALL MOBILE ===== */
+@media(max-width:380px){
+  .header{padding:0 8px;height:48px}
+  .logo-mark{width:30px;height:30px;font-size:12px}
+  .logo h1{font-size:15px}
+  .main{padding:8px}
+  .nav-tab{padding:10px 8px;font-size:11px}
+  .panel{padding:12px;border-radius:10px}
+  .current-ball{width:85px;height:85px}
+  .current-ball .ball-number{font-size:30px}
+  .current-ball .ball-letter{font-size:12px}
+  .bingo-card-header h3{font-size:18px;letter-spacing:4px}
+  .bingo-table td{font-size:15px;padding:7px 0}
+  .stats-row{grid-template-columns:1fr 1fr;gap:6px}
+  #drawMiniDash{flex-direction:column}
+  .draw-input-row input{font-size:14px}
 }
 
 /* ===== PRINT ===== */

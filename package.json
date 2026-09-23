@@ -1,15 +1,1 @@
-{
-  "name": "bingo-master-pro",
-  "version": "1.0.0",
-  "description": "Sistema completo de bingo",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "express": "^4.21.0"
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  }
-}
+﻿{"name":"bingo-master-pro","version":"1.0.0","description":"Sistema completo de bingo","main":"server.js","scripts":{"start":"node server.js"},"dependencies":{"express":"^4.21.0"},"engines":{"node":">=18.0.0"}}

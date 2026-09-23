@@ -334,6 +334,14 @@ input[type="checkbox"]{width:16px;height:16px;accent-color:var(--primary-mid)}
 .card-chip-option.selected{background:var(--primary);border-color:var(--primary);color:#fff}
 .card-chip-option.taken{opacity:0.4;cursor:not-allowed;text-decoration:line-through}
 
+/* Lot history buttons */
+.lot-btn{padding:8px 16px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;font-family:'Outfit',sans-serif;background:var(--surface);border:1.5px solid var(--border);color:var(--text-secondary);cursor:pointer;transition:all 0.15s;display:inline-flex;align-items:center;gap:6px}
+.lot-btn:hover{border-color:var(--primary);color:var(--primary)}
+.lot-btn.active{background:var(--primary);border-color:var(--primary);color:#fff;box-shadow:0 2px 8px var(--primary-glow)}
+.lot-btn .lot-btn-title{font-size:11px;font-weight:400;opacity:0.7}
+.lot-btn .lot-btn-delete{font-size:10px;margin-left:4px;opacity:0.5;cursor:pointer}
+.lot-btn .lot-btn-delete:hover{opacity:1;color:var(--danger)}
+
 /* ===== ANIMATIONS ===== */
 @keyframes popIn{0%{transform:scale(0.3);opacity:0}60%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
 @keyframes shake{0%,100%{transform:rotate(0)}25%{transform:rotate(-8deg)}75%{transform:rotate(8deg)}}
@@ -493,10 +501,12 @@ input[type="checkbox"]{width:16px;height:16px;accent-color:var(--primary-mid)}
 
 <!-- ====== PAGE: JOGADORES (lote + tracking ao vivo) ====== -->
 <div id="pagePlayers" class="page">
-  <div id="lotInfoPanel" style="margin-bottom:20px">
-    <div id="lotInfo">
-      <div class="panel"><div class="empty-state" style="padding:28px"><div class="empty-icon">🎴</div><p style="font-size:15px">Gere cartelas na aba <strong>Cartelas</strong> para iniciar uma sessão de jogo.</p></div></div>
+  <div id="lotHistoryPanel" style="margin-bottom:16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <span style="font-family:Outfit,sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-secondary)">🎴 Lotes de cartelas</span>
     </div>
+    <div id="lotButtons" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px"></div>
+    <div id="lotInfo"></div>
   </div>
 
   <div id="bingoAlertArea"></div>
@@ -615,7 +625,13 @@ input[type="checkbox"]{width:16px;height:16px;accent-color:var(--primary-mid)}
 // ===== STATE =====
 let state={drawnNumbers:[],players:[],wordLists:{},maxNum:75,mode:'numbers',gridSize:5,lots:{},currentLot:null,_lastCards:[]};
 try{const s=localStorage.getItem('bmp3');if(s){state={...state,...JSON.parse(s)};}}catch(e){}
-function saveState(){try{localStorage.setItem('bmp3',JSON.stringify(state));}catch(e){}}
+function saveState(){
+  // Sync drawnNumbers to current lot
+  if(state.currentLot&&state.lots[state.currentLot]){
+    state.lots[state.currentLot].drawnNumbers=state.drawnNumbers.slice();
+  }
+  try{localStorage.setItem('bmp3',JSON.stringify(state));}catch(e){}
+}
 
 // ===== THEME =====
 function toggleTheme(){
@@ -737,6 +753,20 @@ function generateCards(){
   state.currentLot=lotCode;
   state.drawnNumbers=[];
 
+  // Limit to 10 most recent lots
+  var lotKeys=Object.keys(state.lots);
+  if(lotKeys.length>10){
+    // Sort by createdAt and remove oldest
+    var sorted=lotKeys.sort(function(a,b){
+      return new Date(state.lots[b].createdAt)-new Date(state.lots[a].createdAt);
+    });
+    sorted.slice(10).forEach(function(k){
+      // Also remove players from deleted lots
+      state.players=state.players.filter(function(p){return p.lotCode!==k;});
+      delete state.lots[k];
+    });
+  }
+
   document.getElementById('cardsOutput').innerHTML=
     '<div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap" class="no-print">'+
     '<span class="lot-badge">\uD83C\uDCCF Lote: '+lotCode+'</span>'+
@@ -744,6 +774,7 @@ function generateCards(){
     '</div>'+html;
 
   if(mode==='numbers')initDrawBoard(maxNum);
+  renderLotButtons();
   updateLotUI();
   saveState();
 }
@@ -872,10 +903,73 @@ function resetGame(){
 }
 
 // ===== LOT & PLAYERS =====
-// ===== LOT & PLAYERS =====
 var avatarColors=['#2563eb','#dc2626','#ca8a04','#16a34a','#7c3aed','#0d9488','#c44569','#ea580c'];
 function getAvatarColor(i){return avatarColors[i%avatarColors.length];}
 function getInitials(name){var parts=name.trim().split(/\s+/);if(parts.length>=2)return(parts[0][0]+parts[1][0]).toUpperCase();return name.substring(0,2).toUpperCase();}
+
+function renderLotButtons(){
+  var container=document.getElementById('lotButtons');
+  if(!container)return;
+  var lotKeys=Object.keys(state.lots);
+  if(!lotKeys.length){
+    container.innerHTML='<span style="font-size:13px;color:var(--text-muted)">Nenhum lote criado. Gere cartelas na aba Cartelas.</span>';
+    return;
+  }
+  // Sort by createdAt desc (newest first)
+  lotKeys.sort(function(a,b){
+    var da=state.lots[a].createdAt||'',db=state.lots[b].createdAt||'';
+    return da<db?1:da>db?-1:0;
+  });
+  var html='';
+  lotKeys.forEach(function(code){
+    var lot=state.lots[code];
+    var isActive=state.currentLot===code;
+    html+='<div class="lot-btn'+(isActive?' active':'')+'" onclick="switchLot(\''+code+'\')">';
+    html+='<strong>'+code+'</strong>';
+    html+='<span class="lot-btn-title">'+escHtml(lot.title)+' ('+lot.cards.length+')</span>';
+    html+='<span class="lot-btn-delete" onclick="event.stopPropagation();deleteLot(\''+code+'\')" title="Excluir lote">\u2715</span>';
+    html+='</div>';
+  });
+  container.innerHTML=html;
+}
+
+function switchLot(code){
+  if(!state.lots[code])return;
+  // Save current drawnNumbers to current lot before switching
+  if(state.currentLot&&state.lots[state.currentLot]){
+    state.lots[state.currentLot].drawnNumbers=state.drawnNumbers.slice();
+  }
+  state.currentLot=code;
+  // Restore drawnNumbers from the selected lot
+  state.drawnNumbers=state.lots[code].drawnNumbers?state.lots[code].drawnNumbers.slice():[];
+  state.maxNum=state.lots[code].maxNum||75;
+  state.gameOver=false;
+  initDrawBoard(state.maxNum);
+  renderLotButtons();
+  updateLotUI();
+  saveState();
+}
+
+function deleteLot(code){
+  if(!confirm('Excluir o lote '+code+'? Os jogadores deste lote tamb\u00E9m ser\u00E3o removidos.'))return;
+  state.players=state.players.filter(function(p){return p.lotCode!==code;});
+  delete state.lots[code];
+  if(state.currentLot===code){
+    var remaining=Object.keys(state.lots);
+    state.currentLot=remaining.length?remaining[0]:null;
+    if(state.currentLot){
+      state.drawnNumbers=state.lots[state.currentLot].drawnNumbers?state.lots[state.currentLot].drawnNumbers.slice():[];
+      state.maxNum=state.lots[state.currentLot].maxNum||75;
+    }else{
+      state.drawnNumbers=[];
+    }
+    state.gameOver=false;
+  }
+  initDrawBoard(state.maxNum);
+  renderLotButtons();
+  updateLotUI();
+  saveState();
+}
 
 function updateLotUI(){
   var lot=state.currentLot?state.lots[state.currentLot]:null;
@@ -1223,7 +1317,13 @@ async function drawPDF(dl){
 }
 
 // ===== INIT =====
-(function(){initDrawBoard(state.maxNum);updateLotUI();renderWordLists();refreshWordListDropdown();})();
+(function(){
+  // Restore drawnNumbers from current lot
+  if(state.currentLot&&state.lots[state.currentLot]&&state.lots[state.currentLot].drawnNumbers){
+    state.drawnNumbers=state.lots[state.currentLot].drawnNumbers.slice();
+  }
+  initDrawBoard(state.maxNum);renderLotButtons();updateLotUI();renderWordLists();refreshWordListDropdown();
+})();
 </script>
 </body>
 </html>

@@ -1407,16 +1407,10 @@ function generateCards(){
     });
   }
 
-  document.getElementById('cardsOutput').innerHTML=
-    '<div class="cards-output-head no-print">'+
-    '<span class="lot-badge">Lote '+lotCode+'</span>'+
-    '<span style="font-size:14px;color:var(--text-secondary)">'+qty+' cartelas \u00B7 '+lot.createdAt+'</span>'+
-    '<button class="btn btn-primary btn-sm" style="margin-left:auto" onclick="showPage(\'pagePlayers\')">Ir para Ao vivo</button>'+
-    '</div>'+html;
-
   initDrawBoard(mode==='numbers'?maxNum:state.maxNum);
   resetBallDisplay();
   renderLotButtons();
+  renderedLotCards='';
   updateLotUI();
   saveState();
   try{document.getElementById('cardsOutput').scrollIntoView({behavior:'smooth',block:'start'});}catch(e){}
@@ -1772,7 +1766,7 @@ function updateLotUI(){
     if(trackPanel)trackPanel.style.display='none';
     if(grid)grid.classList.add('no-lot');
     lastLotShown=null;
-    updateDrawnStrip();updateLiveTracker();
+    updateDrawnStrip();updateLiveTracker();renderLotCards();renderedLotCards='';
     return;
   }
 
@@ -1805,7 +1799,9 @@ function updateLotUI(){
     chipContainer.appendChild(chip);
   });
   updateDrawnStrip();updateLiveTracker();
+  if(renderedLotCards!==lot.code+':'+lot.cards.length){renderLotCards();renderedLotCards=lot.code+':'+lot.cards.length;}
 }
+var renderedLotCards='';
 
 function updateDrawnStrip(){
   var strip=document.getElementById('playerDrawnBalls');
@@ -2160,11 +2156,40 @@ function renderWordLists(){
   });c.innerHTML=h;
 }
 
+// ===== CARTELAS DO LOTE SELECIONADO =====
+// As cartelas ficam salvas em state.lots; aqui elas sao sempre redesenhadas a partir do lote atual,
+// para nao "sumirem" ao recarregar a pagina ou trocar de lote.
+function lotCardsForPrint(){
+  var lot=state.currentLot?state.lots[state.currentLot]:null;
+  if(lot&&lot.cards&&lot.cards.length)return lot.cards.map(function(c){return c.data;}).filter(Boolean);
+  return state._lastCards||[];
+}
+function renderLotCards(){
+  var out=document.getElementById('cardsOutput');if(!out)return;
+  var lot=state.currentLot?state.lots[state.currentLot]:null;
+  if(!lot||!lot.cards||!lot.cards.length){out.innerHTML='';return;}
+  var layout=document.getElementById('printLayout').value;
+  var ct=lot.title&&lot.title!=='BINGO'?lot.title:'';
+  var html='<div class="cards-grid print-'+layout+'" id="cardsGrid">';
+  lot.cards.forEach(function(c,i){if(c.data)html+=renderCard(c.data,i,lot.gridSize,lot.mode,lot.hasFreeCell,ct,lot.code);});
+  html+='</div>';
+  out.innerHTML=
+    '<div class="cards-output-head no-print">'+
+    '<span class="lot-badge">Lote '+lot.code+'</span>'+
+    '<span style="font-size:14px;color:var(--text-secondary)"><strong style="color:var(--text)">'+escHtml(lot.title)+'</strong> · '+lot.cards.length+' cartelas · '+escHtml(lot.createdAt||'')+'</span>'+
+    '<span style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap">'+
+    '<button class="btn btn-secondary btn-sm" onclick="printCards()">Imprimir</button>'+
+    '<button class="btn btn-gold btn-sm" onclick="exportPDF()">Baixar PDF</button>'+
+    '<button class="btn btn-primary btn-sm" onclick="showPage(\'pagePlayers\')">Ir para Ao vivo</button></span>'+
+    '</div>'+html;
+}
+(function(){var pl=document.getElementById('printLayout');if(pl)pl.addEventListener('change',renderLotCards);})();
+
 // ===== PRINT & PDF =====
 function printCards(){if(!document.getElementById('cardsGrid')){alert('Gere as cartelas primeiro.');return;}window.print();}
 
 async function exportPDF(){
-  if(!state._lastCards||!state._lastCards.length){alert('Gere as cartelas primeiro.');return;}
+  if(!lotCardsForPrint().length){alert('Gere as cartelas primeiro.');return;}
   if(typeof window.jspdf==='undefined'){alert('Biblioteca jsPDF n\u00E3o carregou. Recarregue a p\u00E1gina e tente novamente.');return;}
   var downloads=null;
   try{if(typeof claude!=='undefined'&&claude&&typeof claude.use==='function')downloads=await claude.use('downloads');}catch(e){downloads=null;}
@@ -2182,7 +2207,12 @@ async function drawPDF(dl){
     var customTitle=document.getElementById('cardTitle').value.trim()||'';
     var lot=state.currentLot?state.lots[state.currentLot]:null;
     var lotCode=lot?lot.code:'????';
-    var cards=state._lastCards;
+    var cards=lotCardsForPrint();
+    // O PDF usa as configuracoes do lote selecionado (e nao as do formulario)
+    if(lot&&lot.cards&&lot.cards.length){
+      gridSize=lot.gridSize;mode=lot.mode;hasFreeCell=lot.hasFreeCell;
+      customTitle=lot.title&&lot.title!=='BINGO'?lot.title:'';
+    }
     var headers={3:['B','I','G'],4:['B','I','N','G'],5:['B','I','N','G','O']};
     var cc5=[[47,91,211],[200,52,58],[176,122,12],[31,138,76],[109,63,196]];
     var cc4=[[47,91,211],[200,52,58],[176,122,12],[31,138,76]];

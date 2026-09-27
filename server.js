@@ -1,18 +1,40 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 const pkg = require('./package.json');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const INDEX = path.join(__dirname, 'public', 'index.html');
 
-// Identificação automática de cada deploy (a Vercel preenche o commit sozinha)
+// Commit do deploy: Vercel informa por variável; em outros servidores (Hostinger) tenta ler o .git
+function gitCommit() {
+  try {
+    const gitDir = path.join(__dirname, '.git');
+    const head = fs.readFileSync(path.join(gitDir, 'HEAD'), 'utf8').trim();
+    if (!head.startsWith('ref:')) return head;
+    const ref = head.slice(5).trim();
+    const refFile = path.join(gitDir, ref);
+    if (fs.existsSync(refFile)) return fs.readFileSync(refFile, 'utf8').trim();
+    const packed = fs.readFileSync(path.join(gitDir, 'packed-refs'), 'utf8');
+    const line = packed.split('\n').find(l => l.endsWith(' ' + ref));
+    return line ? line.split(' ')[0] : '';
+  } catch (e) { return ''; }
+}
+// Sem commit disponível, usa a "impressão digital" do index.html: muda a cada deploy com alteração
+function contentHash() {
+  try { return 'h' + crypto.createHash('sha1').update(fs.readFileSync(INDEX)).digest('hex').slice(0, 6); }
+  catch (e) { return 'dev'; }
+}
+
+// Identificação automática de cada deploy
+const commit = process.env.VERCEL_GIT_COMMIT_SHA || process.env.GIT_COMMIT || gitCommit();
 const BUILD = {
   version: pkg.version,
-  commit: (process.env.VERCEL_GIT_COMMIT_SHA || process.env.GIT_COMMIT || 'dev').slice(0, 7),
+  commit: commit ? commit.slice(0, 7) : contentHash(),
   message: (process.env.VERCEL_GIT_COMMIT_MESSAGE || '').split('\n')[0],
-  env: process.env.VERCEL_ENV || 'local'
+  env: process.env.VERCEL_ENV || (process.env.NODE_ENV === 'production' ? 'production' : 'server')
 };
 
 function sendIndex(req, res) {

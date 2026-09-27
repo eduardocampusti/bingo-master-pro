@@ -584,6 +584,26 @@ button.num-cell:hover:not(.drawn){background:var(--border-strong);color:var(--te
   .ui-toasts{top:calc(64px + env(safe-area-inset-top,0px));left:16px;right:16px;width:auto}
 }
 
+/* ===== NUVEM (conta e sincronizacao) ===== */
+.cloud-btn{display:flex;align-items:center;gap:12px;width:100%;min-height:52px;padding:8px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#EDEBF5;cursor:pointer;text-align:left;transition:background .15s,border-color .15s}
+.cloud-btn:hover{background:rgba(255,255,255,.08)}
+.cloud-ic{position:relative;display:grid;place-items:center;width:32px;height:32px;border-radius:10px;background:rgba(168,162,240,.16);color:#C9C5F7;flex-shrink:0}
+.cloud-dot{position:absolute;right:-2px;bottom:-2px;width:10px;height:10px;border-radius:50%;border:2px solid var(--ink);background:#8C88AE}
+.cloud-btn[data-status="synced"] .cloud-dot{background:#4CC784}
+.cloud-btn[data-status="saving"] .cloud-dot{background:#E7C27A;animation:cloudPulse 1s ease-in-out infinite}
+.cloud-btn[data-status="offline"] .cloud-dot{background:#F06A6F}
+.cloud-btn[data-status="off"] .cloud-dot{display:none}
+.cloud-txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.cloud-label{font:600 13px/1.2 var(--font-body)}
+.cloud-sub{font-size:11px;color:#8C88AE;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@keyframes cloudPulse{50%{opacity:.35}}
+.cloud-top{display:none}
+.acc-dialog .ui-msg{margin-bottom:18px}
+.acc-tabs{margin-bottom:16px}
+.acc-form{display:flex;flex-direction:column;gap:12px}
+.acc-err{font-size:13px;font-weight:600;color:var(--danger);background:var(--danger-light);border-radius:10px;padding:10px 12px}
+.acc-form .ui-actions{margin-top:8px}
+
 /* ===== AVISO DE VERSAO NOVA ===== */
 .update-banner{position:fixed;right:24px;bottom:24px;z-index:900;display:flex;align-items:center;gap:12px;max-width:min(520px,calc(100vw - 32px));padding:12px 12px 12px 18px;background:var(--surface);border:1px solid var(--border-strong);border-radius:16px;box-shadow:var(--shadow-md);animation:fadeIn .25s ease-out}
 .update-dot{width:10px;height:10px;border-radius:50%;background:var(--success);box-shadow:0 0 0 4px var(--success-light);flex-shrink:0}
@@ -663,6 +683,10 @@ body.telao-lock{overflow:hidden}
   .topbar .brand-ver-ed{display:none}
   .topbar .theme-toggle{width:44px;height:44px;border-radius:12px;border:1.5px solid var(--border-strong);background:var(--surface);color:var(--text);display:grid;place-items:center;cursor:pointer}
   .topbar .btn-telao{width:44px;padding:0}
+  .topbar .cloud-top{display:grid;place-items:center;width:44px;height:44px;min-height:0;padding:0;border-radius:12px;border:1.5px solid var(--border-strong);background:var(--surface)}
+  .topbar .cloud-top[hidden]{display:none}
+  .topbar .cloud-ic{background:none;color:var(--primary);width:auto;height:auto}
+  .topbar .cloud-dot{border-color:var(--surface);right:-4px;bottom:-3px}
   .bottom-nav{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;left:0;right:0;bottom:0;z-index:60;height:calc(72px + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);background:var(--surface);border-top:1px solid var(--border)}
   .bottom-nav .nav-tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:0;background:none;color:var(--text-muted);font:600 11px var(--font-body);cursor:pointer}
   .bottom-nav .nav-ic{display:grid;place-items:center;width:46px;height:30px;border-radius:999px;transition:background .15s}
@@ -799,6 +823,10 @@ body.telao-lock{overflow:hidden}
     <button class="nav-tab" data-page="pageAbout"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Sobre</button>
   </nav>
   <div class="side-foot">
+    <button type="button" class="cloud-btn cloud-side" onclick="openAccount()" hidden data-status="off">
+      <span class="cloud-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 19H7a5 5 0 1 1 .9-9.9A6 6 0 0 1 19.5 11 4 4 0 0 1 17.5 19z"/></svg><i class="cloud-dot"></i></span>
+      <span class="cloud-txt"><span class="cloud-label">Salvar na nuvem</span><span class="cloud-sub">Acesse de qualquer aparelho</span></span>
+    </button>
     <button class="btn-telao" onclick="openTelao()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>Modo Telão</button>
     <button class="theme-toggle" data-label="1" onclick="toggleTheme()">Tema escuro</button>
   </div>
@@ -813,6 +841,7 @@ body.telao-lock{overflow:hidden}
       <button type="button" class="brand-ver" onclick="showPage('pageAbout')" aria-label="Sobre esta versão"><i aria-hidden="true"></i><span data-app-version="v">v2.6</span><span class="brand-ver-ed">Edição Salão</span></button>
     </div>
   </div>
+  <button type="button" class="cloud-btn cloud-top" onclick="openAccount()" hidden data-status="off"><span class="cloud-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 19H7a5 5 0 1 1 .9-9.9A6 6 0 0 1 19.5 11 4 4 0 0 1 17.5 19z"/></svg><i class="cloud-dot"></i></span></button>
   <button class="btn-telao" onclick="openTelao()" aria-label="Abrir Modo Telão"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></button>
   <button class="theme-toggle" onclick="toggleTheme()" aria-label="Alternar tema"></button>
 </header>
@@ -1264,7 +1293,8 @@ body.telao-lock{overflow:hidden}
 // ===== STATE =====
 let state={drawnNumbers:[],players:[],wordLists:{},maxNum:75,mode:'numbers',gridSize:5,lots:{},currentLot:null,_lastCards:[]};
 try{const s=localStorage.getItem('bmp3');if(s){state={...state,...JSON.parse(s)};}}catch(e){}
-// Normaliza dados antigos
+// Normaliza dados (antigos ou vindos da nuvem)
+function normalizeState(){
 if(!state.lots||typeof state.lots!=='object')state.lots={};
 if(!Array.isArray(state.players))state.players=[];
 if(!state.wordLists||typeof state.wordLists!=='object')state.wordLists={};
@@ -1286,6 +1316,10 @@ Object.keys(state.lots).forEach(function(k){
   if(!Array.isArray(l.drawnNumbers))l.drawnNumbers=k===state.currentLot?state.drawnNumbers.slice():[];
 });
 state.players.forEach(function(p){if(!Array.isArray(p.cardCodes))p.cardCodes=[];});
+if(!state.deletedLots||typeof state.deletedLots!=='object')state.deletedLots={};
+if(!state.deletedPlayers||typeof state.deletedPlayers!=='object')state.deletedPlayers={};
+}
+normalizeState();
 
 // ===== COPIAS DE SEGURANCA AUTOMATICAS =====
 // A cada abertura do sistema (e antes de excluir ou importar lotes) guardamos uma copia
@@ -1310,9 +1344,12 @@ takeSnapshot((function(){try{return localStorage.getItem('bmp3');}catch(e){retur
 function saveState(){
   // Sync drawnNumbers to current lot
   if(state.currentLot&&state.lots[state.currentLot]){
-    state.lots[state.currentLot].drawnNumbers=state.drawnNumbers.slice();
+    var cur=state.lots[state.currentLot];
+    if(!Array.isArray(cur.drawnNumbers)||cur.drawnNumbers.join(',')!==state.drawnNumbers.join(','))cur._ts=Date.now();
+    cur.drawnNumbers=state.drawnNumbers.slice();
   }
   try{localStorage.setItem('bmp3',JSON.stringify(state));}catch(e){}
+  if(typeof scheduleCloudPush==='function')scheduleCloudPush();
 }
 
 // ===== ICONS =====
@@ -1396,6 +1433,13 @@ function notifyGameOver(){notify('Uma cartela foi completada. Clique em Novo jog
 // ===== VERSAO / SOBRE =====
 // Para lançar uma versão nova: adicione um item no topo de APP_VERSIONS.
 var APP_VERSIONS=[
+  {v:'2.8',date:'27/09/2026',title:'Salvar na nuvem',items:[
+    'Conta com e-mail e senha para guardar lotes, jogadores e sorteios no banco de dados da hospedagem',
+    'Acesse de qualquer aparelho: gere no computador e acompanhe pelo celular',
+    'Sincronização automática entre aparelhos a cada poucos segundos',
+    'Sem internet, continua funcionando e envia tudo quando a conexão voltar',
+    'Lotes que já estavam no navegador sobem para a nuvem no primeiro login'
+  ]},
   {v:'2.7',date:'27/09/2026',title:'Somente bingo de números',items:[
     'Lotes de palavras antigos não aparecem mais no sistema (ficam arquivados, sem apagar)',
     'Versão exibida de forma discreta embaixo do nome Bingo Master PRO'
@@ -2236,6 +2280,7 @@ function deleteLot(code){
   confirmThen({title:'Excluir o lote '+code+'?',html:'As cartelas deste lote'+(nPl?' e <b>'+nPl+' jogador'+(nPl>1?'es':'')+'</b>':'')+' ser\u00E3o removidos. Fica uma c\u00F3pia de seguran\u00E7a na tela Cartelas.',tone:'danger',confirmText:'Excluir lote'},function(){doDeleteLot(code);});
 }
 function doDeleteLot(code){
+  state.deletedLots[code]=Date.now();
   try{takeSnapshot(localStorage.getItem('bmp3'));}catch(e){}
   state.players=state.players.filter(function(p){return p.lotCode!==code;});
   delete state.lots[code];
@@ -2375,6 +2420,7 @@ function toggleWinner(id){
 function removePlayer(id){
   var p=state.players.find(function(x){return x.id===id;});if(!p)return;
   confirmThen({title:'Remover '+p.name+'?',message:'O jogador sai do ranking. A cartela fica livre para outra pessoa.',tone:'danger',confirmText:'Remover'},function(){
+    state.deletedPlayers[id]=Date.now();
     state.players=state.players.filter(function(x){return x.id!==id;});updateLotUI();saveState();
     notify(p.name+' foi removido.','success');
   });
@@ -2383,6 +2429,7 @@ function clearPlayers(){
   var lc=state.currentLot,n=state.players.filter(function(p){return p.lotCode===lc;}).length;
   if(!n){notify('Este lote ainda n\u00E3o tem jogadores.','info');return;}
   confirmThen({title:'Remover todos os jogadores?',html:'Os <b>'+n+' jogador'+(n>1?'es':'')+'</b> do lote '+escHtml(lc)+' ser\u00E3o removidos. As cartelas continuam.',tone:'danger',confirmText:'Remover todos'},function(){
+    state.players.forEach(function(p){if(p.lotCode===lc)state.deletedPlayers[p.id]=Date.now();});
     state.players=state.players.filter(function(p){return p.lotCode!==lc;});updateLotUI();saveState();
     notify('Jogadores removidos.','success');
   });
@@ -2926,6 +2973,230 @@ async function drawPDF(dl){
   }catch(e){console.error(e);if(e&&e.code==='declined'){return;}notify('N\u00E3o foi poss\u00EDvel gerar o PDF: '+(e.message||e.code||e),'danger','Erro no PDF');}
 }
 
+// ===== NUVEM: conta + sincronizacao entre aparelhos =====
+// O navegador continua sendo a copia principal (funciona sem internet).
+// Com login, cada alteracao vai para o banco da hospedagem e os outros aparelhos recebem em segundos.
+var cloud={token:null,email:'',name:'',version:0,pending:false,status:'off',available:false,pushTimer:null,busy:false,applying:false,lastSync:null};
+(function(){try{var c=JSON.parse(localStorage.getItem('bmp3_cloud')||'null');if(c&&c.token){cloud.token=c.token;cloud.email=c.email||'';cloud.name=c.name||'';cloud.version=c.version||0;cloud.pending=!!c.pending;}}catch(e){}})();
+function cloudPersist(){
+  try{
+    if(cloud.token)localStorage.setItem('bmp3_cloud',JSON.stringify({token:cloud.token,email:cloud.email,name:cloud.name,version:cloud.version,pending:cloud.pending}));
+    else localStorage.removeItem('bmp3_cloud');
+  }catch(e){}
+}
+function cloudRequest(method,path,body){
+  var opts={method:method,headers:{'Content-Type':'application/json'},cache:'no-store'};
+  if(cloud.token)opts.headers.Authorization='Bearer '+cloud.token;
+  if(body!==undefined)opts.body=JSON.stringify(body);
+  return fetch('/api'+path,opts).then(function(r){
+    return r.json().catch(function(){return{};}).then(function(j){return{status:r.status,body:j};});
+  });
+}
+// Dados que vao para a nuvem (sem o que e so desta tela)
+function cloudPayload(){
+  var d=JSON.parse(JSON.stringify(state));
+  delete d._lastCards;delete d._archivedNow;delete d.gameOver;
+  return d;
+}
+// Junta dois estados: nada criado em um aparelho se perde; exclusoes valem nos dois
+function mergeStates(server,local){
+  server=server||{};local=local||{};
+  var out=JSON.parse(JSON.stringify(server));
+  out.lots=out.lots||{};out.players=out.players||[];
+  var delL=Object.assign({},server.deletedLots||{},local.deletedLots||{});
+  var delP=Object.assign({},server.deletedPlayers||{},local.deletedPlayers||{});
+  Object.keys(local.lots||{}).forEach(function(code){
+    var l=local.lots[code],s=out.lots[code];
+    if(!s||((l._ts||0)>(s._ts||0)))out.lots[code]=JSON.parse(JSON.stringify(l));
+  });
+  Object.keys(delL).forEach(function(code){delete out.lots[code];});
+  var ids={};out.players.forEach(function(p){ids[p.id]=true;});
+  (local.players||[]).forEach(function(p){if(!ids[p.id]){out.players.push(JSON.parse(JSON.stringify(p)));ids[p.id]=true;}});
+  out.players=out.players.filter(function(p){return !delP[p.id]&&out.lots[p.lotCode];});
+  out.deletedLots=delL;out.deletedPlayers=delP;
+  out.wordLists=Object.assign({},local.wordLists||{},server.wordLists||{});
+  out.archivedWordLots=Object.assign({},local.archivedWordLots||{},server.archivedWordLots||{});
+  if(!out.prizeConfig&&local.prizeConfig)out.prizeConfig=local.prizeConfig;
+  // o lote aberto neste aparelho continua aberto
+  if(local.currentLot&&out.lots[local.currentLot])out.currentLot=local.currentLot;
+  else if(!out.lots[out.currentLot]){var ks=Object.keys(out.lots);out.currentLot=ks.length?ks[ks.length-1]:null;}
+  return out;
+}
+function sameData(a,b){return JSON.stringify(a)===JSON.stringify(b);}
+// Substitui o estado local e redesenha tudo
+function applyRemoteState(data){
+  cloud.applying=true;
+  try{
+    var keepLast=state._lastCards;
+    state=Object.assign({drawnNumbers:[],players:[],wordLists:{},maxNum:75,mode:'numbers',gridSize:5,lots:{},currentLot:null},data);
+    state._lastCards=keepLast||[];
+    normalizeState();
+    var lot=state.currentLot?state.lots[state.currentLot]:null;
+    state.drawnNumbers=lot&&Array.isArray(lot.drawnNumbers)?lot.drawnNumbers.slice():[];
+    if(lot)state.maxNum=lot.maxNum||75;
+    state.gameOver=false;
+    try{localStorage.setItem('bmp3',JSON.stringify(state));}catch(e){}
+    applyPrizeConfig();
+    initDrawBoard(state.maxNum);renderLotButtons();updateLotUI();
+  }finally{cloud.applying=false;}
+}
+function setCloudStatus(s){cloud.status=s;renderCloudUI();}
+function scheduleCloudPush(){
+  if(cloud.applying||!cloud.token)return;
+  cloud.pending=true;cloudPersist();
+  setCloudStatus('saving');
+  clearTimeout(cloud.pushTimer);
+  cloud.pushTimer=setTimeout(cloudPush,700);
+}
+function cloudPush(attempt){
+  attempt=attempt||0;
+  if(!cloud.token||!cloud.available)return Promise.resolve();
+  if(cloud.busy){clearTimeout(cloud.pushTimer);cloud.pushTimer=setTimeout(cloudPush,600);return Promise.resolve();}
+  cloud.busy=true;
+  var sent=cloudPayload();
+  return cloudRequest('PUT','/state',{data:sent,baseVersion:cloud.version}).then(function(r){
+    cloud.busy=false;
+    if(r.status===200){
+      cloud.version=r.body.version;cloud.lastSync=new Date();
+      cloud.pending=!sameData(sent,cloudPayload()); // mudou algo enquanto enviava?
+      cloudPersist();
+      if(cloud.pending)scheduleCloudPush();else setCloudStatus('synced');
+    }else if(r.status===409&&attempt<3){
+      // outro aparelho salvou antes: junta os dois e tenta de novo
+      var merged=mergeStates(r.body.data,cloudPayload());
+      cloud.version=r.body.version||0;
+      applyRemoteState(merged);
+      return cloudPush(attempt+1);
+    }else if(r.status===401){cloudSessionExpired();}
+    else{setCloudStatus('offline');cloud.pushTimer=setTimeout(cloudPush,15000);}
+  }).catch(function(){cloud.busy=false;setCloudStatus('offline');cloud.pushTimer=setTimeout(cloudPush,15000);});
+}
+// Busca alteracoes feitas em outro aparelho
+function cloudPull(initial){
+  if(!cloud.token||!cloud.available||cloud.busy)return Promise.resolve();
+  return cloudRequest('GET','/state').then(function(r){
+    if(r.status===401){cloudSessionExpired();return;}
+    if(r.status!==200){setCloudStatus('offline');return;}
+    var srv=r.body;
+    if(!srv.data){ // conta nova: envia o que ja existe neste navegador
+      cloud.version=0;cloudPersist();
+      if(Object.keys(state.lots).length){cloud.pending=true;return cloudPush().then(function(){if(initial)notify('Seus lotes deste navegador foram salvos na nuvem.','success','Tudo salvo');});}
+      setCloudStatus('synced');return;
+    }
+    if(initial||cloud.pending){
+      var local=cloudPayload(),merged=mergeStates(srv.data,local);
+      cloud.version=srv.version;
+      if(!sameData(merged,srv.data)){applyRemoteState(merged);cloud.pending=true;cloudPersist();return cloudPush();}
+      if(!sameData(merged,local))applyRemoteState(merged);
+      cloud.pending=false;cloud.lastSync=new Date();cloudPersist();setCloudStatus('synced');return;
+    }
+    if(srv.version!==cloud.version){
+      cloud.version=srv.version;cloud.lastSync=new Date();cloudPersist();
+      applyRemoteState(mergeStates(srv.data,{currentLot:state.currentLot}));
+    }
+    cloud.lastSync=new Date();setCloudStatus('synced');
+  }).catch(function(){setCloudStatus('offline');});
+}
+function cloudSessionExpired(){
+  cloud.token=null;cloud.version=0;cloud.pending=false;cloudPersist();setCloudStatus('off');
+  notify('Sua sessão expirou. Entre de novo para continuar salvando na nuvem. Seus lotes continuam neste aparelho.','warn','Entre novamente');
+}
+function cloudLogout(){
+  var tk=cloud.token;
+  cloudRequest('POST','/logout').catch(function(){});
+  cloud.token=null;cloud.email='';cloud.name='';cloud.version=0;cloud.pending=false;cloudPersist();setCloudStatus('off');
+  notify('Você saiu da conta. Os lotes continuam neste aparelho.','info','Desconectado');
+  return tk;
+}
+// ---------- Tela de conta ----------
+var CLOUD_ERRORS={invalid_email:'Digite um e-mail válido.',weak_password:'A senha precisa ter pelo menos 6 caracteres.',email_taken:'Já existe uma conta com esse e-mail. Use Entrar.',bad_credentials:'E-mail ou senha incorretos.',too_many_attempts:'Muitas tentativas. Aguarde alguns minutos e tente de novo.',db_not_configured:'O salvamento na nuvem ainda não foi ativado no servidor.',db_starting:'O servidor está iniciando. Tente em alguns segundos.',db_error:'O banco de dados não respondeu. Tente mais tarde.',server_error:'Erro no servidor. Tente de novo.'};
+function openAccount(){
+  if(cloud.token){openAccountMenu();return;}
+  var ov=document.createElement('div');ov.className='ui-overlay no-print';
+  ov.innerHTML='<div class="ui-dialog acc-dialog" role="dialog" aria-modal="true" aria-labelledby="accT">'+
+    '<div class="ui-ic">'+CLOUD_ICON+'</div>'+
+    '<h2 class="ui-title" id="accT">Salvar na nuvem</h2>'+
+    '<p class="ui-msg">Entre para guardar seus lotes, jogadores e sorteios e acessá-los de qualquer aparelho.</p>'+
+    '<div class="seg acc-tabs" role="tablist"><button type="button" class="active" data-mode="login">Entrar</button><button type="button" data-mode="register">Criar conta</button></div>'+
+    '<form class="acc-form" novalidate>'+
+      '<div class="field acc-name" hidden><label for="accName">Seu nome</label><input id="accName" autocomplete="name" placeholder="Ex: Eduardo"></div>'+
+      '<div class="field"><label for="accEmail">E-mail</label><input id="accEmail" type="email" autocomplete="email" placeholder="voce@email.com" required></div>'+
+      '<div class="field"><label for="accPass">Senha</label><input id="accPass" type="password" autocomplete="current-password" placeholder="Mínimo 6 caracteres" required></div>'+
+      '<p class="acc-err" role="alert" hidden></p>'+
+      '<div class="ui-actions"><button type="button" class="btn btn-secondary" data-act="close">Agora não</button><button type="submit" class="btn btn-primary acc-submit">Entrar</button></div>'+
+    '</form></div>';
+  var mode='login';
+  var form=ov.querySelector('form'),err=ov.querySelector('.acc-err'),submit=ov.querySelector('.acc-submit');
+  function close(){document.removeEventListener('keydown',onKey,true);ov.remove();}
+  function onKey(e){if(e.key==='Escape'){e.preventDefault();close();}}
+  function setMode(m){
+    mode=m;
+    ov.querySelectorAll('.acc-tabs button').forEach(function(b){b.classList.toggle('active',b.dataset.mode===m);});
+    ov.querySelector('.acc-name').hidden=m!=='register';
+    ov.querySelector('#accPass').setAttribute('autocomplete',m==='register'?'new-password':'current-password');
+    submit.textContent=m==='register'?'Criar conta':'Entrar';err.hidden=true;
+  }
+  ov.querySelector('.acc-tabs').addEventListener('click',function(e){var b=e.target.closest('button');if(b)setMode(b.dataset.mode);});
+  ov.addEventListener('click',function(e){if(e.target===ov||e.target.closest('[data-act="close"]'))close();});
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var email=ov.querySelector('#accEmail').value.trim(),pass=ov.querySelector('#accPass').value,name=ov.querySelector('#accName').value.trim();
+    err.hidden=true;submit.disabled=true;submit.textContent='Aguarde…';
+    cloudRequest('POST',mode==='register'?'/register':'/login',{email:email,password:pass,name:name}).then(function(r){
+      submit.disabled=false;submit.textContent=mode==='register'?'Criar conta':'Entrar';
+      if(r.status!==200){err.textContent=CLOUD_ERRORS[r.body.error]||'Não foi possível entrar agora.';err.hidden=false;return;}
+      cloud.token=r.body.token;cloud.email=r.body.user.email;cloud.name=r.body.user.name||'';cloud.version=0;cloud.pending=true;cloudPersist();
+      close();
+      notify('Conectado como '+cloud.email+'. Sincronizando seus lotes…','success',mode==='register'?'Conta criada':'Bem-vindo');
+      setCloudStatus('saving');
+      cloudPull(true);
+    }).catch(function(){submit.disabled=false;submit.textContent=mode==='register'?'Criar conta':'Entrar';err.textContent='Sem conexão com o servidor.';err.hidden=false;});
+  });
+  document.addEventListener('keydown',onKey,true);
+  document.body.appendChild(ov);
+  setTimeout(function(){ov.querySelector('#accEmail').focus();},30);
+}
+function openAccountMenu(){
+  var when=cloud.lastSync?cloud.lastSync.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}):'—';
+  var st={synced:'Tudo sincronizado',saving:'Salvando alterações…',offline:'Sem conexão — salvo neste aparelho e será enviado quando voltar'}[cloud.status]||'';
+  uiConfirm({title:'Sua conta',tone:'success',icon:'success',
+    html:'<b>'+escHtml(cloud.name||cloud.email)+'</b>'+(cloud.name?'<br>'+escHtml(cloud.email):'')+'<br><br>'+escHtml(st)+'<br>Última sincronização: '+when+'<br>Lotes na conta: <b>'+Object.keys(state.lots).length+'</b>',
+    confirmText:'Sincronizar agora',cancelText:'Sair da conta'}).then(function(ok){
+    if(ok){setCloudStatus('saving');cloudPull(true);}
+  });
+  // "Sair da conta" usa o botao cancelar: distinguimos o clique para nao deslogar com Esc
+  setTimeout(function(){
+    var b=document.querySelector('.ui-dialog [data-act="no"]');
+    if(b)b.addEventListener('click',function(){cloudLogout();},{once:true});
+  },0);
+}
+var CLOUD_ICON='<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 19H7a5 5 0 1 1 .9-9.9A6 6 0 0 1 19.5 11 4 4 0 0 1 17.5 19z"/></svg>';
+function renderCloudUI(){
+  var label={off:'Salvar na nuvem',synced:'Salvo na nuvem',saving:'Salvando…',offline:'Sem conexão'}[cloud.token?cloud.status:'off'];
+  var sub=cloud.token?(cloud.name||cloud.email):'Acesse de qualquer aparelho';
+  document.querySelectorAll('.cloud-btn').forEach(function(b){
+    b.hidden=!cloud.available;
+    b.dataset.status=cloud.token?cloud.status:'off';
+    var t=b.querySelector('.cloud-label');if(t)t.textContent=label;
+    var s=b.querySelector('.cloud-sub');if(s)s.textContent=sub;
+    b.setAttribute('aria-label',label+(cloud.token?' — '+sub:''));
+    b.title=label+(cloud.token?' · '+sub:'');
+  });
+}
+function cloudInit(){
+  renderCloudUI();
+  if(typeof fetch!=='function')return;
+  cloudRequest('GET','/health').then(function(r){
+    cloud.available=r.status===200&&!!r.body.cloud;
+    renderCloudUI();
+    if(cloud.available&&cloud.token){setCloudStatus('saving');cloudPull(true);}
+  }).catch(function(){cloud.available=false;renderCloudUI();});
+  // recebe alteracoes de outros aparelhos
+  setInterval(function(){if(document.visibilityState==='visible')cloudPull(false);},10000);
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')cloudPull(cloud.pending);});
+  window.addEventListener('online',function(){if(cloud.token){setCloudStatus('saving');cloudPull(true);}});
+}
+
 // ===== INIT =====
 (function(){
   // Restore drawnNumbers from current lot
@@ -2937,6 +3208,7 @@ async function drawPDF(dl){
   initDrawBoard(state.maxNum);renderLotButtons();updateLotUI();
   syncSegments();renderPreview();kpSync();renderAbout();
   if(state._archivedNow){delete state._archivedNow;saveState();}
+  cloudInit();
 })();
 </script>
 </body>

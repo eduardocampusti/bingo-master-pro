@@ -5,6 +5,7 @@ const crypto = require('crypto');
 const pkg = require('./package.json');
 
 const app = express();
+app.set('trust proxy', true); // Hostinger fica atras de CDN: usa o IP real do visitante
 const PORT = process.env.PORT || 3000;
 const INDEX = path.join(__dirname, 'public', 'index.html');
 
@@ -47,6 +48,9 @@ function sendIndex(req, res) {
     );
   });
 }
+
+// Salvamento na nuvem (contas + lotes no MySQL da hospedagem)
+require('./cloud').setupCloud(app);
 
 app.get('/version.json', (req, res) => {
   res.set('Cache-Control', 'no-store');

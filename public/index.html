@@ -272,7 +272,7 @@ button.num-cell:hover:not(.drawn){background:var(--border-strong);color:var(--te
 .prize-row.is-off .prize-dot{background:var(--border-strong)}
 .prize-row.is-off .prize-tag{background:var(--surface-sunk);color:var(--text-muted)}
 .prize-config{margin-top:14px;padding-top:14px;border-top:1px dashed var(--border-strong)}
-.prize-options{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;margin-bottom:14px}
+.prize-options{display:flex;flex-direction:column;margin-bottom:14px}
 .prize-options label{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500;color:var(--text-secondary);cursor:pointer;min-height:36px}
 .prize-config-actions{display:flex;gap:8px;flex-wrap:wrap}
 .bingo-alert{background:var(--gold);color:var(--ink);border-radius:16px;padding:14px 16px;margin-top:14px}
@@ -308,20 +308,45 @@ button.num-cell:hover:not(.drawn){background:var(--border-strong);color:var(--te
 .badge-playing{background:var(--primary-light);color:var(--primary)}
 
 /* Mini-cartelas */
-.mini-cartelas-row{display:flex;gap:8px;flex-wrap:wrap}
-.mini-cartela{background:var(--surface-alt);border:1px solid var(--border);border-radius:10px;padding:6px;flex:1;min-width:140px;max-width:220px}
-.mini-cartela-code{font:600 10px var(--font-display);color:var(--text-muted);text-align:center;margin-bottom:4px}
-.mini-grid{display:grid;gap:2px}
+.rank-item.open{background:var(--surface-alt);border-radius:16px;border-top-color:transparent}
+.rank-item.open + .rank-item{border-top-color:transparent}
+.rank-item.open .rank-row:hover{background:transparent}
+.mini-cartelas-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.mini-cartela{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:10px;min-width:0}
+.mini-cartela.has-line{border-color:color-mix(in srgb,var(--success) 45%,var(--border))}
+.mini-cartela.is-full{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-light)}
+.mini-cartela-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:8px;font-size:11px;color:var(--text-secondary)}
+.mini-cartela-head b{font:700 13px var(--font-display);color:var(--text)}
+.mini-cartela-head span{text-align:right}
+.mini-grid{display:grid;gap:3px}
 .mini-grid.g5{grid-template-columns:repeat(5,1fr)}
 .mini-grid.g4{grid-template-columns:repeat(4,1fr)}
 .mini-grid.g3{grid-template-columns:repeat(3,1fr)}
-.mini-grid-header{font-size:8px;font-weight:700;color:#fff;text-align:center;padding:2px 0;border-radius:3px}
-.mini-grid-cell{font:600 10px/1.2 var(--font-display);text-align:center;padding:3px 0;border-radius:3px;background:var(--surface);border:1px solid var(--border);color:var(--text);overflow:hidden}
-.mini-grid-cell.hit{background:var(--primary);color:var(--on-primary);border-color:var(--primary);font-weight:700}
-.mini-grid-cell.free{background:var(--gold-light);color:var(--gold-dark);font-size:7px;font-weight:700}
-.mini-grid-cell.hit.free{background:var(--gold);color:#fff;border-color:var(--gold)}
-.rank-item.is-winner .mini-grid-cell.hit:not(.free){background:var(--success);border-color:var(--success)}
-.rank-expand-actions{display:flex;justify-content:flex-end;margin-top:10px}
+.mini-grid-header{font:800 10px/1 var(--font-display);color:#fff;text-align:center;height:18px;display:grid;place-items:center;border-radius:6px}
+.mini-grid-cell{font:600 12px/1 var(--font-display);text-align:center;height:28px;display:grid;place-items:center;border-radius:7px;background:var(--surface-sunk);color:var(--text-muted);overflow:hidden;transition:background .2s,color .2s}
+.mini-grid-cell.hit{background:var(--primary-light);color:var(--primary);font-weight:800;box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--primary) 35%,transparent)}
+.mini-grid-cell.free{background:var(--gold-light);color:var(--gold-dark);font-size:12px}
+.mini-grid-cell.line{background:var(--success);color:#fff;box-shadow:none;font-weight:800}
+.mini-grid-cell.free.line{background:var(--success);color:#fff}
+.mini-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:12px;color:var(--text-secondary)}
+.mini-legend span{display:inline-flex;align-items:center;gap:6px}
+.mini-legend i{width:12px;height:12px;border-radius:4px;display:inline-block}
+.lg-hit{background:var(--primary-light);box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--primary) 35%,transparent)}
+.lg-line{background:var(--success)}
+.lg-free{background:var(--gold-light);box-shadow:inset 0 0 0 1.5px var(--gold)}
+.rank-expand-actions{display:flex;justify-content:flex-end;margin-top:8px}
+.rank-expand-actions .btn-text-danger{display:inline-flex;align-items:center;gap:6px;border-radius:10px}
+/* Premios: configuracao por tipo de linha */
+.prize-config-hint{font-size:13px;color:var(--text-secondary);margin-bottom:12px}
+.prize-opt{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 0}
+.prize-opt label{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--text);cursor:pointer;min-height:40px;white-space:nowrap}
+.prize-opt select{min-height:40px;width:auto;min-width:0;flex:1;max-width:190px;padding:6px 10px;font-size:13px;border-radius:10px}
+.prize-opt-note{font-size:12px;color:var(--text-muted)}
+/* Campo de registro sem setinhas */
+#manualDrawInput{-moz-appearance:textfield;appearance:textfield}
+#manualDrawInput::-webkit-outer-spin-button,#manualDrawInput::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+/* Coluna do sorteio fica visivel ao rolar o ranking (so em telas altas o bastante) */
+@media (min-width:1181px) and (min-height:860px){.live-left{position:sticky;top:24px}}
 
 /* Game over */
 .game-over-banner{background:var(--gold);color:var(--ink);border-radius:var(--radius);padding:22px 28px;margin-bottom:20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
@@ -788,7 +813,7 @@ body.telao-lock{overflow:hidden}
           </div>
           <button class="btn btn-primary btn-lg desk-only" onclick="manualDraw()">Registrar</button>
           <button class="btn btn-secondary btn-lg desk-only" onclick="drawNumber()" id="drawBtn">Sortear</button>
-          <button class="btn btn-secondary btn-lg btn-icon undo-btn" onclick="undoManualDraw()" aria-label="Desfazer último número"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg><span class="undo-label">Desfazer última</span></button>
+          <button class="btn btn-secondary btn-lg btn-icon undo-btn" onclick="undoManualDraw()" aria-label="Desfazer último número" title="Desfazer último número"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg><span class="undo-label">Desfazer última</span></button>
         </div>
         <div id="mobileKeypad" class="keypad">
           <div class="kp-visor">
@@ -834,11 +859,24 @@ body.telao-lock{overflow:hidden}
         </div>
         <ul class="prize-list" id="prizeList"></ul>
         <div id="prizeConfig" class="prize-config" hidden>
+          <p class="prize-config-hint">Escolha quais prêmios valem nesta rodada e o tipo de linha de cada um. Ganha quem completar primeiro.</p>
           <div class="prize-options">
-            <label><input type="checkbox" id="prize1line" checked onchange="saveState();updateLiveTracker()"> 1ª linha completa</label>
-            <label><input type="checkbox" id="prize2line" onchange="saveState();updateLiveTracker()"> 2ª linha completa</label>
-            <label><input type="checkbox" id="prize3line" onchange="saveState();updateLiveTracker()"> 3ª linha completa</label>
-            <label><input type="checkbox" id="prizeFull" checked onchange="saveState();updateLiveTracker()"> Cartela cheia</label>
+            <div class="prize-opt">
+              <label><input type="checkbox" id="prize1line" checked onchange="onPrizeConfigChange()"> 1º prêmio</label>
+              <select id="prize1type" onchange="onPrizeConfigChange()" aria-label="Tipo de linha do 1º prêmio"><option value="any">Qualquer linha</option><option value="h">Linha horizontal</option><option value="v">Linha vertical</option><option value="d">Linha diagonal</option></select>
+            </div>
+            <div class="prize-opt">
+              <label><input type="checkbox" id="prize2line" onchange="onPrizeConfigChange()"> 2º prêmio</label>
+              <select id="prize2type" onchange="onPrizeConfigChange()" aria-label="Tipo de linha do 2º prêmio"><option value="any">Qualquer linha</option><option value="h">Linha horizontal</option><option value="v">Linha vertical</option><option value="d">Linha diagonal</option></select>
+            </div>
+            <div class="prize-opt">
+              <label><input type="checkbox" id="prize3line" onchange="onPrizeConfigChange()"> 3º prêmio</label>
+              <select id="prize3type" onchange="onPrizeConfigChange()" aria-label="Tipo de linha do 3º prêmio"><option value="any">Qualquer linha</option><option value="h">Linha horizontal</option><option value="v">Linha vertical</option><option value="d">Linha diagonal</option></select>
+            </div>
+            <div class="prize-opt">
+              <label><input type="checkbox" id="prizeFull" checked onchange="onPrizeConfigChange()"> Cartela cheia</label>
+              <span class="prize-opt-note">encerra o jogo</span>
+            </div>
           </div>
           <div class="prize-config-actions">
             <button class="btn btn-ghost btn-sm" onclick="resetPlayerStatus()">Resetar status</button>
@@ -1246,6 +1284,14 @@ function icon(n){return '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
 // ===== VERSAO / SOBRE =====
 // Para lançar uma versão nova: adicione um item no topo de APP_VERSIONS.
 var APP_VERSIONS=[
+  {v:'2.4',date:'27/09/2026',title:'Prêmios por tipo de linha e novo acompanhamento',items:[
+    'Cada prêmio pode ser linha horizontal, vertical, diagonal ou qualquer linha',
+    'O prêmio vai para quem completou primeiro, pela ordem das pedras, e não muda depois',
+    'Empates no mesmo número são mostrados',
+    'A configuração dos prêmios fica salva',
+    'Mini-cartelas maiores e mais claras: marcado, linha completa e casa livre com cores diferentes',
+    'O painel do sorteio acompanha a rolagem da página no computador'
+  ]},
   {v:'2.3',date:'27/09/2026',title:'Atualização automática',items:[
     'Cada deploy recebe uma identificação automática (build), exibida na aba Sobre',
     'O sistema avisa quando há uma versão nova publicada, com botão Atualizar agora',
@@ -2221,7 +2267,71 @@ function countCompletedLines(cardData,gridSize,hasFreeCell){
 }
 function getPrizeConfig(){
   var e1=document.getElementById('prize1line'),e2=document.getElementById('prize2line'),e3=document.getElementById('prize3line'),eF=document.getElementById('prizeFull');
-  return{line1:e1?e1.checked:true,line2:e2?e2.checked:false,line3:e3?e3.checked:false,full:eF?eF.checked:true};
+  function tp(k){var s=document.getElementById('prize'+k+'type');return s&&LINE_NAMES[s.value]?s.value:'any';}
+  return{line1:e1?e1.checked:true,line2:e2?e2.checked:false,line3:e3?e3.checked:false,full:eF?eF.checked:true,type1:tp(1),type2:tp(2),type3:tp(3)};
+}
+// Configuracao dos premios fica salva no state (antes se perdia ao recarregar)
+function onPrizeConfigChange(){state.prizeConfig=getPrizeConfig();saveState();updateLiveTracker();}
+function applyPrizeConfig(){
+  var c=state.prizeConfig;if(!c||typeof c!=='object')return;
+  [['prize1line','line1'],['prize2line','line2'],['prize3line','line3'],['prizeFull','full']].forEach(function(x){var el=document.getElementById(x[0]);if(el&&typeof c[x[1]]==='boolean')el.checked=c[x[1]];});
+  [1,2,3].forEach(function(k){var s=document.getElementById('prize'+k+'type');if(s&&LINE_NAMES[c['type'+k]])s.value=c['type'+k];});
+}
+
+// ===== LINHAS POR TIPO E ORDEM DE CONCLUSAO =====
+// Cada linha recebe o "momento" em que foi completada (indice da pedra em drawnNumbers),
+// assim o premio vai para quem fechou PRIMEIRO, e nao muda depois.
+var LINE_NAMES={any:'qualquer',h:'horizontal',v:'vertical',d:'diagonal'};
+function drawnPositions(){var pos={};state.drawnNumbers.forEach(function(n,i){pos[n]=i;});return pos;}
+function getCardLines(cardData,gridSize,hasFreeCell,pos){
+  pos=pos||drawnPositions();
+  var mid=Math.floor(gridSize/2),lines=[];
+  function t(c,r){if(hasFreeCell&&gridSize===5&&c===mid&&r===mid)return -1;var p=pos[cardData[c][r]];return p===undefined?Infinity:p;}
+  function add(type,cells){var m=-1;cells.forEach(function(x){m=Math.max(m,t(x[0],x[1]));});lines.push({type:type,cells:cells,t:m});}
+  var i,j,cells;
+  for(i=0;i<gridSize;i++){cells=[];for(j=0;j<gridSize;j++)cells.push([j,i]);add('h',cells);}
+  for(i=0;i<gridSize;i++){cells=[];for(j=0;j<gridSize;j++)cells.push([i,j]);add('v',cells);}
+  cells=[];for(i=0;i<gridSize;i++)cells.push([i,i]);add('d',cells);
+  cells=[];for(i=0;i<gridSize;i++)cells.push([gridSize-1-i,i]);add('d',cells);
+  return lines;
+}
+function cardFullTime(cardData,gridSize,hasFreeCell,pos){
+  pos=pos||drawnPositions();var mid=Math.floor(gridSize/2),m=-1;
+  for(var c=0;c<gridSize;c++)for(var r=0;r<gridSize;r++){
+    if(hasFreeCell&&gridSize===5&&c===mid&&r===mid)continue;
+    var p=pos[cardData[c][r]];if(p===undefined)return Infinity;m=Math.max(m,p);
+  }
+  return m;
+}
+// Premio k: quantas linhas do tipo escolhido sao necessarias.
+// 'qualquer' mantem a regra antiga (2º premio = 2 linhas). Tipos iguais somam: 1º e 2º horizontais = 1 e 2 horizontais.
+function prizeRequirement(prizes,k){
+  var type=prizes['type'+k]||'any';
+  if(type==='any')return{type:type,n:k};
+  var n=0;for(var i=1;i<=k;i++){if(prizes['line'+i]&&(prizes['type'+i]||'any')===type)n++;}
+  return{type:type,n:Math.max(1,n)};
+}
+function prizeLabel(prizes,k){
+  var rq=prizeRequirement(prizes,k);
+  if(rq.type==='any')return k+'ª linha completa';
+  return (rq.n>1?rq.n+'ª linha ':'Linha ')+LINE_NAMES[rq.type];
+}
+function cardPrizeTime(cr,rq){
+  var ts=cr.lineData.filter(function(l){return rq.type==='any'||l.type===rq.type;}).map(function(l){return l.t;}).sort(function(a,b){return a-b;});
+  return ts.length>=rq.n?ts[rq.n-1]:Infinity;
+}
+function findPrizeWinner(playerData,timeFn){
+  var best=Infinity,all=[];
+  playerData.forEach(function(p){p.cardResults.forEach(function(cr){
+    var t=timeFn(cr);if(t===Infinity)return;
+    if(t<best){best=t;all=[{p:p,code:cr.code}];}
+    else if(t===best&&!all.some(function(w){return w.p.id===p.id;}))all.push({p:p,code:cr.code});
+  });});
+  return all.length?{p:all[0].p,code:all[0].code,all:all,t:best}:null;
+}
+function linesSummary(byType){
+  var parts=[];if(byType.h)parts.push(byType.h+' horiz.');if(byType.v)parts.push(byType.v+' vert.');if(byType.d)parts.push(byType.d+' diag.');
+  return parts.join(' · ');
 }
 
 // ===== NA BOCA =====
@@ -2269,12 +2379,15 @@ function renderNaBoca(){
 // ===== PREMIOS =====
 function renderPrizeList(prizes,res){
   var el=document.getElementById('prizeList');if(!el)return;
-  function code(p,k){if(!p)return'';if(k===0)return p.bestCode;var cr=p.cardResults.find(function(c){return c.lines>=k;});return cr?cr.code:p.bestCode;}
-  var rows=[['line1','1\u00AA linha completa',res.p1,1],['line2','2\u00AA linha completa',res.p2,2],['line3','3\u00AA linha completa',res.p3,3],['full','Cartela cheia',res.pF,0]];
+  function tagFor(w){
+    if(w.all&&w.all.length>1)return 'Empate: '+w.all.map(function(x){return escHtml(x.p.name)+' \u00B7 '+x.code;}).join(', ');
+    return escHtml(w.p.name)+' \u00B7 '+w.code;
+  }
+  var rows=[['line1',prizeLabel(prizes,1),res.w1],['line2',prizeLabel(prizes,2),res.w2],['line3',prizeLabel(prizes,3),res.w3],['full','Cartela cheia',res.wF]];
   var h='';
   rows.forEach(function(r){
     var st=!prizes[r[0]]?'off':r[2]?'won':'live';
-    var tag=st==='off'?'Desativado':st==='won'?escHtml(r[2].name)+' \u00B7 '+code(r[2],r[3]):'Em disputa';
+    var tag=st==='off'?'Desativado':st==='won'?tagFor(r[2]):'Em disputa';
     h+='<li class="prize-row is-'+st+'"><span class="prize-dot" aria-hidden="true"></span><span class="prize-name">'+r[1]+'</span><span class="prize-tag">'+tag+'</span></li>';
   });
   el.innerHTML=h;
@@ -2311,37 +2424,39 @@ function updateLiveTracker(){
     return;
   }
 
+  var isNum=lot.mode==='numbers',pos=drawnPositions();
   var playerData=lotPlayers.map(function(p,idx){
-    var bestPct=0,bestHits=0,bestTotal=0,maxLines=0,bestCode='',cardResults=[];
+    var bestPct=0,bestHits=0,bestTotal=0,maxLines=0,bestCode='',cardResults=[],bestByType={h:0,v:0,d:0};
     p.cardCodes.forEach(function(code){
       var cardObj=lot.cards.find(function(c){return c.code===code;});if(!cardObj)return;
       var info=getCardHits(cardObj.data,lot.gridSize,lot.hasFreeCell);
-      var lines=lot.mode==='numbers'?countCompletedLines(cardObj.data,lot.gridSize,lot.hasFreeCell):0;
-      cardResults.push({code:code,pct:info.pct,hits:info.hits,total:info.total,lines:lines,data:cardObj.data});
+      var lineData=isNum?getCardLines(cardObj.data,lot.gridSize,lot.hasFreeCell,pos):[];
+      var done=lineData.filter(function(l){return l.t!==Infinity;});
+      var byType={h:0,v:0,d:0};done.forEach(function(l){byType[l.type]++;});
+      var lines=done.length;
+      cardResults.push({code:code,pct:info.pct,hits:info.hits,total:info.total,lines:lines,byType:byType,lineData:lineData,
+        fullTime:isNum?cardFullTime(cardObj.data,lot.gridSize,lot.hasFreeCell,pos):(info.pct===100?0:Infinity),data:cardObj.data});
       if(info.pct>bestPct||!bestCode){bestPct=info.pct;bestHits=info.hits;bestTotal=info.total;bestCode=code;}
-      if(lines>maxLines)maxLines=lines;
+      if(lines>maxLines){maxLines=lines;bestByType=byType;}
     });
-    return{id:p.id,name:p.name,status:p.status,wins:p.wins,cardCodes:p.cardCodes,bestPct:bestPct,bestHits:bestHits,bestTotal:bestTotal,maxLines:maxLines,bestCode:bestCode,cardResults:cardResults,colorIdx:idx};
+    return{id:p.id,name:p.name,status:p.status,wins:p.wins,cardCodes:p.cardCodes,bestPct:bestPct,bestHits:bestHits,bestTotal:bestTotal,maxLines:maxLines,byType:bestByType,bestCode:bestCode,cardResults:cardResults,colorIdx:idx};
   });
   playerData.sort(function(a,b){return b.bestPct-a.bestPct;});
 
-  // Prize winners (first player to reach each milestone)
-  var byLines=playerData.slice().sort(function(a,b){if(b.maxLines!==a.maxLines)return b.maxLines-a.maxLines;return b.bestPct-a.bestPct;});
-  var p1=prizes.line1?byLines.find(function(p){return p.maxLines>=1;}):null;
-  var p2=prizes.line2?byLines.find(function(p){return p.maxLines>=2;}):null;
-  var p3=prizes.line3?byLines.find(function(p){return p.maxLines>=3;}):null;
-  var pF=prizes.full?playerData.find(function(p){return p.bestPct===100;}):null;
+  // Ganhadores: quem completou PRIMEIRO cada premio (pela ordem das pedras), com o tipo de linha escolhido
+  var w1=prizes.line1&&isNum?findPrizeWinner(playerData,function(cr){return cardPrizeTime(cr,prizeRequirement(prizes,1));}):null;
+  var w2=prizes.line2&&isNum?findPrizeWinner(playerData,function(cr){return cardPrizeTime(cr,prizeRequirement(prizes,2));}):null;
+  var w3=prizes.line3&&isNum?findPrizeWinner(playerData,function(cr){return cardPrizeTime(cr,prizeRequirement(prizes,3));}):null;
+  var wF=prizes.full?findPrizeWinner(playerData,function(cr){return cr.fullTime;}):null;
+  var p1=w1?w1.p:null,pF=wF?wF.p:null;
   var prizeIds={};
-  if(p1)prizeIds[p1.id]=(prizeIds[p1.id]||0)+1;
-  if(p2)prizeIds[p2.id]=(prizeIds[p2.id]||0)+1;
-  if(p3)prizeIds[p3.id]=(prizeIds[p3.id]||0)+1;
-  if(pF)prizeIds[pF.id]=(prizeIds[pF.id]||0)+1;
+  [w1,w2,w3,wF].forEach(function(w){if(w)w.all.forEach(function(x){prizeIds[x.p.id]=(prizeIds[x.p.id]||0)+1;});});
 
-  renderPrizeList(prizes,{p1:p1,p2:p2,p3:p3,pF:pF});
+  renderPrizeList(prizes,{w1:w1,w2:w2,w3:w3,wF:wF});
 
   // Alerta de cartela cheia (os ganhadores de linha aparecem na lista de premios)
   if(prizeAlerts){
-    prizeAlerts.innerHTML=pF?'<div class="bingo-alert"><h3>Cartela cheia!</h3><p>'+escHtml(pF.name)+' completou 100% na cartela '+escHtml(pF.bestCode)+'.</p></div>':'';
+    prizeAlerts.innerHTML=pF?'<div class="bingo-alert"><h3>Cartela cheia!</h3><p>'+escHtml(pF.name)+' completou 100% na cartela '+escHtml(wF.code)+'.</p></div>':'';
   }
 
   // Game Over: disable draw inputs when full card achieved
@@ -2357,7 +2472,7 @@ function updateLiveTracker(){
   // Game over banner in alertArea
   if(alertArea){
     if(gameOver&&pF){
-      alertArea.innerHTML='<div class="game-over-banner" role="status"><div><span class="eyebrow">Jogo finalizado</span><h2>Campe\u00E3o: '+escHtml(pF.name)+'</h2><p>Cartela '+escHtml(pF.bestCode)+' completada com '+state.drawnNumbers.length+' n\u00FAmeros sorteados.</p></div><button class="btn btn-lg" onclick="resetGame()">'+icon('shuffle')+'Novo jogo</button></div>';
+      alertArea.innerHTML='<div class="game-over-banner" role="status"><div><span class="eyebrow">Jogo finalizado</span><h2>Campe\u00E3o: '+escHtml(pF.name)+'</h2><p>Cartela '+escHtml(wF.code)+' completada com '+state.drawnNumbers.length+' n\u00FAmeros sorteados.</p></div><button class="btn btn-lg" onclick="resetGame()">'+icon('shuffle')+'Novo jogo</button></div>';
     }else{alertArea.innerHTML='';}
   }
 
@@ -2372,7 +2487,7 @@ function updateLiveTracker(){
     var color=getAvatarColor(p.colorIdx);
     var falta=p.bestTotal-p.bestHits;
     var detail=p.bestCode?(p.bestCode+' \u00B7 '+(falta>0?'falta '+falta:'completa')):'sem cartela';
-    if(p.maxLines>0)detail+=' \u00B7 '+p.maxLines+' linha'+(p.maxLines!==1?'s':'');
+    if(p.maxLines>0)detail+=' \u00B7 '+linesSummary(p.byType);
     if(p.cardCodes.length>1)detail+=' \u00B7 '+p.cardCodes.length+' cartelas';
     html+='<div class="rank-item'+(hasPrize?' is-winner':'')+(rank===0&&state.drawnNumbers.length>0?' is-first':'')+(open?' open':'')+'" data-id="'+p.id+'">';
     html+='<button type="button" class="rank-row" onclick="toggleRankDetail('+p.id+')" aria-expanded="'+open+'">';
@@ -2385,30 +2500,32 @@ function updateLiveTracker(){
     html+='<span class="rank-pct">'+p.bestPct+'%</span>'+icon('chevron').replace('class="ic"','class="ic rank-chev"');
     html+='</button>';
 
-    // Mini-cartelas (recolhidas)
+    // Mini-cartelas (recolhidas): numero marcado = roxo claro; casas de linha completa = verde
     html+='<div class="rank-expand"'+(open?'':' hidden')+'>';
     if(p.cardResults.length>0){
       var gs=lot.gridSize,mid2=Math.floor(gs/2);
       var useHc=gs===3?hc3:gs===4?hc4:hc5;
       html+='<div class="mini-cartelas-row">';
       p.cardResults.forEach(function(cr){
-        var cStyle='';
-        if(cr.pct===100)cStyle='border-color:var(--gold)';
-        else if(cr.lines>=1&&p1&&p1.id===p.id)cStyle='border-color:var(--success)';
-        html+='<div class="mini-cartela"'+(cStyle?' style="'+cStyle+'"':'')+'>';
-        html+='<div class="mini-cartela-code">'+cr.code+' \u00B7 '+cr.pct+'% \u00B7 '+cr.lines+'L</div>';
+        var inLine={};
+        cr.lineData.forEach(function(l){if(l.t!==Infinity)l.cells.forEach(function(x){inLine[x[0]+','+x[1]]=true;});});
+        var cls=cr.pct===100?' is-full':cr.lines>0?' has-line':'';
+        html+='<div class="mini-cartela'+cls+'">';
+        html+='<div class="mini-cartela-head"><b>'+cr.code+'</b><span>'+cr.pct+'%'+(cr.lines?' \u00B7 '+linesSummary(cr.byType):'')+'</span></div>';
         html+='<div class="mini-grid g'+gs+'">';
         if(lot.mode==='numbers'){var hd=hdrs[gs]||hdrs[5];for(var hi=0;hi<gs;hi++){html+='<div class="mini-grid-header" style="background:'+useHc[hi]+'">'+hd[hi]+'</div>';}}
         for(var rr=0;rr<gs;rr++){for(var c2=0;c2<gs;c2++){
           var isFree=lot.hasFreeCell&&gs===5&&rr===mid2&&c2===mid2;
-          if(isFree){html+='<div class="mini-grid-cell free hit">LIVRE</div>';}
-          else{var v=cr.data[c2][rr];html+='<div class="mini-grid-cell'+(state.drawnNumbers.includes(v)?' hit':'')+'">'+escHtml(String(v))+'</div>';}
+          var lineCls=inLine[c2+','+rr]?' line':'';
+          if(isFree){html+='<div class="mini-grid-cell free'+lineCls+'">\u2605</div>';}
+          else{var v=cr.data[c2][rr];html+='<div class="mini-grid-cell'+(state.drawnNumbers.includes(v)?' hit':'')+lineCls+'">'+escHtml(String(v))+'</div>';}
         }}
         html+='</div></div>';
       });
       html+='</div>';
+      if(lot.mode==='numbers')html+='<div class="mini-legend"><span><i class="lg-hit"></i>Marcado</span><span><i class="lg-line"></i>Linha completa</span><span><i class="lg-free"></i>Livre</span></div>';
     }
-    html+='<div class="rank-expand-actions"><button class="btn btn-sm btn-ghost" onclick="removePlayer('+p.id+')" style="color:var(--danger)">'+icon('trash')+'Remover jogador</button></div>';
+    html+='<div class="rank-expand-actions"><button class="btn-text-danger btn-sm" onclick="removePlayer('+p.id+')">'+icon('trash')+' Remover jogador</button></div>';
     html+='</div></div>';
   });
   container.innerHTML=html;
@@ -2649,6 +2766,7 @@ async function drawPDF(dl){
     state.drawnNumbers=state.lots[state.currentLot].drawnNumbers.slice();
     state.maxNum=state.lots[state.currentLot].maxNum||state.maxNum||75;
   }
+  applyPrizeConfig();
   initDrawBoard(state.maxNum);renderLotButtons();updateLotUI();renderWordLists();refreshWordListDropdown();
   syncSegments();renderPreview();kpSync();renderAbout();
 })();

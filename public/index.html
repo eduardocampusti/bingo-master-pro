@@ -655,7 +655,7 @@ body.telao-lock{overflow:hidden}
   .topbar .brand-pro{color:var(--gold-dark)}
   .topbar .theme-toggle{width:44px;height:44px;border-radius:12px;border:1.5px solid var(--border-strong);background:var(--surface);color:var(--text);display:grid;place-items:center;cursor:pointer}
   .topbar .btn-telao{width:44px;padding:0}
-  .bottom-nav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:60;height:calc(72px + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);background:var(--surface);border-top:1px solid var(--border)}
+  .bottom-nav{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;left:0;right:0;bottom:0;z-index:60;height:calc(72px + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);background:var(--surface);border-top:1px solid var(--border)}
   .bottom-nav .nav-tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:0;background:none;color:var(--text-muted);font:600 11px var(--font-body);cursor:pointer}
   .bottom-nav .nav-ic{display:grid;place-items:center;width:46px;height:30px;border-radius:999px;transition:background .15s}
   .bottom-nav .nav-ic .ic{width:22px;height:22px}
@@ -784,7 +784,6 @@ body.telao-lock{overflow:hidden}
   <nav class="side-nav">
     <button class="nav-tab active" data-page="pagePlayers" aria-current="page"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49M7.76 16.24a6 6 0 0 1 0-8.49M19.07 4.93a10 10 0 0 1 0 14.14M4.93 19.07a10 10 0 0 1 0-14.14"/></svg>Ao vivo</button>
     <button class="nav-tab" data-page="pageCards"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Cartelas</button>
-    <button class="nav-tab" data-page="pageWords"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>Palavras</button>
     <button class="nav-tab" data-page="pageDraw"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 16v-5M12 16V8M17 16v-8"/></svg>Painel</button>
     <button class="nav-tab" data-page="pageAbout"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Sobre</button>
   </nav>
@@ -812,7 +811,6 @@ body.telao-lock{overflow:hidden}
 <nav class="bottom-nav no-print" aria-label="Navegação">
   <button class="nav-tab active" data-page="pagePlayers" aria-current="page"><span class="nav-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49M7.76 16.24a6 6 0 0 1 0-8.49M19.07 4.93a10 10 0 0 1 0 14.14M4.93 19.07a10 10 0 0 1 0-14.14"/></svg></span>Ao vivo</button>
   <button class="nav-tab" data-page="pageCards"><span class="nav-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>Cartelas</button>
-  <button class="nav-tab" data-page="pageWords"><span class="nav-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg></span>Palavras</button>
   <button class="nav-tab" data-page="pageDraw"><span class="nav-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 16v-5M12 16V8M17 16v-8"/></svg></span>Painel</button>
   <button class="nav-tab" data-page="pageAbout"><span class="nav-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span>Sobre</button>
 </nav>
@@ -985,17 +983,7 @@ body.telao-lock{overflow:hidden}
         <input type="text" id="cardTitle" placeholder="Ex: Bingo do Miguel">
       </div>
 
-      <div class="field field-block">
-        <span class="field-label" id="lblMode">Modo</span>
-        <div class="seg" data-for="cardMode" role="radiogroup" aria-labelledby="lblMode">
-          <button type="button" data-value="numbers" role="radio">Números</button>
-          <button type="button" data-value="words" role="radio">Palavras</button>
-        </div>
-        <select id="cardMode" class="native-select" onchange="updateModeUI()">
-          <option value="numbers">Números</option>
-          <option value="words">Palavras</option>
-        </select>
-      </div>
+      <select id="cardMode" class="native-select" aria-hidden="true"><option value="numbers">Números</option></select>
 
       <div class="field field-block" id="grpMaxNum">
         <span class="field-label" id="lblMax">Números até</span>
@@ -1009,12 +997,6 @@ body.telao-lock{overflow:hidden}
           <option value="90">90</option>
           <option value="100">100</option>
         </select>
-      </div>
-
-      <div class="field field-block" id="grpWordList" style="display:none">
-        <label for="wordListSelect">Lista de palavras</label>
-        <select id="wordListSelect"><option value="custom">Personalizada</option></select>
-        <p class="hint">Crie ou edite listas na tela <button type="button" onclick="showPage('pageWords')">Palavras</button>.</p>
       </div>
 
       <div class="field field-block">
@@ -1054,7 +1036,7 @@ body.telao-lock{overflow:hidden}
       </div>
 
       <label class="switch-row" id="freeCellRow">
-        <span><span class="sw-text">Espaço livre no centro</span><small>Disponível apenas na grade 5×5 com números</small></span>
+        <span><span class="sw-text">Espaço livre no centro</span><small>Disponível apenas na grade 5×5</small></span>
         <span class="switch"><input type="checkbox" id="freeCell" checked><span class="track"></span></span>
       </label>
 
@@ -1159,37 +1141,6 @@ body.telao-lock{overflow:hidden}
     <div class="card-head"><h2 class="card-title">Pedras sorteadas</h2><span class="card-sub">em ordem de sorteio</span></div>
     <div class="drawn-numbers" id="drawnBalls"></div>
   </section>
-</div>
-
-<!-- ====== PAGE: PALAVRAS ====== -->
-<div id="pageWords" class="page">
-  <div class="page-head">
-    <div>
-      <h1 class="page-title">Listas de palavras</h1>
-      <p class="page-sub">Crie listas temáticas para usar no modo de cartelas por palavras.</p>
-    </div>
-  </div>
-  <div class="words-layout">
-    <section class="panel">
-      <h2 class="panel-title">Nova lista</h2>
-      <div class="field field-block">
-        <label for="listName">Nome da lista</label>
-        <input type="text" id="listName" placeholder="Ex: Animais, Frutas...">
-      </div>
-      <div class="field field-block">
-        <label for="listWords">Palavras (uma por linha ou separadas por vírgula)</label>
-        <textarea id="listWords" rows="6" placeholder="cachorro&#10;gato&#10;elefante&#10;..."></textarea>
-      </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn btn-primary" onclick="saveWordList()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>Salvar lista</button>
-        <button class="btn btn-secondary" onclick="loadSampleList()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>Carregar exemplos</button>
-      </div>
-    </section>
-    <section class="panel">
-      <h2 class="panel-title">Listas salvas</h2>
-      <div id="savedLists"><div class="empty-state"><p>Nenhuma lista criada ainda.</p></div></div>
-    </section>
-  </div>
 </div>
 
 <!-- ====== PAGE: SOBRE ====== -->
@@ -1425,6 +1376,11 @@ function notifyGameOver(){notify('Uma cartela foi completada. Clique em Novo jog
 // ===== VERSAO / SOBRE =====
 // Para lançar uma versão nova: adicione um item no topo de APP_VERSIONS.
 var APP_VERSIONS=[
+  {v:'2.6',date:'27/09/2026',title:'Foco no bingo de números',items:[
+    'Removido o modo de cartelas por palavras e a tela Palavras',
+    'Gerador de cartelas mais direto: só números, grade e quantidade',
+    'Lotes de palavras já gerados continuam disponíveis para imprimir e baixar em PDF'
+  ]},
   {v:'2.5',date:'27/09/2026',title:'Cartelas lado a lado e mensagens elegantes',items:[
     'Ranking no modo Cartelas: duas cartelas por linha, com os números que faltam em destaque',
     'Modo Lista com resumo do jogador ao lado da cartela aberta',
@@ -1504,7 +1460,7 @@ setInterval(checkForUpdate,3*60*1000);
 document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')checkForUpdate();});
 setTimeout(checkForUpdate,5000);
 var ABOUT_FEATURES=[
-  {ic:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',t:'Cartelas únicas',d:'Lotes com código, grades 3×3 a 5×5, números ou palavras.'},
+  {ic:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',t:'Cartelas únicas',d:'Lotes com código único, grades 3×3 a 5×5, de 75 a 100 números.'},
   {ic:'<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',t:'Modo Telão',d:'Bola gigante, últimas pedras e painel para o público.'},
   {ic:'<path d="M20 6 9 17l-5-5"/>',t:'Conferência automática',d:'Linhas, cartela cheia e quem está na boca, em tempo real.'},
   {ic:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/>',t:'PDF e impressão',d:'4 ou 6 cartelas por folha A4, prontas para imprimir.'}
@@ -1567,14 +1523,11 @@ function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.flo
 function genLotCode(){var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',c='';for(var i=0;i<4;i++)c+=chars[Math.floor(Math.random()*chars.length)];return c;}
 
 // ===== CARD MODE UI =====
-function updateModeUI(){
-  var m=document.getElementById('cardMode').value;
-  document.getElementById('grpMaxNum').style.display=m==='numbers'?'':'none';
-  document.getElementById('grpWordList').style.display=m==='words'?'':'none';
-  refreshWordListDropdown();
-}
+// Modo palavras foi removido (v2.6): cartelas novas sao sempre de numeros.
+// Lotes de palavras antigos continuam abrindo, imprimindo e gerando PDF.
+function updateModeUI(){var g=document.getElementById('grpMaxNum');if(g)g.style.display='';}
 function refreshWordListDropdown(){
-  var s=document.getElementById('wordListSelect');
+  var s=document.getElementById('wordListSelect');if(!s)return;
   s.innerHTML='<option value="custom">Personalizada</option>';
   Object.keys(state.wordLists).forEach(function(n){var o=document.createElement('option');o.value=n;o.textContent=n+' ('+state.wordLists[n].length+')';s.appendChild(o);});
 }
@@ -1624,14 +1577,6 @@ function renderPreview(){
   var customTitle=document.getElementById('cardTitle').value.trim()||'';
   updateGenLabel();
   var words=[];
-  if(mode==='words'){
-    var ln=document.getElementById('wordListSelect').value;
-    words=ln==='custom'?[]:(state.wordLists[ln]||[]);
-    if(words.length<gridSize*gridSize){
-      box.innerHTML='<div class="preview-msg">'+(ln==='custom'?'Selecione uma lista salva para ver a prévia.':'A lista precisa de pelo menos '+(gridSize*gridSize)+' palavras.')+'</div>';
-      return;
-    }
-  }
   var h='';
   for(var i=0;i<2;i++){
     var card=mode==='numbers'?generateNumberCard(maxNum,gridSize):generateWordCard(words,gridSize);
@@ -1639,7 +1584,7 @@ function renderPreview(){
   }
   box.innerHTML=h;
 }
-['cardMode','maxNum','gridSize','printLayout','freeCell','wordListSelect'].forEach(function(id){
+['maxNum','gridSize','printLayout','freeCell'].forEach(function(id){
   var el=document.getElementById(id);if(el)el.addEventListener('change',function(){syncSegments();renderPreview();});
 });
 (function(){
@@ -1705,12 +1650,6 @@ function generateCards(){
   var hasFreeCell=document.getElementById('freeCell').checked;
   var maxNum=parseInt(document.getElementById('maxNum').value);
   var words=[];
-  if(mode==='words'){
-    var ln=document.getElementById('wordListSelect').value;
-    if(ln==='custom'){notify('Selecione uma lista salva na tela Palavras.','warn','Escolha uma lista');return;}
-    words=state.wordLists[ln]||[];
-    if(words.length<gridSize*gridSize){notify('A lista precisa de pelo menos '+(gridSize*gridSize)+' palavras para essa grade.','warn','Lista curta');return;}
-  }
   state.mode=mode;state.gridSize=gridSize;state.maxNum=maxNum;
   var customTitle=document.getElementById('cardTitle').value.trim()||'';
   var printLayout=document.getElementById('printLayout').value;
@@ -2200,7 +2139,7 @@ function mergeBackupData(data){
   });
   Object.keys(data.wordLists||{}).forEach(function(n){if(!state.wordLists[n])state.wordLists[n]=data.wordLists[n];});
   if(added.length&&!state.currentLot){switchLot(added[0]);}
-  renderLotButtons();updateLotUI();refreshWordListDropdown();renderWordLists();saveState();renderSnapshots();
+  renderLotButtons();updateLotUI();saveState();renderSnapshots();
   return{lots:added.length,codes:added};
 }
 function exportBackup(){
@@ -2824,40 +2763,8 @@ function renderTelao(){
 }
 
 // ===== WORD LISTS =====
-function saveWordList(){
-  var name=document.getElementById('listName').value.trim(),raw=document.getElementById('listWords').value.trim();
-  if(!name){notify('Digite o nome da lista.','warn','Falta o nome');return;}if(!raw){notify('Adicione as palavras da lista.','warn','Lista vazia');return;}
-  var words=raw.split(/[\n,]+/).map(function(w){return w.trim();}).filter(function(w){return w.length>0;});
-  if(words.length<9){notify('A lista precisa de no m\u00EDnimo 9 palavras (tem '+words.length+').','warn','Lista curta');return;}
-  state.wordLists[name]=words;document.getElementById('listName').value='';document.getElementById('listWords').value='';
-  renderWordLists();refreshWordListDropdown();saveState();renderPreview();
-}
-function deleteWordList(n){
-  confirmThen({title:'Excluir a lista?',html:'A lista <b>'+escHtml(n)+'</b> ser\u00E1 apagada. Cartelas j\u00E1 geradas n\u00E3o mudam.',tone:'danger',confirmText:'Excluir lista'},function(){
-    delete state.wordLists[n];renderWordLists();refreshWordListDropdown();saveState();renderPreview();
-  });
-}
-function loadSampleList(){
-  var s={'Animais':['Cachorro','Gato','Elefante','Le\u00E3o','Girafa','Cobra','\u00C1guia','Tubar\u00E3o','Pinguim','Borboleta','Cavalo','Coelho','Tartaruga','Baleia','Papagaio','Macaco','Zebra','Coruja','Jacar\u00E9','Abelha','Formiga','Lobo','Urso','Pato','Galinha'],'Frutas':['Ma\u00E7\u00E3','Banana','Laranja','Uva','Morango','Abacaxi','Manga','Melancia','Goiaba','P\u00EAssego','Ameixa','Caju','Acerola','Mam\u00E3o','Maracuj\u00E1','Lim\u00E3o','Pitanga','Jambo','Jabuticaba','Framboesa','Cereja','Figo','Kiwi','Coco','Abacate'],'Matem\u00E1tica':['Soma','Subtra\u00E7\u00E3o','Multiplica\u00E7\u00E3o','Divis\u00E3o','Fra\u00E7\u00E3o','Decimal','Geometria','Tri\u00E2ngulo','Quadrado','C\u00EDrculo','Ret\u00E2ngulo','\u00C2ngulo','Per\u00EDmetro','\u00C1rea','Volume','Equa\u00E7\u00E3o','Pot\u00EAncia','Raiz','Par','\u00CDmpar','Dezena','Centena','Milhar','Dobro','Metade']};
-  Object.keys(s).forEach(function(n){state.wordLists[n]=s[n];});
-  renderWordLists();refreshWordListDropdown();saveState();renderPreview();
-}
-function renderWordLists(){
-  var c=document.getElementById('savedLists'),k=Object.keys(state.wordLists);
-  if(!k.length){c.innerHTML='<div class="empty-state"><p>Nenhuma lista criada ainda.</p></div>';return;}
-  var h='';k.forEach(function(name){
-    var w=state.wordLists[name];
-    h+='<div class="word-list-item">';
-    h+='<div class="word-list-head">';
-    h+='<strong>'+escHtml(name)+'</strong>';
-    h+='<div style="display:flex;gap:8px;align-items:center"><span style="font-size:13px;color:var(--text-secondary);font-weight:600">'+w.length+' palavras</span>';
-    h+='<button class="btn btn-sm btn-ghost btn-icon" onclick="deleteWordList(\''+name.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;')+'\')" style="color:var(--danger)" aria-label="Excluir lista '+escHtml(name)+'">'+icon('trash')+'</button></div></div>';
-    h+='<div class="word-pills">';
-    w.slice(0,15).forEach(function(x){h+='<span class="word-pill">'+escHtml(x)+'</span>';});
-    if(w.length>15)h+='<span class="word-pill" style="background:none;border-style:dashed">+'+(w.length-15)+' mais</span>';
-    h+='</div></div>';
-  });c.innerHTML=h;
-}
+// Listas de palavras continuam guardadas em state.wordLists (nao apagamos dados antigos).
+function renderWordLists(){}
 
 // ===== CARTELAS DO LOTE SELECIONADO =====
 // As cartelas ficam salvas em state.lots; aqui elas sao sempre redesenhadas a partir do lote atual,
@@ -3002,7 +2909,7 @@ async function drawPDF(dl){
     state.maxNum=state.lots[state.currentLot].maxNum||state.maxNum||75;
   }
   applyPrizeConfig();syncRankViewSeg();
-  initDrawBoard(state.maxNum);renderLotButtons();updateLotUI();renderWordLists();refreshWordListDropdown();
+  initDrawBoard(state.maxNum);renderLotButtons();updateLotUI();
   syncSegments();renderPreview();kpSync();renderAbout();
 })();
 </script>

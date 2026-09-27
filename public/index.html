@@ -380,6 +380,13 @@ button.num-cell:hover:not(.drawn){background:var(--border-strong);color:var(--te
 .recent-item .ri-text strong{font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .recent-item .ri-text small{font-size:12px;color:var(--text-secondary)}
 .recent-item.active{border-color:var(--primary)}
+.backup-box{margin-top:16px;padding-top:16px;border-top:1px dashed var(--border-strong);display:flex;flex-direction:column;gap:10px}
+.backup-text strong{display:block;font:700 14px var(--font-display)}
+.backup-text span{font-size:12.5px;color:var(--text-secondary);line-height:1.45}
+.backup-actions{display:flex;gap:8px;flex-wrap:wrap}
+.snap-box{background:var(--gold-light);color:var(--gold-dark);border-radius:14px;padding:12px 14px;font-size:13px;display:flex;flex-direction:column;gap:8px}
+.snap-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.snap-row span{flex:1;min-width:160px;color:var(--text)}
 .cards-output-head{display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
 
 /* ===== WORDS ===== */
@@ -936,8 +943,20 @@ body.telao-lock{overflow:hidden}
         <div id="cardPreview" class="preview-grid"></div>
       </section>
       <section class="card">
-        <div class="card-head"><h2 class="card-title">Lotes recentes</h2><span class="card-sub">até 10 lotes</span></div>
+        <div class="card-head"><h2 class="card-title">Lotes salvos</h2><span class="card-sub" id="recentLotsCount"></span></div>
         <div id="recentLots"></div>
+        <div class="backup-box">
+          <div class="backup-text">
+            <strong>Backup dos lotes</strong>
+            <span>Os lotes ficam salvos neste navegador. Exporte um arquivo para guardar ou passar para outro aparelho.</span>
+          </div>
+          <div class="backup-actions">
+            <button class="btn btn-secondary btn-sm" onclick="exportBackup()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>Exportar backup</button>
+            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('backupFile').click()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg>Importar backup</button>
+            <input type="file" id="backupFile" accept=".json,application/json" hidden onchange="importBackup(this)">
+          </div>
+          <div id="snapshotArea"></div>
+        </div>
       </section>
     </div>
   </div>
@@ -1110,6 +1129,26 @@ Object.keys(state.lots).forEach(function(k){
 });
 state.players.forEach(function(p){if(!Array.isArray(p.cardCodes))p.cardCodes=[];});
 
+// ===== COPIAS DE SEGURANCA AUTOMATICAS =====
+// A cada abertura do sistema (e antes de excluir ou importar lotes) guardamos uma copia
+// dos dados em 'bmp3_snaps' (ate 5). Se lotes sumirem, da para recupera-los pela tela Cartelas.
+function readSnapshots(){try{var a=JSON.parse(localStorage.getItem('bmp3_snaps')||'[]');return Array.isArray(a)?a:[];}catch(e){return[];}}
+function takeSnapshot(raw){
+  try{
+    if(!raw)return;
+    var parsed=JSON.parse(raw);var n=parsed&&parsed.lots?Object.keys(parsed.lots).length:0;
+    if(!n)return;
+    var snaps=readSnapshots();
+    if(snaps.length&&snaps[0].data===raw)return;
+    snaps.unshift({date:new Date().toLocaleString('pt-BR'),lots:n,data:raw});
+    // guarda as 5 mais recentes, mas nunca descarta a copia com mais lotes
+    var biggest=snaps.slice().sort(function(a,b){return b.lots-a.lots;})[0];
+    var keep=snaps.slice(0,5);if(keep.indexOf(biggest)<0){keep[4]=biggest;}
+    localStorage.setItem('bmp3_snaps',JSON.stringify(keep));
+  }catch(e){}
+}
+takeSnapshot((function(){try{return localStorage.getItem('bmp3');}catch(e){return null;}})());
+
 function saveState(){
   // Sync drawnNumbers to current lot
   if(state.currentLot&&state.lots[state.currentLot]){
@@ -1150,7 +1189,7 @@ var APP_VERSIONS=[
     'Layout adaptado para tablet, celular e telas pequenas'
   ]},
   {v:'1.0',date:'23/09/2026',title:'Sistema completo com histórico de lotes',items:[
-    'Até 10 lotes salvos, cada um com código único',
+    'Vários lotes salvos, cada um com código único',
     'Sorteio independente por lote',
     'Prêmios por linha e cartela cheia, com fim de jogo automático',
     'Acompanhamento ao vivo com mini-cartelas dos jogadores'
@@ -1396,16 +1435,8 @@ function generateCards(){
   state.drawnNumbers=[];
   state.gameOver=false;
 
-  // Limit to 10 most recent lots
-  var lotKeys=Object.keys(state.lots);
-  if(lotKeys.length>10){
-    var sorted=sortedLotKeys();
-    sorted.slice(10).forEach(function(k){
-      // Also remove players from deleted lots
-      state.players=state.players.filter(function(p){return p.lotCode!==k;});
-      delete state.lots[k];
-    });
-  }
+  // Lotes antigos NAO sao mais apagados automaticamente (antes o limite de 10 removia
+  // lotes e jogadores sem avisar). Excluir lote agora so acontece pelo botao de excluir.
 
   initDrawBoard(mode==='numbers'?maxNum:state.maxNum);
   resetBallDisplay();
@@ -1682,6 +1713,8 @@ document.addEventListener('click',function(e){
 
 function renderRecentLots(keys){
   var el=document.getElementById('recentLots');if(!el)return;
+  var cnt=document.getElementById('recentLotsCount');if(cnt)cnt.textContent=keys.length?keys.length+' lote'+(keys.length>1?'s':''):'';
+  renderSnapshots();
   if(!keys.length){el.innerHTML='<p class="empty-inline">Nenhum lote gerado ainda.</p>';return;}
   var h='<ul class="recent-list">';
   keys.forEach(function(code){
@@ -1691,6 +1724,72 @@ function renderRecentLots(keys){
   el.innerHTML=h+'</ul>';
 }
 function openLot(code){switchLot(code);showPage('pagePlayers');}
+
+// ===== BACKUP: exportar / importar / recuperar =====
+function mergeBackupData(data){
+  if(!data||typeof data!=='object'||!data.lots)return{lots:0};
+  var added=[];
+  Object.keys(data.lots).forEach(function(code){
+    if(state.lots[code])return;
+    var l=data.lots[code];if(!l||!Array.isArray(l.cards))return;
+    if(!Array.isArray(l.drawnNumbers))l.drawnNumbers=code===data.currentLot&&Array.isArray(data.drawnNumbers)?data.drawnNumbers.slice():[];
+    state.lots[code]=l;added.push(code);
+  });
+  var ids={};state.players.forEach(function(p){ids[p.id]=true;});
+  (data.players||[]).forEach(function(p){
+    if(p&&added.indexOf(p.lotCode)>=0&&!ids[p.id]){if(!Array.isArray(p.cardCodes))p.cardCodes=[];state.players.push(p);}
+  });
+  Object.keys(data.wordLists||{}).forEach(function(n){if(!state.wordLists[n])state.wordLists[n]=data.wordLists[n];});
+  if(added.length&&!state.currentLot){switchLot(added[0]);}
+  renderLotButtons();updateLotUI();refreshWordListDropdown();renderWordLists();saveState();renderSnapshots();
+  return{lots:added.length,codes:added};
+}
+function exportBackup(){
+  saveState();
+  var n=Object.keys(state.lots).length;
+  if(!n){alert('Ainda não há lotes para exportar.');return;}
+  var payload={app:'bingo-master-pro',version:APP_VERSION,exportedAt:new Date().toISOString(),data:state};
+  var blob=new Blob([JSON.stringify(payload)],{type:'application/json'});
+  var d=new Date(),stamp=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='bingo-backup-'+stamp+'-'+n+'-lotes.json';
+  document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1000);
+}
+function importBackup(input){
+  var f=input.files&&input.files[0];if(!f)return;
+  var reader=new FileReader();
+  reader.onload=function(){
+    try{
+      var obj=JSON.parse(String(reader.result).replace(/^﻿/,''));
+      var data=obj&&obj.data&&obj.data.lots?obj.data:obj;
+      takeSnapshot(localStorage.getItem('bmp3'));
+      var r=mergeBackupData(data);
+      alert(r.lots?r.lots+' lote(s) recuperado(s): '+r.codes.join(', '):'Nenhum lote novo neste arquivo (todos já estão na lista).');
+    }catch(e){alert('Arquivo de backup inválido.');}
+    input.value='';
+  };
+  reader.readAsText(f);
+}
+function renderSnapshots(){
+  var el=document.getElementById('snapshotArea');if(!el)return;
+  var best=null;
+  readSnapshots().forEach(function(s,i){
+    try{
+      var d=JSON.parse(s.data);var missing=Object.keys(d.lots||{}).filter(function(k){return !state.lots[k];});
+      if(missing.length&&(!best||missing.length>best.missing.length))best={i:i,date:s.date,missing:missing};
+    }catch(e){}
+  });
+  var dismissed='';try{dismissed=localStorage.getItem('bmp3_snap_dismiss')||'';}catch(e){}
+  if(!best||dismissed===best.date+'|'+best.missing.join(',')){el.innerHTML='';return;}
+  window._snapSig=best.date+'|'+best.missing.join(',');
+  el.innerHTML='<div class="snap-box"><div class="snap-row"><span>Encontramos uma cópia automática de <b>'+escHtml(best.date)+'</b> com <b>'+best.missing.length+' lote(s)</b> que não estão na lista: '+best.missing.map(escHtml).join(', ')+'.</span>'+
+    '<button class="btn btn-primary btn-sm" onclick="restoreSnapshot('+best.i+')">Recuperar lotes</button><button class="btn btn-ghost btn-sm" onclick="dismissSnapshot()">Dispensar</button></div></div>';
+}
+function dismissSnapshot(){try{localStorage.setItem('bmp3_snap_dismiss',window._snapSig||'');}catch(e){}renderSnapshots();}
+function restoreSnapshot(i){
+  var s=readSnapshots()[i];if(!s)return;
+  try{var r=mergeBackupData(JSON.parse(s.data));alert(r.lots?r.lots+' lote(s) recuperado(s): '+r.codes.join(', '):'Nada para recuperar.');}
+  catch(e){alert('Não foi possível ler a cópia.');}
+}
 
 function switchLot(code){
   if(!state.lots[code])return;
@@ -1711,6 +1810,7 @@ function switchLot(code){
 
 function deleteLot(code){
   if(!confirm('Excluir o lote '+code+'? Os jogadores deste lote tamb\u00E9m ser\u00E3o removidos.'))return;
+  try{takeSnapshot(localStorage.getItem('bmp3'));}catch(e){}
   state.players=state.players.filter(function(p){return p.lotCode!==code;});
   delete state.lots[code];
   if(state.currentLot===code){

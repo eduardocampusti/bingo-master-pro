@@ -469,9 +469,13 @@ button.num-cell:hover:not(.drawn){background:var(--border-strong);color:var(--te
 .words-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}
 
 /* ===== SOBRE ===== */
-.side-credit{display:flex;align-items:center;justify-content:center;gap:8px;min-height:36px;border:0;background:none;color:#8C88AE;font:500 12px var(--font-body);cursor:pointer;border-radius:10px;transition:color .15s}
-.side-credit:hover{color:#EDEBF5}
-.side-version{font:700 11px var(--font-display);color:#E7C27A;border:1px solid rgba(231,194,122,.35);border-radius:999px;padding:2px 8px}
+.brand-text{display:flex;flex-direction:column;gap:5px;min-width:0}
+.brand-ver{display:inline-flex;align-items:center;gap:7px;align-self:flex-start;border:0;background:none;padding:0;cursor:pointer;font:500 11px/1 var(--font-body);letter-spacing:.06em;color:#8C88AE;transition:color .15s}
+.brand-ver i{width:6px;height:6px;border-radius:50%;background:#E7C27A;box-shadow:0 0 0 3px rgba(231,194,122,.18)}
+.brand-ver span[data-app-version]{font:700 11.5px/1 var(--font-display);letter-spacing:.04em;color:#E7C27A}
+.brand-ver-ed{text-transform:uppercase;letter-spacing:.14em;font-size:9.5px;font-weight:600}
+.brand-ver:hover{color:#EDEBF5}
+.brand-ver:focus-visible{outline:2px solid #E7C27A;outline-offset:3px;border-radius:4px}
 .about-hero{position:relative;overflow:hidden;background:var(--ink);color:#EDEBF5;border-radius:var(--radius);padding:36px 40px;display:flex;align-items:center;gap:32px;margin-bottom:24px;border:1px solid var(--ink)}
 [data-theme="dark"] .about-hero{border-color:var(--border-strong)}
 .about-hero::after{content:'';position:absolute;right:-90px;top:-90px;width:320px;height:320px;border-radius:50%;border:1px solid rgba(231,194,122,.18);box-shadow:0 0 0 40px rgba(231,194,122,.04),0 0 0 80px rgba(231,194,122,.03);pointer-events:none}
@@ -653,6 +657,10 @@ body.telao-lock{overflow:hidden}
   .topbar .brand-mark{width:34px;height:34px;font-size:17px;background:var(--gold);color:#16152B}
   .topbar .brand-name{color:var(--text);font-size:16px}
   .topbar .brand-pro{color:var(--gold-dark)}
+  .topbar .brand-text{gap:3px}
+  .topbar .brand-ver{color:var(--text-muted)}
+  .topbar .brand-ver span[data-app-version]{color:var(--gold-dark)}
+  .topbar .brand-ver-ed{display:none}
   .topbar .theme-toggle{width:44px;height:44px;border-radius:12px;border:1.5px solid var(--border-strong);background:var(--surface);color:var(--text);display:grid;place-items:center;cursor:pointer}
   .topbar .btn-telao{width:44px;padding:0}
   .bottom-nav{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;left:0;right:0;bottom:0;z-index:60;height:calc(72px + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);background:var(--surface);border-top:1px solid var(--border)}
@@ -779,7 +787,10 @@ body.telao-lock{overflow:hidden}
 <aside class="sidebar no-print" aria-label="Navegação principal">
   <div class="brand">
     <div class="brand-mark" aria-hidden="true">B</div>
-    <div class="brand-name">Bingo Master<span class="brand-pro">PRO</span></div>
+    <div class="brand-text">
+      <div class="brand-name">Bingo Master<span class="brand-pro">PRO</span></div>
+      <button type="button" class="brand-ver" onclick="showPage('pageAbout')" aria-label="Sobre esta versão"><i aria-hidden="true"></i><span data-app-version="v">v2.6</span><span class="brand-ver-ed">Edição Salão</span></button>
+    </div>
   </div>
   <nav class="side-nav">
     <button class="nav-tab active" data-page="pagePlayers" aria-current="page"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49M7.76 16.24a6 6 0 0 1 0-8.49M19.07 4.93a10 10 0 0 1 0 14.14M4.93 19.07a10 10 0 0 1 0-14.14"/></svg>Ao vivo</button>
@@ -788,10 +799,6 @@ body.telao-lock{overflow:hidden}
     <button class="nav-tab" data-page="pageAbout"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Sobre</button>
   </nav>
   <div class="side-foot">
-    <button class="side-credit" onclick="showPage('pageAbout')" aria-label="Sobre o sistema">
-      <span class="side-version" data-app-version="v">v2.1</span>
-      <span>por Vencer Digital</span>
-    </button>
     <button class="btn-telao" onclick="openTelao()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>Modo Telão</button>
     <button class="theme-toggle" data-label="1" onclick="toggleTheme()">Tema escuro</button>
   </div>
@@ -801,7 +808,10 @@ body.telao-lock{overflow:hidden}
 <header class="topbar no-print">
   <div class="brand">
     <div class="brand-mark" aria-hidden="true">B</div>
-    <div class="brand-name">Bingo Master<span class="brand-pro">PRO</span></div>
+    <div class="brand-text">
+      <div class="brand-name">Bingo Master<span class="brand-pro">PRO</span></div>
+      <button type="button" class="brand-ver" onclick="showPage('pageAbout')" aria-label="Sobre esta versão"><i aria-hidden="true"></i><span data-app-version="v">v2.6</span><span class="brand-ver-ed">Edição Salão</span></button>
+    </div>
   </div>
   <button class="btn-telao" onclick="openTelao()" aria-label="Abrir Modo Telão"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></button>
   <button class="theme-toggle" onclick="toggleTheme()" aria-label="Alternar tema"></button>
@@ -1259,7 +1269,17 @@ if(!state.lots||typeof state.lots!=='object')state.lots={};
 if(!Array.isArray(state.players))state.players=[];
 if(!state.wordLists||typeof state.wordLists!=='object')state.wordLists={};
 if(!Array.isArray(state.drawnNumbers))state.drawnNumbers=[];
-if(state.currentLot&&!state.lots[state.currentLot])state.currentLot=null;
+// Modo palavras removido: lotes de palavras antigos vao para state.archivedWordLots
+// (continuam guardados, mas nao aparecem mais em lugar nenhum do sistema).
+if(!state.archivedWordLots||typeof state.archivedWordLots!=='object')state.archivedWordLots={};
+Object.keys(state.lots).forEach(function(k){
+  if(state.lots[k]&&state.lots[k].mode==='words'){state.archivedWordLots[k]=state.lots[k];delete state.lots[k];state._archivedNow=true;}
+});
+if(state.currentLot&&!state.lots[state.currentLot]){
+  // lote atual era de palavras: abre o lote de numeros mais recente
+  var _k=Object.keys(state.lots);state.currentLot=_k.length?_k[_k.length-1]:null;
+  state.drawnNumbers=state.currentLot&&Array.isArray(state.lots[state.currentLot].drawnNumbers)?state.lots[state.currentLot].drawnNumbers.slice():[];
+}
 Object.keys(state.lots).forEach(function(k){
   var l=state.lots[k];
   if(!Array.isArray(l.cards))l.cards=[];
@@ -1376,6 +1396,10 @@ function notifyGameOver(){notify('Uma cartela foi completada. Clique em Novo jog
 // ===== VERSAO / SOBRE =====
 // Para lançar uma versão nova: adicione um item no topo de APP_VERSIONS.
 var APP_VERSIONS=[
+  {v:'2.7',date:'27/09/2026',title:'Somente bingo de números',items:[
+    'Lotes de palavras antigos não aparecem mais no sistema (ficam arquivados, sem apagar)',
+    'Versão exibida de forma discreta embaixo do nome Bingo Master PRO'
+  ]},
   {v:'2.6',date:'27/09/2026',title:'Foco no bingo de números',items:[
     'Removido o modo de cartelas por palavras e a tela Palavras',
     'Gerador de cartelas mais direto: só números, grade e quantidade',
@@ -1470,7 +1494,7 @@ function renderAbout(){
   var cur=APP_VERSIONS[0];
   var rd=document.getElementById('aboutReleaseDate');if(rd)rd.textContent=cur.date;
   var bd=document.getElementById('aboutBuild');if(bd){bd.hidden=!buildKnown();bd.querySelector('b').textContent=BUILD_COMMIT;}
-  var sc=document.querySelector('.side-credit');if(sc&&buildKnown())sc.title='Versão '+APP_VERSION+' · build '+BUILD_COMMIT;
+  document.querySelectorAll('.brand-ver').forEach(function(b){b.title='Versão '+APP_VERSION+(buildKnown()?' · build '+BUILD_COMMIT:'')+' · por Vencer Digital';});
   var ed=document.getElementById('aboutEdition');if(ed)ed.textContent='Edição '+(cur.v.charAt(0)==='2'?'Salão':'Clássica');
   var vc=document.getElementById('aboutVersionCount');if(vc)vc.textContent=APP_VERSIONS.length+' versões lançadas';
   var yr=document.getElementById('aboutYear');if(yr)yr.textContent=new Date().getFullYear();
@@ -2129,6 +2153,7 @@ function mergeBackupData(data){
   var added=[];
   Object.keys(data.lots).forEach(function(code){
     if(state.lots[code])return;
+    if(data.lots[code]&&data.lots[code].mode==='words')return;
     var l=data.lots[code];if(!l||!Array.isArray(l.cards))return;
     if(!Array.isArray(l.drawnNumbers))l.drawnNumbers=code===data.currentLot&&Array.isArray(data.drawnNumbers)?data.drawnNumbers.slice():[];
     state.lots[code]=l;added.push(code);
@@ -2172,7 +2197,7 @@ function renderSnapshots(){
   var best=null;
   readSnapshots().forEach(function(s,i){
     try{
-      var d=JSON.parse(s.data);var missing=Object.keys(d.lots||{}).filter(function(k){return !state.lots[k];});
+      var d=JSON.parse(s.data);var missing=Object.keys(d.lots||{}).filter(function(k){return !state.lots[k]&&d.lots[k]&&d.lots[k].mode!=='words';});
       if(missing.length&&(!best||missing.length>best.missing.length))best={i:i,date:s.date,missing:missing};
     }catch(e){}
   });
@@ -2911,6 +2936,7 @@ async function drawPDF(dl){
   applyPrizeConfig();syncRankViewSeg();
   initDrawBoard(state.maxNum);renderLotButtons();updateLotUI();
   syncSegments();renderPreview();kpSync();renderAbout();
+  if(state._archivedNow){delete state._archivedNow;saveState();}
 })();
 </script>
 </body>

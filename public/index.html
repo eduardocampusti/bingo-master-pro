@@ -485,6 +485,12 @@ button.num-cell:hover:not(.drawn){background:var(--border-strong);color:var(--te
 .about-footer{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:28px;padding-top:20px;border-top:1px solid var(--border);font-size:13px;color:var(--text-muted);text-align:center;flex-wrap:wrap}
 .vd-mark{height:22px;width:auto}
 
+/* ===== AVISO DE VERSAO NOVA ===== */
+.update-banner{position:fixed;right:24px;bottom:24px;z-index:900;display:flex;align-items:center;gap:12px;max-width:min(520px,calc(100vw - 32px));padding:12px 12px 12px 18px;background:var(--surface);border:1px solid var(--border-strong);border-radius:16px;box-shadow:var(--shadow-md);animation:fadeIn .25s ease-out}
+.update-dot{width:10px;height:10px;border-radius:50%;background:var(--success);box-shadow:0 0 0 4px var(--success-light);flex-shrink:0}
+.update-text{font-size:14px;flex:1;min-width:0}
+@media (max-width:900px){.update-banner{left:16px;right:16px;bottom:calc(84px + env(safe-area-inset-bottom,0px));flex-wrap:wrap}}
+
 /* ===== TELAO ===== */
 .telao{position:fixed;inset:0;z-index:1000;background:#0E0D22;color:#fff;display:flex;flex-direction:column;gap:28px;padding:32px 48px;overflow:auto;outline:none}
 .telao-top{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
@@ -1087,6 +1093,7 @@ body.telao-lock{overflow:hidden}
       <div class="about-meta">
         <span class="about-chip about-chip-gold">Versão <b data-app-version>2.1</b></span>
         <span class="about-chip">Lançada em <b id="aboutReleaseDate">23/09/2026</b></span>
+        <span class="about-chip" id="aboutBuild" hidden>Build <b>—</b></span>
         <span class="about-chip">Funciona offline no navegador</span>
       </div>
     </div>
@@ -1145,6 +1152,14 @@ body.telao-lock{overflow:hidden}
 </div>
 
 </main>
+
+<!-- ===== AVISO DE VERSAO NOVA ===== -->
+<div id="updateBanner" class="update-banner no-print" role="status" hidden>
+  <span class="update-dot" aria-hidden="true"></span>
+  <span class="update-text"><b>Nova versão disponível</b> (<span data-new-version>nova</span>). Seus lotes continuam salvos.</span>
+  <button class="btn btn-primary btn-sm" onclick="applyUpdate()">Atualizar agora</button>
+  <button class="btn btn-ghost btn-sm btn-icon" onclick="document.getElementById('updateBanner').hidden=true" aria-label="Fechar aviso"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+</div>
 
 <!-- ===== MODO TELAO ===== -->
 <div id="telaoOverlay" class="telao no-print" role="dialog" aria-modal="true" aria-label="Modo Telão" tabindex="-1" hidden>
@@ -1231,6 +1246,11 @@ function icon(n){return '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
 // ===== VERSAO / SOBRE =====
 // Para lançar uma versão nova: adicione um item no topo de APP_VERSIONS.
 var APP_VERSIONS=[
+  {v:'2.3',date:'27/09/2026',title:'Atualização automática',items:[
+    'Cada deploy recebe uma identificação automática (build), exibida na aba Sobre',
+    'O sistema avisa quando há uma versão nova publicada, com botão Atualizar agora',
+    'O navegador sempre busca a versão mais recente, sem ficar preso em cópia antiga'
+  ]},
   {v:'2.2',date:'27/09/2026',title:'Proteção dos lotes',items:[
     'Lotes antigos não são mais apagados ao gerar um lote novo',
     'Cópias automáticas com botão para recuperar lotes que sumiram',
@@ -1266,6 +1286,29 @@ var APP_VERSIONS=[
   ]}
 ];
 var APP_VERSION=APP_VERSIONS[0].v;
+// Preenchidos automaticamente pelo servidor a cada deploy (server.js)
+var BUILD_COMMIT='__BUILD_COMMIT__',BUILD_VERSION='__BUILD_VERSION__';
+function buildKnown(){return BUILD_COMMIT.slice(0,2)!=='__'&&BUILD_COMMIT!=='dev';}
+
+// ===== AVISO DE VERSAO NOVA =====
+// Verifica periodicamente se um deploy mais novo foi publicado e oferece atualizar.
+var updateShown=false;
+function checkForUpdate(){
+  if(!buildKnown()||updateShown||typeof fetch!=='function')return;
+  fetch('/version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).then(function(b){
+    if(b&&b.commit&&b.commit!=='dev'&&b.commit!==BUILD_COMMIT)showUpdateBanner(b);
+  }).catch(function(){});
+}
+function showUpdateBanner(b){
+  updateShown=true;
+  var el=document.getElementById('updateBanner');if(!el)return;
+  el.querySelector('[data-new-version]').textContent=b.version?'v'+String(b.version).replace(/\.0$/,''):'nova';
+  el.hidden=false;
+}
+function applyUpdate(){try{saveState();}catch(e){}location.reload();}
+setInterval(checkForUpdate,3*60*1000);
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')checkForUpdate();});
+setTimeout(checkForUpdate,5000);
 var ABOUT_FEATURES=[
   {ic:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',t:'Cartelas únicas',d:'Lotes com código, grades 3×3 a 5×5, números ou palavras.'},
   {ic:'<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',t:'Modo Telão',d:'Bola gigante, últimas pedras e painel para o público.'},
@@ -1276,6 +1319,8 @@ function renderAbout(){
   document.querySelectorAll('[data-app-version]').forEach(function(el){el.textContent=(el.dataset.appVersion==='v'?'v':'')+APP_VERSION;});
   var cur=APP_VERSIONS[0];
   var rd=document.getElementById('aboutReleaseDate');if(rd)rd.textContent=cur.date;
+  var bd=document.getElementById('aboutBuild');if(bd){bd.hidden=!buildKnown();bd.querySelector('b').textContent=BUILD_COMMIT;}
+  var sc=document.querySelector('.side-credit');if(sc&&buildKnown())sc.title='Versão '+APP_VERSION+' · build '+BUILD_COMMIT;
   var ed=document.getElementById('aboutEdition');if(ed)ed.textContent='Edição '+(cur.v.charAt(0)==='2'?'Salão':'Clássica');
   var vc=document.getElementById('aboutVersionCount');if(vc)vc.textContent=APP_VERSIONS.length+' versões lançadas';
   var yr=document.getElementById('aboutYear');if(yr)yr.textContent=new Date().getFullYear();

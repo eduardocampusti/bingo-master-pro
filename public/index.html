@@ -1318,6 +1318,7 @@ Object.keys(state.lots).forEach(function(k){
 state.players.forEach(function(p){if(!Array.isArray(p.cardCodes))p.cardCodes=[];});
 if(!state.deletedLots||typeof state.deletedLots!=='object')state.deletedLots={};
 if(!state.deletedPlayers||typeof state.deletedPlayers!=='object')state.deletedPlayers={};
+if(state.printLot&&!state.lots[state.printLot])state.printLot=null;
 }
 normalizeState();
 
@@ -1743,6 +1744,7 @@ function generateCards(){
 
   state.lots[lotCode]=lot;
   state.currentLot=lotCode;
+  state.printLot=lotCode;
   state.drawnNumbers=[];
   state.gameOver=false;
 
@@ -2038,11 +2040,29 @@ function renderRecentLots(keys){
   var h='<ul class="recent-list">';
   keys.forEach(function(code){
     var lot=state.lots[code];
-    h+='<li><button type="button" class="recent-item'+(code===state.currentLot?' active':'')+'" onclick="openLot(\''+code+'\')"><span class="lot-code">'+code+'</span><span class="ri-text"><strong>'+escHtml(lot.title)+' \u00B7 '+lot.cards.length+' cartelas</strong><small>'+escHtml(lot.createdAt||'')+'</small></span>'+icon('chevron').replace('<svg','<svg style="transform:rotate(-90deg)"')+'</button></li>';
+    h+='<li><button type="button" class="recent-item'+(code===state.currentLot?' active':'')+'" onclick="openLotCards(\''+code+'\')"><span class="lot-code">'+code+'</span><span class="ri-text"><strong>'+escHtml(lot.title)+' \u00B7 '+lot.cards.length+' cartelas</strong><small>'+escHtml(lot.createdAt||'')+'</small></span>'+icon('chevron').replace('<svg','<svg style="transform:rotate(-90deg)"')+'</button></li>';
   });
   el.innerHTML=h+'</ul>';
 }
 function openLot(code){switchLot(code);showPage('pagePlayers');}
+function openLotCards(code){
+  var lot=state.lots[code];
+  if(!lot||!lot.cards||!lot.cards.length||!lot.cards.some(function(c){return c.data;})){
+    notify('Este lote não possui dados de cartelas salvos.','info','Lote sem cartelas');return;
+  }
+  switchLot(code);
+  state.printLot=code;
+  saveState();
+  showPage('pageCards');
+  renderLotCards();
+}
+function getPrintLot(){
+  var code=state.printLot||state.currentLot;
+  if(!code||!state.lots[code])return null;
+  var lot=state.lots[code];
+  if(!lot.cards||!lot.cards.length)return null;
+  return lot;
+}
 
 // ===== CADASTRAR CARTELAS IMPRESSAS (recriar lote a partir do papel) =====
 // Rascunho salvo em 'bmp3_manual_draft' para nao perder o que foi digitado.
@@ -2842,13 +2862,15 @@ function renderWordLists(){}
 // As cartelas ficam salvas em state.lots; aqui elas sao sempre redesenhadas a partir do lote atual,
 // para nao "sumirem" ao recarregar a pagina ou trocar de lote.
 function lotCardsForPrint(){
-  var lot=state.currentLot?state.lots[state.currentLot]:null;
+  var lot=getPrintLot();
+  if(!lot){lot=state.currentLot?state.lots[state.currentLot]:null;}
   if(lot&&lot.cards&&lot.cards.length)return lot.cards.map(function(c){return c.data;}).filter(Boolean);
   return state._lastCards||[];
 }
 function renderLotCards(){
   var out=document.getElementById('cardsOutput');if(!out)return;
-  var lot=state.currentLot?state.lots[state.currentLot]:null;
+  var lot=getPrintLot();
+  if(!lot){lot=state.currentLot?state.lots[state.currentLot]:null;}
   if(!lot||!lot.cards||!lot.cards.length){out.innerHTML='';return;}
   var layout=document.getElementById('printLayout').value;
   var ct=lot.title&&lot.title!=='BINGO'?lot.title:'';
@@ -2868,7 +2890,14 @@ function renderLotCards(){
 (function(){var pl=document.getElementById('printLayout');if(pl)pl.addEventListener('change',renderLotCards);})();
 
 // ===== PRINT & PDF =====
-function printCards(){if(!document.getElementById('cardsGrid')){notify('Gere ou selecione um lote de cartelas primeiro.','info','Nada para imprimir');return;}window.print();}
+function printCards(){
+  if(!document.getElementById('cardsGrid')){
+    var lot=getPrintLot();
+    if(!lot){notify('Gere ou selecione um lote de cartelas primeiro.','info','Nada para imprimir');return;}
+    renderLotCards();
+  }
+  window.print();
+}
 
 async function exportPDF(){
   if(!lotCardsForPrint().length){notify('Gere ou selecione um lote de cartelas primeiro.','info','Nada para exportar');return;}
@@ -2883,18 +2912,14 @@ async function drawPDF(dl){
     var jsPDF=window.jspdf.jsPDF;
     var pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
     var layout=parseInt(document.getElementById('printLayout').value);
-    var gridSize=parseInt(document.getElementById('gridSize').value);
-    var mode=document.getElementById('cardMode').value;
-    var hasFreeCell=document.getElementById('freeCell').checked;
-    var customTitle=document.getElementById('cardTitle').value.trim()||'';
-    var lot=state.currentLot?state.lots[state.currentLot]:null;
+    var lot=getPrintLot();
+    if(!lot){lot=state.currentLot?state.lots[state.currentLot]:null;}
     var lotCode=lot?lot.code:'????';
     var cards=lotCardsForPrint();
-    // O PDF usa as configuracoes do lote selecionado (e nao as do formulario)
-    if(lot&&lot.cards&&lot.cards.length){
-      gridSize=lot.gridSize;mode=lot.mode;hasFreeCell=lot.hasFreeCell;
-      customTitle=lot.title&&lot.title!=='BINGO'?lot.title:'';
-    }
+    var gridSize=lot?lot.gridSize:parseInt(document.getElementById('gridSize').value);
+    var mode=lot?lot.mode:'numbers';
+    var hasFreeCell=lot?lot.hasFreeCell:document.getElementById('freeCell').checked;
+    var customTitle=lot&&lot.title&&lot.title!=='BINGO'?lot.title:'';
     var headers={3:['B','I','G'],4:['B','I','N','G'],5:['B','I','N','G','O']};
     var cc5=[[47,91,211],[200,52,58],[176,122,12],[31,138,76],[109,63,196]];
     var cc4=[[47,91,211],[200,52,58],[176,122,12],[31,138,76]];
@@ -3206,6 +3231,7 @@ function cloudInit(){
   }
   applyPrizeConfig();syncRankViewSeg();
   initDrawBoard(state.maxNum);renderLotButtons();updateLotUI();
+  if(state.printLot&&state.lots[state.printLot])renderLotCards();
   syncSegments();renderPreview();kpSync();renderAbout();
   if(state._archivedNow){delete state._archivedNow;saveState();}
   cloudInit();

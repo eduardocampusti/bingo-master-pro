@@ -197,6 +197,12 @@ input::placeholder,textarea::placeholder{color:var(--text-muted)}
 .card-chip-option:hover:not(:disabled){border-color:var(--primary);color:var(--primary)}
 .card-chip-option.selected{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
 .card-chip-option.taken{opacity:.45;cursor:not-allowed;text-decoration:line-through}
+.card-chip-option.used{opacity:.35;cursor:not-allowed;background:var(--bg-secondary);color:var(--text-secondary);border-color:var(--border)}
+.used-cards-info{font-size:13px;color:var(--text-secondary);margin-bottom:8px}
+.exhausted-badge{display:inline-block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;padding:2px 8px;border-radius:4px;background:var(--bg-secondary);color:var(--text-secondary);margin-right:4px}
+.used-cards-panel{margin-top:8px;padding:8px 12px;background:var(--bg-secondary);border-radius:8px;font-size:13px}
+.used-card-release{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)}
+.used-card-release:last-child{border-bottom:none}
 
 .live-grid{display:grid;grid-template-columns:minmax(0,724px) minmax(320px,1fr);gap:24px;align-items:start}
 .live-grid.no-lot{grid-template-columns:minmax(0,860px)}
@@ -1314,6 +1320,7 @@ Object.keys(state.lots).forEach(function(k){
   var l=state.lots[k];
   if(!Array.isArray(l.cards))l.cards=[];
   if(!Array.isArray(l.drawnNumbers))l.drawnNumbers=k===state.currentLot?state.drawnNumbers.slice():[];
+  if(!Array.isArray(l.usedCards))l.usedCards=[];
 });
 state.players.forEach(function(p){if(!Array.isArray(p.cardCodes))p.cardCodes=[];});
 if(!state.deletedLots||typeof state.deletedLots!=='object')state.deletedLots={};
@@ -1957,10 +1964,17 @@ function isGameOver(){
 
 function resetGame(){
   function doNewGame(){
+    var lot=state.currentLot?state.lots[state.currentLot]:null;
+    if(lot){
+      if(!Array.isArray(lot.usedCards))lot.usedCards=[];
+      state.players.forEach(function(p){
+        if(p.lotCode===lot.code)p.cardCodes.forEach(function(cc){if(lot.usedCards.indexOf(cc)<0)lot.usedCards.push(cc);});
+      });
+    }
     state.drawnNumbers=[];
     state.gameOver=false;
     resetBallDisplay();
-    updateDrawStats();saveState();
+    updateDrawStats();updateLotUI();renderLotButtons();saveState();
     notify('Nova rodada pronta. Jogadores e cartelas foram mantidos.','success','Novo jogo');
   }
   if(!state.drawnNumbers.length){doNewGame();return;}
@@ -1982,7 +1996,11 @@ function sortedLotKeys(){
   return Object.keys(state.lots).sort(function(a,b){return lotTime(state.lots[b])-lotTime(state.lots[a]);});
 }
 function lotMeta(lot){
-  return lot.cards.length+' cartelas \u00B7 '+lot.gridSize+'\u00D7'+lot.gridSize+' \u00B7 '+(lot.mode==='numbers'?(lot.maxNum||75)+' n\u00FAmeros':'palavras');
+  var base=lot.cards.length+' cartelas \u00B7 '+lot.gridSize+'\u00D7'+lot.gridSize+' \u00B7 '+(lot.mode==='numbers'?(lot.maxNum||75)+' n\u00FAmeros':'palavras');
+  var used=(lot.usedCards||[]).length;
+  if(used>=lot.cards.length&&lot.cards.length>0)return base+' \u00B7 Esgotado';
+  if(used>0)return base+' \u00B7 '+used+'/'+lot.cards.length+' usadas';
+  return base;
 }
 
 var lotPillsExpanded=false;
@@ -2000,7 +2018,8 @@ function renderLotButtons(){
   show.forEach(function(code){
     var lot=state.lots[code];
     html+='<div class="lot-btn">';
-    html+='<button type="button" class="lot-btn-main" onclick="switchLot(\''+code+'\')"><strong>'+code+'</strong><span class="lot-btn-title">'+escHtml(lot.title)+' ('+lot.cards.length+')</span></button>';
+    var uc=(lot.usedCards||[]).length,exh=uc>=lot.cards.length&&lot.cards.length>0;
+    html+='<button type="button" class="lot-btn-main" onclick="switchLot(\''+code+'\')"><strong>'+code+'</strong><span class="lot-btn-title">'+escHtml(lot.title)+' ('+lot.cards.length+')'+(exh?' · Esgotado':uc>0?' · '+uc+'/'+lot.cards.length:'')+'</span></button>';
     html+='<button type="button" class="lot-btn-delete" onclick="deleteLot(\''+code+'\')" aria-label="Excluir lote '+code+'" title="Excluir lote">'+icon('x')+'</button>';
     html+='</div>';
   });
@@ -2380,15 +2399,45 @@ function updateLotUI(){
   chipContainer.innerHTML='';
   var assignedCodes={};
   state.players.forEach(function(p){if(p.lotCode===lot.code)p.cardCodes.forEach(function(c){assignedCodes[c]=true;});});
+  var usedSet={};
+  (lot.usedCards||[]).forEach(function(cc){usedSet[cc]=true;});
+  var freeCount=0;
   lot.cards.forEach(function(c){
+    var isUsed=!!usedSet[c.code]&&!assignedCodes[c.code];
+    var isTaken=!!assignedCodes[c.code];
+    if(!isUsed&&!isTaken)freeCount++;
     var chip=document.createElement('button');
     chip.type='button';
-    chip.className='card-chip-option'+(assignedCodes[c.code]?' taken':'');
-    chip.textContent=c.code;chip.dataset.code=c.code;
-    if(assignedCodes[c.code]){chip.disabled=true;chip.setAttribute('aria-label',c.code+' (ocupada)');}
-    else{chip.setAttribute('aria-pressed','false');chip.addEventListener('click',function(){this.classList.toggle('selected');this.setAttribute('aria-pressed',this.classList.contains('selected')?'true':'false');});}
+    chip.dataset.code=c.code;
+    if(isUsed){
+      chip.className='card-chip-option used';
+      chip.textContent=c.code;
+      chip.disabled=true;
+      chip.setAttribute('aria-label',c.code+' (usada)');
+    }else if(isTaken){
+      chip.className='card-chip-option taken';
+      chip.textContent=c.code;
+      chip.disabled=true;
+      chip.setAttribute('aria-label',c.code+' (ocupada)');
+    }else{
+      chip.className='card-chip-option';
+      chip.textContent=c.code;
+      chip.setAttribute('aria-pressed','false');
+      chip.addEventListener('click',function(){this.classList.toggle('selected');this.setAttribute('aria-pressed',this.classList.contains('selected')?'true':'false');});
+    }
     chipContainer.appendChild(chip);
   });
+  var usedCount=(lot.usedCards||[]).length;
+  var totalCards=lot.cards.length;
+  var isExhausted=usedCount>=totalCards&&totalCards>0;
+  var usedInfo=document.getElementById('usedCardsInfo');
+  if(!usedInfo){usedInfo=document.createElement('div');usedInfo.id='usedCardsInfo';usedInfo.className='used-cards-info';chipContainer.parentElement.insertBefore(usedInfo,chipContainer);}
+  if(usedCount>0){
+    if(isExhausted)usedInfo.innerHTML='<span class="exhausted-badge">Esgotado</span> Todas as '+totalCards+' cartelas foram usadas.';
+    else usedInfo.innerHTML=usedCount+' de '+totalCards+' usada'+(usedCount>1?'s':'')+' · '+freeCount+' livre'+(freeCount>1?'s':'');
+    if(usedCount>0)usedInfo.innerHTML+=' <button class="btn-text btn-sm" onclick="showUsedCards()">Gerenciar</button>';
+    usedInfo.hidden=false;
+  }else{usedInfo.hidden=true;}
   updateDrawnStrip();updateLiveTracker();
   if(renderedLotCards!==lot.code+':'+lot.cards.length){renderLotCards();renderedLotCards=lot.code+':'+lot.cards.length;}
 }
@@ -2429,6 +2478,36 @@ function addPlayer(){
   document.getElementById('playerName').value='';
   updateLotUI();saveState();
   document.getElementById('playerName').focus();
+}
+
+function showUsedCards(){
+  var lot=state.currentLot?state.lots[state.currentLot]:null;
+  if(!lot||!lot.usedCards||!lot.usedCards.length)return;
+  var panel=document.getElementById('usedCardsPanel');
+  if(panel){panel.hidden=!panel.hidden;return;}
+  panel=document.createElement('div');panel.id='usedCardsPanel';panel.className='used-cards-panel';
+  var chipContainer=document.getElementById('cardChipSelect');
+  chipContainer.parentElement.insertBefore(panel,chipContainer.nextSibling);
+  renderUsedPanel();
+}
+function renderUsedPanel(){
+  var panel=document.getElementById('usedCardsPanel');if(!panel)return;
+  var lot=state.currentLot?state.lots[state.currentLot]:null;
+  if(!lot||!lot.usedCards||!lot.usedCards.length){panel.hidden=true;return;}
+  var h='';
+  lot.usedCards.forEach(function(cc){
+    h+='<div class="used-card-release"><span>'+escHtml(cc)+'</span><button class="btn btn-secondary btn-sm" onclick="releaseCard(\''+cc+'\')">Liberar</button></div>';
+  });
+  panel.innerHTML=h;panel.hidden=false;
+}
+function releaseCard(cc){
+  var lot=state.currentLot?state.lots[state.currentLot]:null;
+  if(!lot)return;
+  confirmThen({title:'Liberar a cartela '+cc+'?',html:'Ela voltará a ficar disponível para novas rodadas.',tone:'warn',confirmText:'Liberar'},function(){
+    lot.usedCards=lot.usedCards.filter(function(x){return x!==cc;});
+    updateLotUI();renderLotButtons();renderUsedPanel();saveState();
+    notify('Cartela '+cc+' liberada.','success','Cartela liberada');
+  });
 }
 
 function toggleWinner(id){

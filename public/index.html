@@ -137,6 +137,26 @@ input::placeholder,textarea::placeholder{color:var(--text-muted)}
 .bingo-table td.free-cell{background:var(--gold-light);color:var(--gold-dark);font:700 10px/1.1 var(--font-body);text-transform:uppercase;letter-spacing:.08em;box-shadow:inset 0 0 0 1.5px var(--gold)}
 .bingo-card-footer{text-align:center;margin-top:8px;font-size:11px;color:var(--text-muted);letter-spacing:.04em}
 .word-bingo-table td{font:600 13px/1.2 var(--font-body);padding:6px 4px;word-break:break-word;height:52px}
+
+/* ===== SHARED HISTORY ===== */
+.shared-history{margin-top:8px}
+.shared-header{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.shared-header .card-sub{font-size:12px;color:var(--text-muted)}
+.shared-list{list-style:none;display:flex;flex-direction:column;gap:4px}
+.shared-item{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;padding:8px 10px;border-radius:12px;border:1px solid var(--border);background:var(--surface-alt);cursor:pointer;text-align:left;transition:border-color .15s,background .15s}
+.shared-item:hover{border-color:var(--border-strong);background:var(--surface)}
+.shared-item .lot-code{font:700 13px/1 var(--font-display);letter-spacing:.06em;padding:6px 10px;border-radius:8px;background:var(--primary);color:var(--on-primary);flex-shrink:0}
+.shared-item-text{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.shared-item-text strong{font:600 14px/1.2 var(--font-body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shared-item-text small{font-size:12px;color:var(--text-secondary)}
+.shared-actions{display:flex;gap:4px;flex-shrink:0}
+.shared-pin{width:32px;height:32px;border-radius:8px;border:0;background:none;color:var(--text-muted);cursor:pointer;display:grid;place-items:center;transition:color .15s}
+.shared-pin:hover{color:var(--gold)}
+.shared-pin.active{color:var(--gold)}
+.shared-del{width:32px;height:32px;border-radius:8px;border:0;background:none;color:var(--text-muted);cursor:pointer;display:grid;place-items:center;transition:color .15s,background .15s}
+.shared-del:hover{color:var(--danger);background:var(--danger-light)}
+.save-reminder{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--text-muted);animation:fadeIn .3s}
+.btn-saved{opacity:.7;pointer-events:none}
 .lot-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;background:var(--primary);color:var(--on-primary);font:700 14px var(--font-display);letter-spacing:.06em}
 
 /* ===== BALLS ===== */
@@ -1179,6 +1199,16 @@ body.telao-lock{overflow:hidden}
           </div>
         </div>
       </section>
+      <section class="card">
+        <div class="shared-header">
+          <div>
+            <h2 class="card-title">Histórico de cartelas salvas</h2>
+            <p class="card-sub" id="sharedCaption">Compartilhado entre todos os aparelhos</p>
+          </div>
+          <button class="btn btn-ghost btn-sm btn-icon" onclick="loadSharedLots()" aria-label="Atualizar histórico"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></button>
+        </div>
+        <div id="sharedLotsList" class="shared-history"><p class="empty-inline">Carregando…</p></div>
+      </section>
     </div>
   </div>
 
@@ -1508,6 +1538,13 @@ function notifyGameOver(){notify('Uma cartela foi completada. Clique em Novo jog
 // ===== VERSAO / SOBRE =====
 // Para lançar uma versão nova: adicione um item no topo de APP_VERSIONS.
 var APP_VERSIONS=[
+  {v:'2.9',date:'29/09/2026',title:'Histórico compartilhado de cartelas',items:[
+    'Botão "Salvar cartelas" envia o lote para o histórico compartilhado (sem login)',
+    'Qualquer pessoa pode ver, reimprimir e baixar PDF dos lotes salvos',
+    'Histórico visível em qualquer aparelho que abrir o site',
+    'Excluir exige digitar o código do lote para confirmar',
+    'Limite de 15 lotes (+ fixados); os mais antigos saem automaticamente'
+  ]},
   {v:'2.8',date:'27/09/2026',title:'Salvar na nuvem',items:[
     'Conta com e-mail e senha para guardar lotes, jogadores e sorteios no banco de dados da hospedagem',
     'Acesse de qualquer aparelho: gere no computador e acompanhe pelo celular',
@@ -3312,11 +3349,17 @@ function renderLotCards(){
   var html='<div class="cards-grid print-'+layout+'" id="cardsGrid">';
   lot.cards.forEach(function(c,i){if(c.data)html+=renderCard(c.data,i,lot.gridSize,lot.mode,lot.hasFreeCell,ct,lot.code);});
   html+='</div>';
+  var isSaved=lot.savedAt;
+  var saveBtn=isSaved
+    ?'<button class="btn btn-secondary btn-sm btn-saved" disabled><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 19H7a5 5 0 1 1 .9-9.9A6 6 0 0 1 19.5 11 4 4 0 0 1 17.5 19z"/></svg>Salvo ✓</button>'
+    :'<button class="btn btn-primary btn-sm" onclick="openSaveLotModal(\''+lot.code+'\')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 19H7a5 5 0 1 1 .9-9.9A6 6 0 0 1 19.5 11 4 4 0 0 1 17.5 19z"/><path d="M12 13v5M9.5 15.5 12 13l2.5 2.5"/></svg>Salvar cartelas</button>';
+  var reminder=isSaved?'':'<span class="save-reminder">Não salvo no histórico</span>';
   out.innerHTML=
     '<div class="cards-output-head no-print">'+
     '<span class="lot-badge">Lote '+lot.code+'</span>'+
-    '<span style="font-size:14px;color:var(--text-secondary)"><strong style="color:var(--text)">'+escHtml(lot.title)+'</strong> · '+lot.cards.length+' cartelas · '+escHtml(lot.createdAt||'')+'</span>'+
+    '<span style="font-size:14px;color:var(--text-secondary)"><strong style="color:var(--text)">'+escHtml(lot.title)+'</strong> · '+lot.cards.length+' cartelas · '+escHtml(lot.createdAt||'')+' '+reminder+'</span>'+
     '<span style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap">'+
+    saveBtn+
     '<button class="btn btn-secondary btn-sm" onclick="printCards()">Imprimir</button>'+
     '<button class="btn btn-gold btn-sm" onclick="exportPDF()">Baixar PDF</button>'+
     '<button class="btn btn-primary btn-sm" onclick="showPage(\'pagePlayers\')">Ir para Ao vivo</button></span>'+
@@ -3432,6 +3475,174 @@ async function drawPDF(dl){
     }
   }catch(e){console.error(e);if(e&&e.code==='declined'){return;}notify('N\u00E3o foi poss\u00EDvel gerar o PDF: '+(e.message||e.code||e),'danger','Erro no PDF');}
 }
+
+// ===== HISTORICO COMPARTILHADO DE CARTELAS SALVAS =====
+var sharedLots=[];
+var sharedLotsLoaded=false;
+function slRequest(method,path,body,headers){
+  var opts={method:method,headers:Object.assign({'Content-Type':'application/json'},headers||{}),cache:'no-store'};
+  if(body!==undefined)opts.body=JSON.stringify(body);
+  return fetch('/api'+path,opts).then(function(r){
+    return r.json().catch(function(){return{};}).then(function(j){return{status:r.status,body:j};});
+  });
+}
+function loadSharedLots(){
+  slRequest('GET','/lots').then(function(r){
+    if(r.status===200&&Array.isArray(r.body)){sharedLots=r.body;sharedLotsLoaded=true;renderSharedLots();}
+    else{document.getElementById('sharedLotsList').innerHTML='<p class="empty-inline">Não foi possível carregar o histórico.</p>';}
+  }).catch(function(){
+    document.getElementById('sharedLotsList').innerHTML='<p class="empty-inline">Sem conexão com o servidor.</p>';
+  });
+}
+function renderSharedLots(){
+  var el=document.getElementById('sharedLotsList');if(!el)return;
+  var cap=document.getElementById('sharedCaption');
+  if(cap)cap.textContent='Compartilhado entre todos os aparelhos · '+sharedLots.length+' de 15';
+  if(!sharedLots.length){el.innerHTML='<p class="empty-inline">Nenhum lote salvo no histórico ainda.</p>';return;}
+  var h='<ul class="shared-list">';
+  sharedLots.forEach(function(lot){
+    var dt=lot.savedAt?new Date(lot.savedAt).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
+    var by=lot.savedBy?' · '+escHtml(lot.savedBy):'';
+    var pinCls=lot.pinned?' active':'';
+    h+='<li><div class="shared-item" onclick="openSharedLot(\''+lot.code+'\')">';
+    h+='<span class="lot-code">'+lot.code+'</span>';
+    h+='<span class="shared-item-text"><strong>'+escHtml(lot.title||'BINGO')+' · '+lot.cardCount+' cartelas</strong><small>'+dt+by+'</small></span>';
+    h+='<span class="shared-actions" onclick="event.stopPropagation()">';
+    h+='<button class="shared-pin'+pinCls+'" onclick="toggleSharedPin(\''+lot.code+'\','+(!lot.pinned)+')" title="'+(lot.pinned?'Desafixar':'Fixar')+'"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17v5M9 11V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v7M5 11h14l-1.5 6h-11z"/></svg></button>';
+    h+='<button class="shared-del" onclick="deleteSharedLot(\''+lot.code+'\')" title="Excluir"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>';
+    h+='</span></div></li>';
+  });
+  el.innerHTML=h+'</ul>';
+}
+function openSharedLot(code){
+  slRequest('GET','/lots/'+code).then(function(r){
+    if(r.status!==200){notify('Não foi possível abrir o lote '+code+'.','danger','Erro');return;}
+    var remote=r.body;
+    var data=remote.data;
+    if(!data||!data.cards||!data.cards.length){notify('Lote sem dados de cartelas.','info','Lote vazio');return;}
+    // importa no localStorage se nao existir
+    if(!state.lots[code]){
+      state.lots[code]={
+        code:code,title:data.title||remote.title||'BINGO',mode:data.mode||'numbers',
+        gridSize:data.gridSize||5,maxNum:data.maxNum||75,hasFreeCell:data.hasFreeCell!==false&&(data.gridSize||5)===5,
+        cards:data.cards,drawnNumbers:[],createdAt:data.createdAt||'',createdTs:data.createdTs||Date.now(),
+        usedCards:[],prizes:data.prizes||{p1:{on:true,desc:'',type:'any'},p2:{on:false,desc:'',type:'any'},p3:{on:false,desc:'',type:'any'},full:{on:true,desc:''}},
+        prizeWinners:[],savedAt:remote.savedAt
+      };
+      normalizeState();
+      saveState();
+    }
+    state.lots[code].savedAt=remote.savedAt;
+    state.printLot=code;
+    saveState();
+    showPage('pageCards');
+    renderLotCards();
+    renderRecentLots(Object.keys(state.lots));
+    notify('Lote '+code+' aberto do histórico.','success','Lote carregado');
+  }).catch(function(){notify('Sem conexão com o servidor.','danger','Erro de conexão');});
+}
+function openSaveLotModal(code){
+  var lot=state.lots[code];
+  if(!lot)return;
+  var savedBy='';try{savedBy=localStorage.getItem('bmp3_savedBy')||'';}catch(e){}
+  var ov=document.createElement('div');ov.className='ui-overlay no-print';
+  ov.innerHTML='<div class="ui-dialog" role="dialog" aria-modal="true" aria-labelledby="slT">'+
+    '<div class="ui-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:28px;height:28px;color:var(--primary)"><path d="M17.5 19H7a5 5 0 1 1 .9-9.9A6 6 0 0 1 19.5 11 4 4 0 0 1 17.5 19z"/><path d="M12 13v5M9.5 15.5 12 13l2.5 2.5"/></svg></div>'+
+    '<h2 class="ui-title" id="slT">Salvar cartelas</h2>'+
+    '<p class="ui-msg">Salvar o lote <b>'+code+'</b> ('+escHtml(lot.title)+' · '+lot.cards.length+' cartelas) no histórico compartilhado?</p>'+
+    '<div class="field" style="margin-bottom:16px"><label for="slSavedBy">Salvo por (opcional)</label><input id="slSavedBy" placeholder="Seu nome" maxlength="40" value="'+escHtml(savedBy)+'"></div>'+
+    '<div class="ui-actions"><button type="button" class="btn btn-secondary" data-act="close">Cancelar</button><button type="button" class="btn btn-primary" id="slSaveBtn">Salvar</button></div>'+
+    '</div>';
+  function close(){document.removeEventListener('keydown',onKey,true);ov.remove();}
+  function onKey(e){if(e.key==='Escape'){e.preventDefault();close();}}
+  ov.addEventListener('click',function(e){if(e.target===ov||e.target.closest('[data-act="close"]'))close();});
+  document.addEventListener('keydown',onKey,true);
+  ov.querySelector('#slSaveBtn').addEventListener('click',function(){
+    var btn=this;btn.disabled=true;btn.textContent='Salvando…';
+    var name=ov.querySelector('#slSavedBy').value.trim().slice(0,40);
+    try{localStorage.setItem('bmp3_savedBy',name);}catch(e){}
+    var payload={
+      code:lot.code,title:lot.title||'BINGO',savedBy:name,
+      data:{cards:lot.cards,gridSize:lot.gridSize,mode:lot.mode||'numbers',maxNum:lot.maxNum||75,
+        hasFreeCell:lot.hasFreeCell,createdAt:lot.createdAt,createdTs:lot.createdTs,
+        title:lot.title,prizes:lot.prizes}
+    };
+    doSaveLot(payload,false,btn,close);
+  });
+  document.body.appendChild(ov);
+  setTimeout(function(){ov.querySelector('#slSavedBy').focus();},30);
+}
+function doSaveLot(payload,replace,btn,closeFn){
+  var url='/lots'+(replace?'?replace=1':'');
+  slRequest('POST',url,payload).then(function(r){
+    if(r.status===200){
+      var lot=state.lots[payload.code];
+      if(lot)lot.savedAt=new Date().toISOString();
+      saveState();renderLotCards();
+      closeFn();
+      notify('Lote '+payload.code+' salvo no histórico. Disponível em qualquer aparelho.','success','Salvo');
+      if(r.body.removed&&r.body.removed.length){
+        r.body.removed.forEach(function(c){notify('O lote '+c+' saiu do histórico (limite de 15).','info','Limite atingido');});
+      }
+      loadSharedLots();
+    }else if(r.status===409&&r.body.exists){
+      var dt=r.body.savedAt?new Date(r.body.savedAt).toLocaleString('pt-BR'):'';
+      confirmThen({title:'Lote já salvo',message:'O lote '+payload.code+' já está salvo desde '+dt+'. Substituir pela versão atual?',tone:'warn',confirmText:'Substituir'},function(){
+        if(btn){btn.disabled=true;btn.textContent='Salvando…';}
+        doSaveLot(payload,true,btn,closeFn);
+      });
+      if(btn){btn.disabled=false;btn.textContent='Salvar';}
+    }else{
+      if(btn){btn.disabled=false;btn.textContent='Salvar';}
+      var msg=r.body.error==='storage_full'?'O histórico está cheio (máximo '+r.body.max+' lotes).':'Não foi possível salvar agora. Tente de novo.';
+      notify(msg,'danger','Erro ao salvar');
+    }
+  }).catch(function(){
+    if(btn){btn.disabled=false;btn.textContent='Tentar de novo';}
+    notify('Não foi possível salvar agora. As cartelas continuam neste aparelho. Tente de novo.','danger','Sem conexão');
+  });
+}
+function toggleSharedPin(code,pinned){
+  slRequest('PATCH','/lots/'+code,{pinned:pinned}).then(function(r){
+    if(r.status===200)loadSharedLots();
+    else notify('Não foi possível '+(pinned?'fixar':'desafixar')+' o lote.','danger','Erro');
+  }).catch(function(){notify('Sem conexão.','danger','Erro');});
+}
+function deleteSharedLot(code){
+  var ov=document.createElement('div');ov.className='ui-overlay no-print';
+  ov.innerHTML='<div class="ui-dialog" role="dialog" aria-modal="true" aria-labelledby="sdT">'+
+    '<div class="ui-ic" style="background:var(--danger-light)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:28px;height:28px;color:var(--danger)"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></div>'+
+    '<h2 class="ui-title" id="sdT">Excluir lote do histórico</h2>'+
+    '<p class="ui-msg">Isso remove o lote <b>'+code+'</b> do histórico compartilhado (não apaga do seu aparelho).<br>Para confirmar, digite o código do lote:</p>'+
+    '<div class="field" style="margin-bottom:16px"><input id="sdConfirm" placeholder="'+code+'" maxlength="12" style="text-transform:uppercase;text-align:center;font-family:var(--font-display);font-weight:700;letter-spacing:.1em"></div>'+
+    '<div class="ui-actions"><button type="button" class="btn btn-secondary" data-act="close">Cancelar</button><button type="button" class="btn btn-danger" id="sdDelBtn" disabled>Excluir</button></div>'+
+    '</div>';
+  function close(){document.removeEventListener('keydown',onKey,true);ov.remove();}
+  function onKey(e){if(e.key==='Escape'){e.preventDefault();close();}}
+  var inp=ov.querySelector('#sdConfirm'),btn=ov.querySelector('#sdDelBtn');
+  inp.addEventListener('input',function(){btn.disabled=inp.value.trim().toUpperCase()!==code;});
+  ov.addEventListener('click',function(e){if(e.target===ov||e.target.closest('[data-act="close"]'))close();});
+  document.addEventListener('keydown',onKey,true);
+  btn.addEventListener('click',function(){
+    btn.disabled=true;btn.textContent='Excluindo…';
+    slRequest('DELETE','/lots/'+code,undefined,{'X-Confirm-Code':code}).then(function(r){
+      if(r.status===200){close();notify('Lote '+code+' excluído do histórico.','success','Excluído');loadSharedLots();}
+      else{btn.disabled=false;btn.textContent='Excluir';notify('Não foi possível excluir.','danger','Erro');}
+    }).catch(function(){btn.disabled=false;btn.textContent='Excluir';notify('Sem conexão.','danger','Erro');});
+  });
+  document.body.appendChild(ov);
+  setTimeout(function(){inp.focus();},30);
+}
+// Carrega ao abrir a tela Cartelas e ao voltar para a aba
+(function(){
+  var origShow=window.showPage;
+  if(origShow){
+    window.showPage=function(p){origShow(p);if(p==='pageCards'&&!sharedLotsLoaded)loadSharedLots();};
+  }
+  document.addEventListener('visibilitychange',function(){
+    if(document.visibilityState==='visible'){var pg=document.querySelector('.page.active');if(pg&&pg.id==='pageCards')loadSharedLots();}
+  });
+})();
 
 // ===== NUVEM: conta + sincronizacao entre aparelhos =====
 // O navegador continua sendo a copia principal (funciona sem internet).
@@ -3669,6 +3880,7 @@ function cloudInit(){
   if(state.printLot&&state.lots[state.printLot])renderLotCards();
   syncSegments();renderPreview();kpSync();renderAbout();
   if(state._archivedNow){delete state._archivedNow;saveState();}
+  loadSharedLots();
   cloudInit();
 })();
 </script>

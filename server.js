@@ -49,6 +49,9 @@ function sendIndex(req, res) {
   });
 }
 
+// Historico compartilhado de cartelas (sem login, visivel para todos)
+require('./shared-lots').setupSharedLots(app);
+
 // Salvamento na nuvem (contas + lotes no MySQL da hospedagem)
 require('./cloud').setupCloud(app);
 

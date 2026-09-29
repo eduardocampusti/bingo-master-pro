@@ -4,3 +4,4 @@ Thumbs.db
 *.log
 
 public/index.backup.html
+server.backup.js

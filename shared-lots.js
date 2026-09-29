@@ -22,6 +22,20 @@ function rateLimit(req, res, next) {
   next();
 }
 
+// Data de criacao segura: aceita timestamp, ISO ou o formato brasileiro "27/09/2026, 11:58:03".
+// (new Date("27/09/2026...") e invalido e fazia o MySQL recusar o INSERT.)
+function safeCreatedAt(data, fallback) {
+  if (data && typeof data.createdTs === 'number' && isFinite(data.createdTs)) return new Date(data.createdTs);
+  const v = data && data.createdAt;
+  if (v) {
+    const m = /^(\d{1,2})\/(\d{1,2})\/(\d{4}),?\s*(\d{1,2}):(\d{2})(?::(\d{2}))?/.exec(String(v));
+    if (m) return new Date(+m[3], +m[2] - 1, +m[1], +m[4], +m[5], +(m[6] || 0));
+    const d = new Date(v);
+    if (!isNaN(d.getTime())) return d;
+  }
+  return fallback || new Date();
+}
+
 // ---------- Validacao ----------
 function validateLotData(body) {
   const { code, title, savedBy, data } = body || {};
@@ -92,7 +106,7 @@ function mysqlLotsStore(pool) {
       const now = new Date();
       const cardCount = data.cards ? data.cards.length : 0;
       const json = JSON.stringify(data);
-      const createdAt = data.createdAt ? new Date(data.createdAt) : now;
+      const createdAt = safeCreatedAt(data, now);
       if (replace) {
         await pool.query(
           'UPDATE bingo_saved_lots SET title=?, saved_by=?, card_count=?, grid_size=?, mode=?, data=?, created_at=?, updated_at=? WHERE lot_code=?',
@@ -108,6 +122,15 @@ function mysqlLotsStore(pool) {
     async setPinned(code, pinned) {
       const [r] = await pool.query('UPDATE bingo_saved_lots SET pinned=?, updated_at=NOW() WHERE lot_code=?', [pinned ? 1 : 0, code]);
       return r.affectedRows > 0;
+    },
+    async setTitle(code, title) {
+      const [rows] = await pool.query('SELECT data FROM bingo_saved_lots WHERE lot_code = ?', [code]);
+      if (!rows.length) return false;
+      let data = {};
+      try { data = JSON.parse(rows[0].data) || {}; } catch (e) { data = {}; }
+      data.title = title;
+      await pool.query('UPDATE bingo_saved_lots SET title=?, data=?, updated_at=NOW() WHERE lot_code=?', [title, JSON.stringify(data), code]);
+      return true;
     },
     async remove(code) {
       const [r] = await pool.query('DELETE FROM bingo_saved_lots WHERE lot_code=?', [code]);
@@ -188,9 +211,9 @@ function fileLotsStore(dataDir) {
       const cardCount = data.cards ? data.cards.length : 0;
       const idx = lots.findIndex(x => x.code === code);
       if (replace && idx >= 0) {
-        lots[idx] = { ...lots[idx], title, savedBy, cardCount, gridSize: data.gridSize, mode: data.mode, data, createdAt: data.createdAt || lots[idx].createdAt, updatedAt: now };
+        lots[idx] = { ...lots[idx], title, savedBy, cardCount, gridSize: data.gridSize, mode: data.mode, data, createdAt: safeCreatedAt(data, new Date(now)).toISOString(), updatedAt: now };
       } else {
-        lots.push({ code, title, savedBy, cardCount, gridSize: data.gridSize, mode: data.mode, data, pinned: false, createdAt: data.createdAt || now, savedAt: now, updatedAt: now });
+        lots.push({ code, title, savedBy, cardCount, gridSize: data.gridSize, mode: data.mode, data, pinned: false, createdAt: safeCreatedAt(data, new Date(now)).toISOString(), savedAt: now, updatedAt: now });
       }
       await persist();
     },
@@ -198,6 +221,15 @@ function fileLotsStore(dataDir) {
       const l = lots.find(x => x.code === code);
       if (!l) return false;
       l.pinned = !!pinned;
+      l.updatedAt = new Date().toISOString();
+      await persist();
+      return true;
+    },
+    async setTitle(code, title) {
+      const l = lots.find(x => x.code === code);
+      if (!l) return false;
+      l.title = title;
+      if (l.data && typeof l.data === 'object') l.data.title = title;
       l.updatedAt = new Date().toISOString();
       await persist();
       return true;
@@ -288,14 +320,23 @@ function createSharedLotsRouter(store) {
     }
   });
 
-  // PATCH /api/lots/:code
+  // PATCH /api/lots/:code  { pinned?: boolean, title?: string }
   router.patch('/lots/:code', needStore, async (req, res, next) => {
     try {
       const code = String(req.params.code).toUpperCase();
       if (!CODE_RE.test(code)) return res.status(400).json({ error: 'invalid_code' });
-      if (typeof req.body.pinned !== 'boolean') return res.status(400).json({ error: 'invalid_pinned' });
-      const ok = await store.setPinned(code, req.body.pinned);
-      if (!ok) return res.status(404).json({ error: 'not_found' });
+      const body = req.body || {};
+      const hasPinned = body.pinned !== undefined, hasTitle = body.title !== undefined;
+      if (!hasPinned && !hasTitle) return res.status(400).json({ error: 'nothing_to_update' });
+      if (hasPinned && typeof body.pinned !== 'boolean') return res.status(400).json({ error: 'invalid_pinned' });
+      let title = null;
+      if (hasTitle) {
+        if (typeof body.title !== 'string') return res.status(400).json({ error: 'invalid_title' });
+        title = body.title.trim().slice(0, 120) || 'BINGO';
+      }
+      if (!(await store.exists(code))) return res.status(404).json({ error: 'not_found' });
+      if (hasPinned) await store.setPinned(code, body.pinned);
+      if (hasTitle) await store.setTitle(code, title);
       res.json({ ok: true });
     } catch (e) { next(e); }
   });

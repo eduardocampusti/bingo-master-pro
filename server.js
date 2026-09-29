@@ -52,7 +52,7 @@ function sendIndex(req, res) {
 // Historico compartilhado de cartelas (sem login, visivel para todos)
 require('./shared-lots').setupSharedLots(app);
 
-// Salvamento na nuvem (contas + lotes no MySQL da hospedagem)
+// Nuvem antiga (v2.8): somente leitura, para migrar lotes de quem ainda tem sessao
 require('./cloud').setupCloud(app);
 
 app.get('/version.json', (req, res) => {

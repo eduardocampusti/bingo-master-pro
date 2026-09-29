@@ -5,3 +5,5 @@ Thumbs.db
 
 public/index.backup.html
 server.backup.js
+cloud.backup.js
+shared-lots.backup.js

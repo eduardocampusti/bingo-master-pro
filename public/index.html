@@ -15,7 +15,7 @@
   --gold:#B8862B;--gold-light:#F7EBD3;--gold-dark:#7A5510;
   --text:#16152B;--text-secondary:#5E5C70;--text-muted:#6F6C80;
   --border:#E4DFD3;--border-strong:#D6D0C2;
-  --success:#1F8A4C;--success-light:#E3F3E9;--danger:#C8343A;--danger-light:#FBE9E9;
+  --success:#1F8A4C;--success-light:#E3F3E9;--success-dark:#17693A;--danger:#C8343A;--danger-light:#FDECEC;--danger-dark:#A32A2F;--sel-bg:#F4F2FC;
   --col-b:#2F5BD3;--col-i:#C8343A;--col-n:#B07A0C;--col-g:#1F8A4C;--col-o:#6D3FC4;
   --radius:22px;--radius-md:14px;--radius-sm:10px;
   --shadow:0 1px 2px rgba(22,21,43,.04);--shadow-md:0 10px 30px rgba(22,21,43,.06);
@@ -29,7 +29,7 @@
   --text:#EDEBF5;--text-secondary:#B9B5D6;--text-muted:#8C88AE;
   --border:#2B2A4A;--border-strong:#3A3960;--gold:#E7C27A;
   --gold-light:#3A2F17;--gold-dark:#E7C27A;
-  --success:#4CC784;--success-light:#15321F;--danger:#F06A6F;--danger-light:#3A1A1E;
+  --success:#4CC784;--success-light:#15321F;--success-dark:#7FD9A5;--danger:#F06A6F;--danger-light:#3A1A1E;--danger-dark:#F59A9D;--sel-bg:#23214A;
   --shadow:0 1px 2px rgba(0,0,0,.3);--shadow-md:0 10px 30px rgba(0,0,0,.35);
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -137,27 +137,6 @@ input::placeholder,textarea::placeholder{color:var(--text-muted)}
 .bingo-table td.free-cell{background:var(--gold-light);color:var(--gold-dark);font:700 10px/1.1 var(--font-body);text-transform:uppercase;letter-spacing:.08em;box-shadow:inset 0 0 0 1.5px var(--gold)}
 .bingo-card-footer{text-align:center;margin-top:8px;font-size:11px;color:var(--text-muted);letter-spacing:.04em}
 .word-bingo-table td{font:600 13px/1.2 var(--font-body);padding:6px 4px;word-break:break-word;height:52px}
-
-/* ===== SHARED HISTORY ===== */
-.shared-history{margin-top:8px}
-.shared-header{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:4px}
-.shared-header .card-sub{font-size:12px;color:var(--text-muted)}
-.shared-list{list-style:none;display:flex;flex-direction:column;gap:4px}
-.shared-item{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;padding:8px 10px;border-radius:12px;border:1px solid var(--border);background:var(--surface-alt);cursor:pointer;text-align:left;transition:border-color .15s,background .15s}
-.shared-item:hover{border-color:var(--border-strong);background:var(--surface)}
-.shared-item .lot-code{font:700 13px/1 var(--font-display);letter-spacing:.06em;padding:6px 10px;border-radius:8px;background:var(--primary);color:var(--on-primary);flex-shrink:0}
-.shared-item-text{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
-.shared-item-text strong{font:600 14px/1.2 var(--font-body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.shared-item-text small{font-size:12px;color:var(--text-secondary)}
-.shared-actions{display:flex;gap:4px;flex-shrink:0}
-.shared-pin{width:32px;height:32px;border-radius:8px;border:0;background:none;color:var(--text-muted);cursor:pointer;display:grid;place-items:center;transition:color .15s}
-.shared-pin:hover{color:var(--gold)}
-.shared-pin.active{color:var(--gold)}
-.shared-del{width:32px;height:32px;border-radius:8px;border:0;background:none;color:var(--text-muted);cursor:pointer;display:grid;place-items:center;transition:color .15s,background .15s}
-.shared-del:hover{color:var(--danger);background:var(--danger-light)}
-.save-reminder{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--text-muted);animation:fadeIn .3s}
-.btn-saved{opacity:.7;pointer-events:none}
-.lot-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;background:var(--primary);color:var(--on-primary);font:700 14px var(--font-display);letter-spacing:.06em}
 
 /* ===== BALLS ===== */
 .ball-b{--c:#2F5BD3;--cl:#8FA8EE;--cd:#1B3A94}
@@ -654,26 +633,6 @@ button.num-cell:hover:not(.drawn){background:var(--border-strong);color:var(--te
   .ui-toasts{top:calc(64px + env(safe-area-inset-top,0px));left:16px;right:16px;width:auto}
 }
 
-/* ===== NUVEM (conta e sincronizacao) ===== */
-.cloud-btn{display:flex;align-items:center;gap:12px;width:100%;min-height:52px;padding:8px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#EDEBF5;cursor:pointer;text-align:left;transition:background .15s,border-color .15s}
-.cloud-btn:hover{background:rgba(255,255,255,.08)}
-.cloud-ic{position:relative;display:grid;place-items:center;width:32px;height:32px;border-radius:10px;background:rgba(168,162,240,.16);color:#C9C5F7;flex-shrink:0}
-.cloud-dot{position:absolute;right:-2px;bottom:-2px;width:10px;height:10px;border-radius:50%;border:2px solid var(--ink);background:#8C88AE}
-.cloud-btn[data-status="synced"] .cloud-dot{background:#4CC784}
-.cloud-btn[data-status="saving"] .cloud-dot{background:#E7C27A;animation:cloudPulse 1s ease-in-out infinite}
-.cloud-btn[data-status="offline"] .cloud-dot{background:#F06A6F}
-.cloud-btn[data-status="off"] .cloud-dot{display:none}
-.cloud-txt{display:flex;flex-direction:column;gap:2px;min-width:0}
-.cloud-label{font:600 13px/1.2 var(--font-body)}
-.cloud-sub{font-size:11px;color:#8C88AE;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-@keyframes cloudPulse{50%{opacity:.35}}
-.cloud-top{display:none}
-.acc-dialog .ui-msg{margin-bottom:18px}
-.acc-tabs{margin-bottom:16px}
-.acc-form{display:flex;flex-direction:column;gap:12px}
-.acc-err{font-size:13px;font-weight:600;color:var(--danger);background:var(--danger-light);border-radius:10px;padding:10px 12px}
-.acc-form .ui-actions{margin-top:8px}
-
 /* ===== AVISO DE VERSAO NOVA ===== */
 .update-banner{position:fixed;right:24px;bottom:24px;z-index:900;display:flex;align-items:center;gap:12px;max-width:min(520px,calc(100vw - 32px));padding:12px 12px 12px 18px;background:var(--surface);border:1px solid var(--border-strong);border-radius:16px;box-shadow:var(--shadow-md);animation:fadeIn .25s ease-out}
 .update-dot{width:10px;height:10px;border-radius:50%;background:var(--success);box-shadow:0 0 0 4px var(--success-light);flex-shrink:0}
@@ -851,10 +810,234 @@ body.telao-lock{overflow:hidden}
   .bottom-nav .nav-tab{font-size:10px}
 }
 
+/* ===== BIBLIOTECA DE LOTES (tela Cartelas) ===== */
+.print-area{display:none}
+.lib-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.lib-title{font:800 30px/1.1 var(--font-display);letter-spacing:-.02em}
+.lib-head-actions{display:flex;gap:10px;flex-wrap:wrap}
+.lib-mstatus{display:none}
+.lib-layout{display:grid;grid-template-columns:380px minmax(0,1fr);gap:24px;align-items:start}
+.lib-list{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:12px;position:sticky;top:24px;height:calc(100vh - 48px);min-height:420px;box-shadow:var(--shadow)}
+.lib-search{position:relative}
+.lib-search .ic{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);pointer-events:none}
+.lib-search input{padding-left:42px;min-height:46px}
+.lib-filters{display:flex;flex-wrap:wrap;gap:6px}
+.lib-pill{min-height:44px;padding:0 14px;border-radius:999px;border:1.5px solid var(--border-strong);background:var(--surface);color:var(--text-secondary);font:600 13px var(--font-body);cursor:pointer;transition:background .15s,color .15s,border-color .15s}
+.lib-pill:hover{border-color:var(--text-muted);color:var(--text)}
+.lib-pill.active{background:var(--ink);border-color:var(--ink);color:#fff}
+[data-theme="dark"] .lib-pill.active{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+.lib-offline{font-size:12.5px;color:var(--text-secondary);background:var(--surface-sunk);border-radius:10px;padding:8px 12px;display:flex;gap:8px;align-items:center}
+.lib-offline .ic{width:16px;height:16px;color:var(--text-muted)}
+.lib-items{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:8px;margin:0 -6px;padding:2px 6px}
+.lib-item{display:flex;align-items:stretch;border:1.5px solid var(--border);border-radius:14px;background:var(--surface);transition:border-color .15s,background .15s}
+.lib-item:hover{border-color:var(--border-strong)}
+.lib-item.is-sel{background:var(--sel-bg);border-color:var(--primary)}
+.lib-item-main{flex:1;min-width:0;min-height:44px;display:flex;gap:12px;align-items:flex-start;padding:12px 4px 12px 12px;border:0;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer;border-radius:12px}
+.lib-code{font:800 13px/1 var(--font-display);letter-spacing:.06em;padding:7px 9px;border-radius:9px;background:var(--primary-light);color:var(--primary);flex-shrink:0;transition:background .15s,color .15s}
+.lib-item.is-sel .lib-code{background:var(--primary);color:var(--on-primary)}
+.lib-item-text{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1}
+.lib-item-title{display:flex;align-items:center;gap:6px;min-width:0;font-weight:700;font-size:14.5px;line-height:1.25}
+.lib-item-title .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lib-item-title .ic{width:14px;height:14px;color:var(--gold-dark)}
+.lib-item-meta{font-size:12.5px;color:var(--text-secondary)}
+.lib-badge{display:inline-flex;align-items:center;gap:5px;align-self:flex-start;font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.lib-badge .ic{width:12px;height:12px}
+.lib-badge.is-shared{background:var(--success-light);color:var(--success-dark)}
+.lib-badge.is-local{background:var(--surface-sunk);color:var(--text-secondary)}
+.lib-more{width:44px;min-height:44px;border:0;background:none;border-radius:10px;color:var(--text-secondary);cursor:pointer;display:grid;place-items:center;flex-shrink:0;align-self:center;margin-right:4px;transition:background .15s,color .15s}
+.lib-more:hover,.lib-more[aria-expanded="true"]{background:var(--surface-sunk);color:var(--text)}
+.lib-foot{font-size:12.5px;color:var(--text-secondary);border-top:1px solid var(--border);padding-top:10px}
+.lib-none{padding:28px 12px;text-align:center;color:var(--text-muted);font-size:14px}
+
+/* Detalhe do lote */
+.lib-detail{min-width:0;display:flex;flex-direction:column;gap:20px}
+.ld-mtop,.ld-bottombar,.mob-only{display:none}
+.ld-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+.ld-top{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.ld-id{display:flex;gap:16px;align-items:flex-start;min-width:0;flex:1}
+.ld-code{font:800 20px/1 var(--font-display);letter-spacing:.06em;background:var(--primary);color:var(--on-primary);padding:12px 14px;border-radius:12px;flex-shrink:0}
+.ld-title{font:800 24px/1.15 var(--font-display);letter-spacing:-.01em;word-break:break-word}
+.ld-meta{font-size:14px;color:var(--text-secondary);margin-top:6px;line-height:1.5}
+.ld-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;align-items:center}
+.ld-actions .btn{min-height:48px}
+.ld-actions .ld-more{margin-left:auto;width:48px}
+.btn-success-soft{background:var(--success-light);color:var(--success-dark);border-color:var(--success)}
+.btn-success-soft:hover:not(:disabled){filter:brightness(.97)}
+.ld-cards-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.ld-cards-title{font:700 20px/1.2 var(--font-display)}
+.ld-view button{min-height:40px;white-space:nowrap}
+.thumbs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.thumb{display:flex;flex-direction:column;gap:8px;min-width:0;padding:10px;border:1.5px solid var(--border);border-radius:14px;background:var(--surface-alt);color:inherit;font:inherit;text-align:left;cursor:pointer;transition:border-color .15s,transform .15s,box-shadow .15s}
+.thumb:hover{border-color:var(--primary);box-shadow:var(--shadow-md)}
+.thumb-head{display:flex;justify-content:space-between;align-items:baseline;gap:6px;font-size:11.5px;color:var(--text-secondary);min-width:0}
+.thumb-head b{font:700 12.5px var(--font-display);color:var(--text);white-space:nowrap}
+.thumb-head span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.thumb .mini-grid-cell{height:24px;font-size:11px;color:var(--text)}
+.thumb .mini-grid-header{height:17px}
+.ld-full{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+.ld-loading{display:flex;flex-direction:column;align-items:center;gap:12px;padding:48px 24px;text-align:center;color:var(--text-secondary)}
+.ld-spin{width:28px;height:28px;border-radius:50%;border:3px solid var(--border);border-top-color:var(--primary);animation:ldSpin .8s linear infinite}
+@keyframes ldSpin{to{transform:rotate(360deg)}}
+
+/* Estado vazio */
+.lib-empty{max-width:640px;margin:24px auto;text-align:center;padding:40px 32px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.lib-empty svg.illu{width:150px;height:auto}
+.lib-empty h2{font:800 24px/1.2 var(--font-display)}
+.lib-steps{list-style:none;display:flex;flex-direction:column;gap:10px;text-align:left;margin:4px 0 8px}
+.lib-steps li{display:flex;align-items:center;gap:12px;font-size:15px;color:var(--text-secondary)}
+.lib-steps b{width:30px;height:30px;border-radius:50%;background:var(--primary-light);color:var(--primary);display:grid;place-items:center;font:800 14px var(--font-display);flex-shrink:0}
+
+/* Menus suspensos (Ferramentas e "Mais acoes") */
+.dd-menu{position:fixed;z-index:1150;min-width:270px;max-width:calc(100vw - 32px);background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:0 18px 50px -12px rgba(22,21,43,.3);padding:6px;animation:uiFade .15s ease-out}
+.dd-item{display:flex;gap:12px;align-items:flex-start;width:100%;min-height:44px;padding:10px 12px;border:0;background:none;border-radius:10px;color:var(--text);cursor:pointer;text-align:left;font:600 14px var(--font-body)}
+.dd-item .ic{margin-top:1px;color:var(--text-secondary)}
+.dd-item:hover,.dd-item:focus-visible{background:var(--surface-alt)}
+.dd-item:focus-visible{outline:2px solid var(--primary);outline-offset:-2px}
+.dd-item small{display:block;color:var(--text-secondary);font-size:12.5px;font-weight:500;margin-top:2px;line-height:1.35}
+.dd-item.is-danger{background:var(--danger-light);color:var(--danger-dark);margin-top:2px}
+.dd-item.is-danger .ic{color:var(--danger-dark)}
+.dd-item.is-danger:hover{filter:brightness(.97)}
+.dd-sep{height:1px;background:var(--border);margin:6px 4px}
+
+/* Janelas */
+.ui-dialog.dlg-md{max-width:520px}
+.ui-dialog .field{margin-top:16px}
+.ui-dialog .field label{font-size:13px}
+.link-box{display:flex;gap:8px;align-items:center;margin-top:16px}
+.link-box input{font:600 14px var(--font-body);min-width:0}
+.share-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.share-actions .btn{flex:1;min-width:140px}
+.zoom-dialog{max-width:520px}
+.zoom-dialog .bingo-card{box-shadow:none;margin-top:8px}
+.zoom-dialog .ui-actions{flex-wrap:wrap}
+.del-dialog{max-width:560px;border-radius:26px}
+.del-dialog .ui-ic{border-radius:50%;background:var(--danger-light);color:var(--danger)}
+.del-dialog .ui-title{color:var(--danger-dark)}
+.del-lot{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--border);border-radius:14px;background:var(--surface-alt);margin:6px 0 14px}
+.del-lot .lib-code{font-size:15px;padding:9px 11px;background:var(--primary);color:var(--on-primary)}
+.del-lot b{display:block;font-size:15px}
+.del-lot small{display:block;font-size:12.5px;color:var(--text-secondary);margin-top:2px}
+.del-warn{margin-top:14px;padding:12px 14px;border-radius:12px;background:var(--danger-light);color:var(--danger-dark);font-size:14px;font-weight:600;line-height:1.45}
+.del-dialog .btn-gold{margin-top:14px;width:100%}
+.del-dialog #dlInput{text-transform:uppercase;font:700 18px var(--font-display);letter-spacing:.1em;text-align:center}
+
+/* Status do historico (barra lateral e topo da tela Cartelas no celular) */
+.hist-status{display:flex;align-items:center;gap:12px;width:100%;min-height:52px;padding:8px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#EDEBF5;cursor:pointer;text-align:left;font:inherit;transition:background .15s}
+.hist-status:hover{background:rgba(255,255,255,.08)}
+.hist-ic{position:relative;display:grid;place-items:center;width:32px;height:32px;border-radius:10px;background:rgba(168,162,240,.16);color:#C9C5F7;flex-shrink:0}
+.hist-dot{position:absolute;right:-2px;bottom:-2px;width:10px;height:10px;border-radius:50%;border:2px solid var(--ink);background:#8C88AE}
+.hist-status[data-status="on"] .hist-dot{background:#4CC784}
+.hist-txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.hist-label{font:600 13px/1.2 var(--font-body)}
+.hist-sub{font-size:11.5px;color:#B9B5D6;line-height:1.35}
+
+/* Painel lateral "Novo lote" */
+.nl-overlay{position:fixed;inset:0;z-index:1100;background:rgba(22,21,43,.55);display:flex;justify-content:flex-end;animation:uiFade .2s ease-out}
+.nl-panel{width:600px;max-width:100%;height:100%;background:var(--surface);color:var(--text);box-shadow:-24px 0 60px rgba(22,21,43,.25);display:flex;flex-direction:column;animation:nlIn .25s cubic-bezier(.2,.8,.3,1)}
+@keyframes nlIn{from{transform:translateX(48px);opacity:0}to{transform:none;opacity:1}}
+.nl-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:24px 24px 18px;border-bottom:1px solid var(--border)}
+.nl-title{font:800 24px/1.15 var(--font-display);letter-spacing:-.01em}
+.nl-sub{font-size:14px;color:var(--text-secondary);margin-top:4px}
+.nl-body{flex:1;overflow-y:auto;padding:22px 24px;display:flex;flex-direction:column;gap:26px;overscroll-behavior:contain}
+.nl-step{display:flex;flex-direction:column;gap:14px}
+.nl-step-title{display:flex;align-items:center;gap:10px;font:700 16px var(--font-display)}
+.nl-num{width:26px;height:26px;border-radius:50%;background:var(--primary);color:var(--on-primary);display:grid;place-items:center;font:800 13px var(--font-display);flex-shrink:0}
+.nl-step .field-block,.nl-step .switch-row{margin-bottom:0}
+.nl-qty-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.nl-qty-row .stepper{width:190px}
+.nl-quick{display:flex;gap:6px;flex-wrap:wrap}
+.nl-quick button{min-height:44px;min-width:48px;padding:0 12px;border-radius:999px;border:1.5px solid var(--border-strong);background:var(--surface);color:var(--text-secondary);font:700 14px var(--font-display);cursor:pointer}
+.nl-quick button.active{border-color:var(--primary);background:var(--primary-light);color:var(--primary)}
+.nl-sheets{font-size:14px;color:var(--text-secondary)}
+.nl-sheets b{color:var(--text);font-family:var(--font-display)}
+.nl-preview{display:flex;gap:18px;align-items:flex-start;padding:16px;border-radius:18px;background:var(--surface-alt);border:1px solid var(--border)}
+.nl-preview-card{width:200px;flex-shrink:0}
+.nl-preview-side{display:flex;flex-direction:column;gap:10px;min-width:0}
+.nl-preview-side .hint{margin:0;font-size:13px;line-height:1.5;color:var(--text-secondary)}
+.nl-preview-card .bingo-card{padding:10px 8px 8px;border-radius:14px;box-shadow:none}
+.nl-preview-card .bingo-card-header{margin-bottom:6px}
+.nl-preview-card .bingo-card-header h3{font-size:16px;letter-spacing:.14em}
+.nl-preview-card .bingo-card-header h3.custom-title{font-size:13px;letter-spacing:.02em}
+.nl-preview-card .bingo-card-header .card-id{font-size:9px}
+.nl-preview-card .bingo-table{border-spacing:3px}
+.nl-preview-card .bingo-table th{height:20px;font-size:11px;border-radius:6px}
+.nl-preview-card .bingo-table td{height:26px;font-size:12px;border-radius:6px}
+.nl-preview-card .bingo-table td.free-cell{font-size:6.5px}
+.nl-preview-card .bingo-card-footer{font-size:8.5px;margin-top:4px}
+.nl-foot{padding:16px 24px calc(16px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--border);display:flex;flex-direction:column;gap:12px;background:var(--surface)}
+.nl-share{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--text-secondary);cursor:pointer;min-height:44px;padding-top:4px}
+.nl-share input{margin-top:1px;flex-shrink:0}
+.nl-share b{color:var(--text)}
+body.nl-lock{overflow:hidden}
+
+/* Cadastrar cartelas impressas (janela) */
+.ml-overlay{align-items:flex-start;overflow-y:auto}
+.ml-overlay .manual-lot{width:100%;max-width:860px;margin:auto 0;animation:uiPop .22s ease-out}
+
+@media (max-width:1280px){
+  .lib-layout{grid-template-columns:340px minmax(0,1fr)}
+  .thumbs{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:1024px){
+  .lib-layout{display:block}
+  .lib-list{position:static;height:auto;min-height:0;max-height:none}
+  .lib-items{overflow:visible}
+  .lib-detail{display:none}
+  .lib-layout.show-detail .lib-detail{display:flex;position:fixed;top:0;left:var(--sidebar-w);right:0;bottom:0;z-index:65;background:var(--bg);overflow-y:auto;padding:0 20px;gap:16px;overscroll-behavior:contain;animation:ldIn .22s ease-out}
+  @keyframes ldIn{from{transform:translateX(24px);opacity:0}to{transform:none;opacity:1}}
+  body.lib-lock{overflow:hidden}
+  /* a animacao da pagina usa transform, o que prenderia o painel fixo dentro dela */
+  body.lib-lock .page.active{animation:none;transform:none}
+  .ld-mtop{display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:2;margin:0 -20px;padding:calc(8px + env(safe-area-inset-top,0px)) 12px 8px;background:var(--surface);border-bottom:1px solid var(--border)}
+  .ld-mtop .lib-code{font-size:14px}
+  .ld-mtop-title{flex:1;min-width:0;font:700 16px var(--font-display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ld-bottombar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;position:sticky;bottom:0;z-index:2;margin:auto -20px 0;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));background:var(--surface);border-top:1px solid var(--border)}
+  .ld-bottombar .btn{min-height:50px;padding:0 8px;font-size:13.5px}
+  .ld-actions .ld-main,.ld-actions .ld-more{display:none}
+  .ld-actions:not(:has(.btn:not(.ld-main):not(.ld-more))){display:none}
+  .mob-only{display:inline-flex}
+  .ld-top{flex-direction:column;gap:10px}
+  .ld-id .ld-code{display:none}
+  .thumbs{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:900px){
+  .lib-mstatus{display:block;margin-bottom:14px}
+  .lib-mstatus .hist-status{background:var(--surface);border-color:var(--border);color:var(--text)}
+  .lib-mstatus .hist-ic{background:var(--primary-light);color:var(--primary)}
+  .lib-mstatus .hist-dot{border-color:var(--surface)}
+  .lib-mstatus .hist-sub{color:var(--text-secondary)}
+  .lib-layout.show-detail .lib-detail{left:0;bottom:calc(72px + env(safe-area-inset-bottom,0px))}
+  .ld-bottombar{padding-bottom:12px}
+}
+@media (max-width:640px){
+  .lib-title{font-size:26px}
+  .lib-head{align-items:stretch}
+  .lib-head-actions{width:100%}
+  .lib-head-actions .btn{flex:1}
+  .lib-list{padding:12px;border-radius:18px}
+  .ld-card{padding:18px;border-radius:18px}
+  .ld-title{font-size:20px}
+  .ld-code{font-size:17px;padding:10px 12px}
+  .nl-panel{width:100%}
+  .nl-head,.nl-body{padding-left:16px;padding-right:16px}
+  .nl-foot{padding-left:16px;padding-right:16px}
+  .nl-preview{flex-direction:column;align-items:center;text-align:center}
+  .ui-overlay.lib-modal{align-items:center;padding:16px}
+  .ui-overlay.lib-modal .ui-dialog{border-radius:22px;padding:22px 18px 18px}
+  .ml-overlay{padding:0}
+  .ml-overlay .manual-lot{border-radius:0;min-height:100%}
+}
+@media (max-width:420px){
+  .thumbs{gap:10px}
+  .thumb{padding:8px}
+  .thumb .mini-grid-cell{height:22px;font-size:10.5px}
+}
+
 /* ===== PRINT ===== */
 @media print{
   body{background:#fff!important;color:#000!important;padding:0!important}
-  .sidebar,.topbar,.bottom-nav,.telao,.gen-layout,.no-print{display:none!important}
+  .sidebar,.topbar,.bottom-nav,.telao,.gen-layout,.no-print,.ui-overlay,.nl-overlay,.dd-menu,.ui-toasts{display:none!important}
+  .print-area{display:block!important}
   .page{display:block!important;animation:none!important}
   .page:not(#pageCards){display:none!important}
   .main{padding:0;margin:0;max-width:none}
@@ -893,9 +1076,9 @@ body.telao-lock{overflow:hidden}
     <button class="nav-tab" data-page="pageAbout"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Sobre</button>
   </nav>
   <div class="side-foot">
-    <button type="button" class="cloud-btn cloud-side" onclick="openAccount()" hidden data-status="off">
-      <span class="cloud-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 19H7a5 5 0 1 1 .9-9.9A6 6 0 0 1 19.5 11 4 4 0 0 1 17.5 19z"/></svg><i class="cloud-dot"></i></span>
-      <span class="cloud-txt"><span class="cloud-label">Salvar na nuvem</span><span class="cloud-sub">Acesse de qualquer aparelho</span></span>
+    <button type="button" class="hist-status" onclick="goSharedFilter()" data-status="wait">
+      <span class="hist-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 19H7a5 5 0 1 1 .9-9.9A6 6 0 0 1 19.5 11 4 4 0 0 1 17.5 19z"/></svg><i class="hist-dot"></i></span>
+      <span class="hist-txt"><span class="hist-label">Histórico compartilhado</span><span class="hist-sub">Conectando…</span></span>
     </button>
     <button class="btn-telao" onclick="openTelao()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>Modo Telão</button>
     <button class="theme-toggle" data-label="1" onclick="toggleTheme()">Tema escuro</button>
@@ -911,7 +1094,6 @@ body.telao-lock{overflow:hidden}
       <button type="button" class="brand-ver" onclick="showPage('pageAbout')" aria-label="Sobre esta versão"><i aria-hidden="true"></i><span data-app-version="v">v2.6</span><span class="brand-ver-ed">Edição Salão</span></button>
     </div>
   </div>
-  <button type="button" class="cloud-btn cloud-top" onclick="openAccount()" hidden data-status="off"><span class="cloud-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 19H7a5 5 0 1 1 .9-9.9A6 6 0 0 1 19.5 11 4 4 0 0 1 17.5 19z"/></svg><i class="cloud-dot"></i></span></button>
   <button class="btn-telao" onclick="openTelao()" aria-label="Abrir Modo Telão"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></button>
   <button class="theme-toggle" onclick="toggleTheme()" aria-label="Alternar tema"></button>
 </header>
@@ -1085,166 +1267,63 @@ body.telao-lock{overflow:hidden}
   </div>
 </div>
 
-<!-- ====== PAGE: CARTELAS ====== -->
+<!-- ====== PAGE: CARTELAS (biblioteca de lotes) ====== -->
 <div id="pageCards" class="page">
-  <div class="gen-layout no-print">
-    <section class="card gen-config">
-      <h1 class="page-title">Novo lote de cartelas</h1>
-      <p class="page-sub">A prévia ao lado atualiza enquanto você configura.</p>
+  <div class="lib-mstatus no-print">
+    <button type="button" class="hist-status" onclick="goSharedFilter()" data-status="wait">
+      <span class="hist-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 19H7a5 5 0 1 1 .9-9.9A6 6 0 0 1 19.5 11 4 4 0 0 1 17.5 19z"/></svg><i class="hist-dot"></i></span>
+      <span class="hist-txt"><span class="hist-label">Histórico compartilhado</span><span class="hist-sub">Conectando…</span></span>
+    </button>
+  </div>
 
-      <div class="field field-block">
-        <label for="cardTitle">Título da cartela</label>
-        <input type="text" id="cardTitle" placeholder="Ex: Bingo do Miguel">
-      </div>
-
-      <select id="cardMode" class="native-select" aria-hidden="true"><option value="numbers">Números</option></select>
-
-      <div class="field field-block" id="grpMaxNum">
-        <span class="field-label" id="lblMax">Números até</span>
-        <div class="seg" data-for="maxNum" role="radiogroup" aria-labelledby="lblMax">
-          <button type="button" data-value="75" role="radio">75</button>
-          <button type="button" data-value="90" role="radio">90</button>
-          <button type="button" data-value="100" role="radio">100</button>
-        </div>
-        <select id="maxNum" class="native-select">
-          <option value="75">75 (padrão)</option>
-          <option value="90">90</option>
-          <option value="100">100</option>
-        </select>
-      </div>
-
-      <div class="field field-block">
-        <span class="field-label" id="lblGrid">Grade</span>
-        <div class="seg" data-for="gridSize" role="radiogroup" aria-labelledby="lblGrid">
-          <button type="button" data-value="3" role="radio">3×3</button>
-          <button type="button" data-value="4" role="radio">4×4</button>
-          <button type="button" data-value="5" role="radio">5×5</button>
-        </div>
-        <select id="gridSize" class="native-select">
-          <option value="5">5×5</option>
-          <option value="4">4×4</option>
-          <option value="3">3×3</option>
-        </select>
-      </div>
-
-      <div class="gen-row field-block">
-        <div class="field">
-          <label for="cardQty">Quantidade</label>
-          <div class="stepper">
-            <button type="button" onclick="stepQty(-1)" aria-label="Diminuir quantidade"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button>
-            <input type="number" id="cardQty" value="4" min="1" max="50" inputmode="numeric">
-            <button type="button" onclick="stepQty(1)" aria-label="Aumentar quantidade"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
-          </div>
-        </div>
-        <div class="field">
-          <span class="field-label" id="lblLayout">Por folha A4</span>
-          <div class="seg" data-for="printLayout" role="radiogroup" aria-labelledby="lblLayout">
-            <button type="button" data-value="4" role="radio">4</button>
-            <button type="button" data-value="6" role="radio">6</button>
-          </div>
-          <select id="printLayout" class="native-select">
-            <option value="4">4 por folha A4</option>
-            <option value="6">6 por folha A4</option>
-          </select>
-        </div>
-      </div>
-
-      <label class="switch-row" id="freeCellRow">
-        <span><span class="sw-text">Espaço livre no centro</span><small>Disponível apenas na grade 5×5</small></span>
-        <span class="switch"><input type="checkbox" id="freeCell" checked><span class="track"></span></span>
-      </label>
-
-      <div class="gen-actions">
-        <button class="btn btn-primary btn-lg btn-block" onclick="generateCards()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span id="genBtnLabel">Gerar 4 cartelas</span></button>
-        <div class="gen-actions-row">
-          <button class="btn btn-secondary" onclick="printCards()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Imprimir</button>
-          <button class="btn btn-gold" onclick="exportPDF()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>Baixar PDF</button>
-        </div>
-      </div>
-    </section>
-
-    <div class="gen-side">
-      <section class="card">
-        <div class="card-head">
-          <div>
-            <h2 class="card-title">Prévia</h2>
-            <p class="card-sub" id="previewCaption"></p>
-          </div>
-          <button class="btn btn-ghost btn-sm btn-icon" onclick="renderPreview()" aria-label="Sortear outra prévia"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></button>
-        </div>
-        <div id="cardPreview" class="preview-grid"></div>
-      </section>
-      <section class="card">
-        <div class="card-head"><h2 class="card-title">Lotes salvos</h2><span class="card-sub" id="recentLotsCount"></span></div>
-        <div id="recentLots"></div>
-        <div class="backup-box">
-          <div class="backup-text">
-            <strong>Backup dos lotes</strong>
-            <span>Os lotes ficam salvos neste navegador. Exporte um arquivo para guardar ou passar para outro aparelho.</span>
-          </div>
-          <div class="backup-actions">
-            <button class="btn btn-secondary btn-sm" onclick="exportBackup()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>Exportar backup</button>
-            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('backupFile').click()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg>Importar backup</button>
-            <input type="file" id="backupFile" accept=".json,application/json" hidden onchange="importBackup(this)">
-          </div>
-          <div id="snapshotArea"></div>
-        </div>
-        <div class="backup-box">
-          <div class="backup-text">
-            <strong>Perdeu um lote que já foi impresso?</strong>
-            <span>Digite os números das cartelas impressas para recriar o lote com o mesmo código e continuar acompanhando o jogo.</span>
-          </div>
-          <div class="backup-actions">
-            <button class="btn btn-primary btn-sm" onclick="openManualLot()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>Cadastrar cartelas impressas</button>
-          </div>
-        </div>
-      </section>
-      <section class="card">
-        <div class="shared-header">
-          <div>
-            <h2 class="card-title">Histórico de cartelas salvas</h2>
-            <p class="card-sub" id="sharedCaption">Compartilhado entre todos os aparelhos</p>
-          </div>
-          <button class="btn btn-ghost btn-sm btn-icon" onclick="loadSharedLots()" aria-label="Atualizar histórico"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></button>
-        </div>
-        <div id="sharedLotsList" class="shared-history"><p class="empty-inline">Carregando…</p></div>
-      </section>
+  <div class="lib-head no-print">
+    <div>
+      <h1 class="lib-title">Cartelas</h1>
+      <p class="page-sub">Escolha um lote para imprimir, baixar ou usar no jogo.</p>
+    </div>
+    <div class="lib-head-actions">
+      <button type="button" class="btn btn-secondary" id="toolsBtn" aria-haspopup="menu" aria-expanded="false" onclick="toggleToolsMenu(this)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Ferramentas</button>
+      <button type="button" class="btn btn-primary" id="newLotBtn" onclick="openNewLotPanel()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Novo lote</button>
     </div>
   </div>
 
-  <section id="manualLotPanel" class="card manual-lot no-print" hidden>
-    <div class="card-head">
-      <div>
-        <h2 class="card-title">Cadastrar cartelas impressas</h2>
-        <p class="card-sub">Use o código e os números exatamente como estão no papel. O que você digita fica salvo mesmo se fechar a página.</p>
-      </div>
-      <button class="btn btn-ghost btn-sm btn-icon" onclick="closeManualLot()" aria-label="Fechar"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
-    </div>
-    <div class="ml-setup">
-      <div class="field"><label for="mlCode">Código do lote</label><input type="text" id="mlCode" maxlength="8" placeholder="Ex: 2NEE" autocomplete="off" style="text-transform:uppercase" oninput="mlSaveSetup()"></div>
-      <div class="field"><label for="mlTitle">Título (opcional)</label><input type="text" id="mlTitle" placeholder="Ex: Bingo da Igreja" oninput="mlSaveSetup()"></div>
-      <div class="field"><label for="mlQty">Nº de cartelas</label><input type="number" id="mlQty" min="1" max="50" value="12" inputmode="numeric" oninput="mlSaveSetup()"></div>
-      <div class="field"><label for="mlMax">Números até</label><select id="mlMax" onchange="mlSaveSetup()"><option value="75">75</option><option value="90">90</option><option value="100">100</option></select></div>
-      <div class="field"><label for="mlGrid">Grade</label><select id="mlGrid" onchange="mlSaveSetup()"><option value="5">5×5</option><option value="4">4×4</option><option value="3">3×3</option></select></div>
-      <label class="ml-check"><input type="checkbox" id="mlFree" checked onchange="mlSaveSetup()"> Espaço livre no centro</label>
-    </div>
-    <div class="ml-editor">
-      <div class="ml-nav">
-        <button class="btn btn-secondary btn-sm" onclick="mlGo(-1)" aria-label="Cartela anterior"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
-        <strong id="mlCardLabel">Cartela 01</strong>
-        <button class="btn btn-secondary btn-sm" onclick="mlGo(1)" aria-label="Próxima cartela"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
-        <span class="ml-progress" id="mlProgress"></span>
-      </div>
-      <div id="mlGridBox" class="ml-grid"></div>
-      <p class="hint" id="mlMsg">Digite linha por linha, como está no papel. Enter ou Tab passa para a próxima casa.</p>
-    </div>
-    <div class="ml-actions">
-      <button class="btn btn-ghost btn-sm" onclick="mlClearDraft()" style="color:var(--danger)">Descartar rascunho</button>
-      <button class="btn btn-primary" onclick="mlSaveLot()">Salvar lote e acompanhar</button>
-    </div>
+  <div id="snapshotArea" class="no-print" style="margin-bottom:16px"></div>
+  <input type="file" id="backupFile" accept=".json,application/json" hidden onchange="importBackup(this)">
+
+  <section id="libEmpty" class="card lib-empty no-print" hidden>
+    <svg class="illu" viewBox="0 0 160 120" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="30" y="18" width="84" height="92" rx="12" fill="var(--surface-sunk)" stroke="var(--border-strong)" stroke-width="2" transform="rotate(-8 72 64)"/>
+      <rect x="46" y="12" width="84" height="92" rx="12" fill="var(--surface)" stroke="var(--primary)" stroke-width="2.5"/>
+      <rect x="56" y="24" width="64" height="10" rx="5" fill="var(--primary-light)"/>
+      <g fill="var(--surface-sunk)"><rect x="56" y="42" width="14" height="14" rx="4"/><rect x="81" y="42" width="14" height="14" rx="4"/><rect x="106" y="42" width="14" height="14" rx="4"/><rect x="56" y="64" width="14" height="14" rx="4"/><rect x="106" y="64" width="14" height="14" rx="4"/><rect x="56" y="86" width="14" height="10" rx="4"/><rect x="81" y="86" width="14" height="10" rx="4"/><rect x="106" y="86" width="14" height="10" rx="4"/></g>
+      <rect x="81" y="64" width="14" height="14" rx="4" fill="var(--gold-light)" stroke="var(--gold)" stroke-width="1.5"/>
+      <circle cx="132" cy="96" r="16" fill="var(--gold)"/><path d="M132 89v14M125 96h14" stroke="#16152B" stroke-width="3"/>
+    </svg>
+    <h2>Comece criando seu primeiro lote</h2>
+    <ol class="lib-steps">
+      <li><b>1</b>Crie um lote de cartelas</li>
+      <li><b>2</b>Imprima ou baixe o PDF</li>
+      <li><b>3</b>Use no jogo e acompanhe ao vivo</li>
+    </ol>
+    <button type="button" class="btn btn-primary btn-lg" onclick="openNewLotPanel()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Criar primeiro lote</button>
   </section>
 
-  <div id="cardsOutput"></div>
+  <div id="libLayout" class="lib-layout no-print">
+    <aside class="lib-list" aria-label="Lotes de cartelas">
+      <div class="lib-search">
+        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" id="libSearch" placeholder="Buscar por código ou título" aria-label="Buscar por código ou título" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="lib-filters" id="libFilters" role="group" aria-label="Filtrar lotes"></div>
+      <p class="lib-offline" id="libOffline" role="status" hidden><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 2l20 20M17.5 19H7a5 5 0 0 1-1.6-9.74M9.3 5.3A6 6 0 0 1 19.5 11 4 4 0 0 1 21 18.3"/></svg>Histórico compartilhado indisponível no momento</p>
+      <div class="lib-items" id="libItems" aria-label="Lista de lotes"></div>
+      <div class="lib-foot" id="libFoot"></div>
+    </aside>
+    <section class="lib-detail" id="libDetail" aria-label="Detalhe do lote"></section>
+  </div>
+
+  <!-- Area usada so na impressao: cartelas em tamanho real do lote selecionado -->
+  <div id="cardsOutput" class="print-area"></div>
 </div>
 
 <!-- ====== PAGE: PAINEL (historico do sorteio) ====== -->
@@ -1345,6 +1424,137 @@ body.telao-lock{overflow:hidden}
 </div>
 
 </main>
+
+<!-- ===== PAINEL LATERAL: NOVO LOTE ===== -->
+<div id="newLotOverlay" class="nl-overlay no-print" hidden>
+  <div class="nl-panel" id="newLotPanel" role="dialog" aria-modal="true" aria-labelledby="nlTitle" aria-describedby="nlSub">
+    <header class="nl-head">
+      <div>
+        <h2 class="nl-title" id="nlTitle">Novo lote de cartelas</h2>
+        <p class="nl-sub" id="nlSub">3 passos rápidos. A prévia atualiza enquanto você escolhe.</p>
+      </div>
+      <button type="button" class="btn btn-ghost btn-icon" onclick="closeNewLotPanel()" aria-label="Fechar"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </header>
+    <div class="nl-body">
+      <section class="nl-step" aria-labelledby="nlS1">
+        <h3 class="nl-step-title" id="nlS1"><span class="nl-num">1</span>Nome e tipo</h3>
+        <div class="field">
+          <label for="cardTitle">Título impresso na cartela</label>
+          <input type="text" id="cardTitle" maxlength="60" placeholder="Ex: Bingo do Miguel" autocomplete="off">
+        </div>
+        <select id="cardMode" class="native-select" aria-hidden="true" tabindex="-1"><option value="numbers">Números</option></select>
+      </section>
+
+      <section class="nl-step" aria-labelledby="nlS2">
+        <h3 class="nl-step-title" id="nlS2"><span class="nl-num">2</span>Formato</h3>
+        <div class="field field-block" id="grpMaxNum">
+          <span class="field-label" id="lblMax">Números até</span>
+          <div class="seg" data-for="maxNum" role="radiogroup" aria-labelledby="lblMax">
+            <button type="button" data-value="75" role="radio">75</button>
+            <button type="button" data-value="90" role="radio">90</button>
+            <button type="button" data-value="100" role="radio">100</button>
+          </div>
+          <select id="maxNum" class="native-select" aria-hidden="true" tabindex="-1">
+            <option value="75">75 (padrão)</option>
+            <option value="90">90</option>
+            <option value="100">100</option>
+          </select>
+        </div>
+        <div class="field field-block">
+          <span class="field-label" id="lblGrid">Grade</span>
+          <div class="seg" data-for="gridSize" role="radiogroup" aria-labelledby="lblGrid">
+            <button type="button" data-value="3" role="radio">3×3</button>
+            <button type="button" data-value="4" role="radio">4×4</button>
+            <button type="button" data-value="5" role="radio">5×5</button>
+          </div>
+          <select id="gridSize" class="native-select" aria-hidden="true" tabindex="-1">
+            <option value="5">5×5</option>
+            <option value="4">4×4</option>
+            <option value="3">3×3</option>
+          </select>
+        </div>
+        <label class="switch-row" id="freeCellRow">
+          <span><span class="sw-text">Espaço livre no centro</span><small>Disponível apenas na grade 5×5</small></span>
+          <span class="switch"><input type="checkbox" id="freeCell" checked><span class="track"></span></span>
+        </label>
+      </section>
+
+      <section class="nl-step" aria-labelledby="nlS3">
+        <h3 class="nl-step-title" id="nlS3"><span class="nl-num">3</span>Quantidade</h3>
+        <div class="nl-qty-row">
+          <div class="stepper">
+            <button type="button" onclick="stepQty(-1)" aria-label="Diminuir quantidade"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button>
+            <input type="number" id="cardQty" value="4" min="1" max="50" inputmode="numeric" aria-label="Quantidade de cartelas">
+            <button type="button" onclick="stepQty(1)" aria-label="Aumentar quantidade"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+          </div>
+          <div class="nl-quick" id="nlQuick" role="group" aria-label="Atalhos de quantidade">
+            <button type="button" data-q="4">4</button><button type="button" data-q="8">8</button><button type="button" data-q="12">12</button><button type="button" data-q="20">20</button>
+          </div>
+        </div>
+        <p class="nl-sheets" id="nlSheets" aria-live="polite"></p>
+        <div class="field">
+          <span class="field-label" id="lblLayout">Por folha A4</span>
+          <div class="seg" data-for="printLayout" role="radiogroup" aria-labelledby="lblLayout">
+            <button type="button" data-value="4" role="radio">4</button>
+            <button type="button" data-value="6" role="radio">6</button>
+          </div>
+          <select id="printLayout" class="native-select" aria-hidden="true" tabindex="-1">
+            <option value="4">4 por folha A4</option>
+            <option value="6">6 por folha A4</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="nl-preview" aria-label="Prévia">
+        <div id="cardPreview" class="nl-preview-card"></div>
+        <div class="nl-preview-side">
+          <span class="field-label">Prévia</span>
+          <p class="hint" id="previewCaption">Exemplo de como a cartela vai sair. Os números reais são sorteados ao gerar, e cada cartela recebe um código único.</p>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="renderPreview()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>Outro exemplo</button>
+        </div>
+      </section>
+    </div>
+    <footer class="nl-foot">
+      <label class="nl-share"><input type="checkbox" id="nlShare" checked><span><b>Salvar no histórico compartilhado</b> — disponível em qualquer aparelho</span></label>
+      <button type="button" class="btn btn-primary btn-lg btn-block" id="nlGenerate" onclick="submitNewLot()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span id="genBtnLabel">Gerar 4 cartelas</span></button>
+    </footer>
+  </div>
+</div>
+
+<!-- ===== JANELA: CADASTRAR CARTELAS IMPRESSAS ===== -->
+<div id="manualLotOverlay" class="ui-overlay ml-overlay no-print" hidden>
+  <section id="manualLotPanel" class="card manual-lot" role="dialog" aria-modal="true" aria-labelledby="mlHeading">
+    <div class="card-head">
+      <div>
+        <h2 class="card-title" id="mlHeading">Cadastrar cartelas impressas</h2>
+        <p class="card-sub">Use o código e os números exatamente como estão no papel. O que você digita fica salvo mesmo se fechar a página.</p>
+      </div>
+      <button class="btn btn-ghost btn-icon" onclick="closeManualLot()" aria-label="Fechar"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="ml-setup">
+      <div class="field"><label for="mlCode">Código do lote</label><input type="text" id="mlCode" maxlength="8" placeholder="Ex: 2NEE" autocomplete="off" style="text-transform:uppercase" oninput="mlSaveSetup()"></div>
+      <div class="field"><label for="mlTitle">Título (opcional)</label><input type="text" id="mlTitle" placeholder="Ex: Bingo da Igreja" oninput="mlSaveSetup()"></div>
+      <div class="field"><label for="mlQty">Nº de cartelas</label><input type="number" id="mlQty" min="1" max="50" value="12" inputmode="numeric" oninput="mlSaveSetup()"></div>
+      <div class="field"><label for="mlMax">Números até</label><select id="mlMax" onchange="mlSaveSetup()"><option value="75">75</option><option value="90">90</option><option value="100">100</option></select></div>
+      <div class="field"><label for="mlGrid">Grade</label><select id="mlGrid" onchange="mlSaveSetup()"><option value="5">5×5</option><option value="4">4×4</option><option value="3">3×3</option></select></div>
+      <label class="ml-check"><input type="checkbox" id="mlFree" checked onchange="mlSaveSetup()"> Espaço livre no centro</label>
+    </div>
+    <div class="ml-editor">
+      <div class="ml-nav">
+        <button class="btn btn-secondary" onclick="mlGo(-1)" aria-label="Cartela anterior"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+        <strong id="mlCardLabel">Cartela 01</strong>
+        <button class="btn btn-secondary" onclick="mlGo(1)" aria-label="Próxima cartela"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+        <span class="ml-progress" id="mlProgress"></span>
+      </div>
+      <div id="mlGridBox" class="ml-grid"></div>
+      <p class="hint" id="mlMsg">Digite linha por linha, como está no papel. Enter ou Tab passa para a próxima casa.</p>
+    </div>
+    <div class="ml-actions">
+      <button class="btn btn-ghost" onclick="mlClearDraft()" style="color:var(--danger)">Descartar rascunho</button>
+      <button class="btn btn-primary" onclick="mlSaveLot()">Salvar lote e acompanhar</button>
+    </div>
+  </section>
+</div>
 
 <!-- ===== AVISO DE VERSAO NOVA ===== -->
 <div id="updateBanner" class="update-banner no-print" role="status" hidden>
@@ -1454,7 +1664,6 @@ function saveState(){
     cur.drawnNumbers=state.drawnNumbers.slice();
   }
   try{localStorage.setItem('bmp3',JSON.stringify(state));}catch(e){}
-  if(typeof scheduleCloudPush==='function')scheduleCloudPush();
 }
 
 // ===== ICONS =====
@@ -1531,13 +1740,21 @@ function notify(message,tone,title){
   t.querySelector('.t-close').addEventListener('click',dismiss);
   box.appendChild(t);
   while(box.children.length>4)box.firstChild.remove();
-  setTimeout(dismiss,tone==='danger'?7000:4500);
+  setTimeout(dismiss,4000);
 }
 function notifyGameOver(){notify('Uma cartela foi completada. Clique em Novo jogo para começar outra rodada.','warn','Jogo finalizado');}
 
 // ===== VERSAO / SOBRE =====
 // Para lançar uma versão nova: adicione um item no topo de APP_VERSIONS.
 var APP_VERSIONS=[
+  {v:'2.11',date:'29/09/2026',title:'Biblioteca de lotes',items:[
+    'Tela Cartelas virou uma biblioteca: lista única de lotes à esquerda e o lote selecionado à direita',
+    'Novo lote em painel lateral, com prévia compacta e opção de salvar no histórico compartilhado',
+    'Miniaturas das cartelas, cartela ampliada e impressão ou PDF de uma cartela só',
+    'Fixar, renomear, enviar para outro aparelho por link e gerar lote parecido',
+    'Exclusão com aviso explícito e confirmação pelo código do lote',
+    'Um único status de salvamento: histórico compartilhado (a nuvem com login foi aposentada e os lotes migrados)'
+  ]},
   {v:'2.9',date:'29/09/2026',title:'Histórico compartilhado de cartelas',items:[
     'Botão "Salvar cartelas" envia o lote para o histórico compartilhado (sem login)',
     'Qualquer pessoa pode ver, reimprimir e baixar PDF dos lotes salvos',
@@ -1700,7 +1917,13 @@ document.querySelectorAll('.nav-tab').forEach(function(t){
 // ===== UTILS =====
 function escHtml(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
 function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var tmp=b[i];b[i]=b[j];b[j]=tmp;}return b;}
-function genLotCode(){var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',c='';for(var i=0;i<4;i++)c+=chars[Math.floor(Math.random()*chars.length)];return c;}
+function genLotCode(){
+  // Codigo que ainda nao existe neste aparelho nem no historico compartilhado
+  var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',c='',tries=0;
+  do{c='';for(var i=0;i<4;i++)c+=chars[Math.floor(Math.random()*chars.length)];tries++;}
+  while(tries<50&&(state.lots[c]||(state.deletedLots&&state.deletedLots[c])||sharedByCode(c)));
+  return c;
+}
 
 // ===== CARD MODE UI =====
 // Modo palavras foi removido (v2.6): cartelas novas sao sempre de numeros.
@@ -1728,13 +1951,12 @@ function syncSegments(){
   if(fc)fc.disabled=off;
   if(row)row.classList.toggle('is-disabled',off);
 }
-document.querySelectorAll('.seg').forEach(function(seg){
-  seg.addEventListener('click',function(e){
-    var b=e.target.closest('button');if(!b)return;
-    var sel=document.getElementById(seg.dataset.for);if(!sel||sel.value===b.dataset.value)return;
-    sel.value=b.dataset.value;
-    sel.dispatchEvent(new Event('change',{bubbles:true}));
-  });
+// Delegado: vale tambem para segmentados criados depois (ex.: Preferencias de impressao)
+document.addEventListener('click',function(e){
+  var b=e.target.closest&&e.target.closest('.seg[data-for] button');if(!b)return;
+  var sel=document.getElementById(b.closest('.seg').dataset.for);if(!sel||sel.value===b.dataset.value)return;
+  sel.value=b.dataset.value;
+  sel.dispatchEvent(new Event('change',{bubbles:true}));
 });
 function getQty(){return Math.min(50,Math.max(1,parseInt(document.getElementById('cardQty').value)||4));}
 function stepQty(d){
@@ -1745,8 +1967,9 @@ function stepQty(d){
 function updateGenLabel(){
   var q=getQty();
   var l=document.getElementById('genBtnLabel');if(l)l.textContent='Gerar '+q+' cartela'+(q>1?'s':'');
-  var cap=document.getElementById('previewCaption');
-  if(cap)cap.textContent='Lote será gerado com código único · ex.: XXXX-01 a XXXX-'+String(q).padStart(2,'0');
+  var per=parseInt(document.getElementById('printLayout').value)||4,sh=Math.ceil(q/per);
+  var el=document.getElementById('nlSheets');if(el)el.innerHTML='= <b>'+sh+' folha'+(sh>1?'s':'')+' A4</b> ('+per+' cartelas por folha)';
+  document.querySelectorAll('#nlQuick [data-q]').forEach(function(b){var on=parseInt(b.dataset.q)===q;b.classList.toggle('active',on);b.setAttribute('aria-pressed',on?'true':'false');});
 }
 function renderPreview(){
   var box=document.getElementById('cardPreview');if(!box)return;
@@ -1758,7 +1981,8 @@ function renderPreview(){
   updateGenLabel();
   var words=[];
   var h='';
-  for(var i=0;i<2;i++){
+  // Uma cartela de exemplo: nao altera o state nem o localStorage
+  for(var i=0;i<1;i++){
     var card=mode==='numbers'?generateNumberCard(maxNum,gridSize):generateWordCard(words,gridSize);
     if(card)h+=renderCard(card,i,gridSize,mode,hasFreeCell,customTitle,'XXXX');
   }
@@ -1767,6 +1991,12 @@ function renderPreview(){
 ['maxNum','gridSize','printLayout','freeCell'].forEach(function(id){
   var el=document.getElementById(id);if(el)el.addEventListener('change',function(){syncSegments();renderPreview();});
 });
+// Preferencia de impressao (4 ou 6 por folha) vale para Imprimir e PDF de qualquer lote
+(function(){
+  var pl=document.getElementById('printLayout');if(!pl)return;
+  try{var v=localStorage.getItem('bmp3_printLayout');if(v==='4'||v==='6')pl.value=v;}catch(e){}
+  pl.addEventListener('change',function(){try{localStorage.setItem('bmp3_printLayout',pl.value);}catch(e){}updateGenLabel();renderPrintArea();});
+})();
 (function(){
   var q=document.getElementById('cardQty');
   q.addEventListener('input',updateGenLabel);
@@ -1868,7 +2098,6 @@ function generateCards(){
   renderedLotCards='';
   updateLotUI();
   saveState();
-  try{document.getElementById('cardsOutput').scrollIntoView({behavior:'smooth',block:'start'});}catch(e){}
 }
 
 // ===== DRAW =====
@@ -2152,7 +2381,7 @@ function renderLotMenu(keys){
     var lot=state.lots[code],on=code===state.currentLot;
     h+='<button type="button" role="menuitem" class="lot-menu-item'+(on?' active':'')+'" onclick="closeLotMenu();switchLot(\''+code+'\')"><strong>'+code+'</strong><span>'+escHtml(lot.title)+' \u00B7 '+lot.cards.length+' cartelas</span>'+(on?icon('check'):'')+'</button>';
   });
-  h+='<div class="lot-menu-sep"></div><button type="button" role="menuitem" class="lot-menu-item" onclick="closeLotMenu();showPage(\'pageCards\')">'+icon('plus')+'<span style="color:var(--text)">Gerar novo lote</span></button>';
+  h+='<div class="lot-menu-sep"></div><button type="button" role="menuitem" class="lot-menu-item" onclick="closeLotMenu();showPage(\'pageCards\');openNewLotPanel()">'+icon('plus')+'<span style="color:var(--text)">Gerar novo lote</span></button>';
   menu.innerHTML=h;
 }
 function toggleLotMenu(){
@@ -2168,30 +2397,9 @@ document.addEventListener('click',function(e){
   if(!w)closeLotMenu();
 });
 
-function renderRecentLots(keys){
-  var el=document.getElementById('recentLots');if(!el)return;
-  var cnt=document.getElementById('recentLotsCount');if(cnt)cnt.textContent=keys.length?keys.length+' lote'+(keys.length>1?'s':''):'';
-  renderSnapshots();
-  if(!keys.length){el.innerHTML='<p class="empty-inline">Nenhum lote gerado ainda.</p>';return;}
-  var h='<ul class="recent-list">';
-  keys.forEach(function(code){
-    var lot=state.lots[code];
-    h+='<li><button type="button" class="recent-item'+(code===state.currentLot?' active':'')+'" onclick="openLotCards(\''+code+'\')"><span class="lot-code">'+code+'</span><span class="ri-text"><strong>'+escHtml(lot.title)+' \u00B7 '+lot.cards.length+' cartelas</strong><small>'+escHtml(lot.createdAt||'')+'</small></span>'+icon('chevron').replace('<svg','<svg style="transform:rotate(-90deg)"')+'</button></li>';
-  });
-  el.innerHTML=h+'</ul>';
-}
+// A lista de lotes agora e a biblioteca da tela Cartelas
+function renderRecentLots(){renderSnapshots();renderLibrary();}
 function openLot(code){switchLot(code);showPage('pagePlayers');}
-function openLotCards(code){
-  var lot=state.lots[code];
-  if(!lot||!lot.cards||!lot.cards.length||!lot.cards.some(function(c){return c.data;})){
-    notify('Este lote não possui dados de cartelas salvos.','info','Lote sem cartelas');return;
-  }
-  switchLot(code);
-  state.printLot=code;
-  saveState();
-  showPage('pageCards');
-  renderLotCards();
-}
 function getPrintLot(){
   var code=state.printLot||state.currentLot;
   if(!code||!state.lots[code])return null;
@@ -2236,15 +2444,11 @@ function openManualLot(){
   document.getElementById('mlMax').value=String(mlDraft.max);
   document.getElementById('mlGrid').value=String(mlDraft.grid);
   document.getElementById('mlFree').checked=!!mlDraft.free;
-  var p=document.getElementById('manualLotPanel');p.hidden=false;
   mlRender();
-  try{p.scrollIntoView({behavior:'smooth',block:'start'});}catch(e){}
-  setTimeout(function(){
-    var target=mlDraft.code?document.querySelector('#mlGridBox input'):document.getElementById('mlCode');
-    if(target)target.focus();
-  },250);
+  var ov=document.getElementById('manualLotOverlay');
+  if(ov&&ov.hidden)showStaticOverlay(ov,mlDraft.code?document.querySelector('#mlGridBox input'):document.getElementById('mlCode'));
 }
-function closeManualLot(){document.getElementById('manualLotPanel').hidden=true;}
+function closeManualLot(){var ov=document.getElementById('manualLotOverlay');if(ov)hideStaticOverlay(ov);}
 function mlSaveSetup(){
   if(!mlDraft)mlLoadDraft();
   var oldGrid=mlDraft.grid;
@@ -2343,6 +2547,7 @@ function mlSaveLot(){
   mlDraft=null;
   closeManualLot();
   switchLot(code);
+  state.printLot=code;libSel=code;saveState();
   notify('Lote '+code+' recriado com '+cards.length+' cartelas. Agora é só adicionar os jogadores e acompanhar.','success','Lote recuperado');
   showPage('pagePlayers');
 }
@@ -2397,7 +2602,7 @@ function renderSnapshots(){
   var best=null;
   readSnapshots().forEach(function(s,i){
     try{
-      var d=JSON.parse(s.data);var missing=Object.keys(d.lots||{}).filter(function(k){return !state.lots[k]&&d.lots[k]&&d.lots[k].mode!=='words';});
+      var d=JSON.parse(s.data);var missing=Object.keys(d.lots||{}).filter(function(k){return !state.lots[k]&&!(state.deletedLots&&state.deletedLots[k])&&d.lots[k]&&d.lots[k].mode!=='words';}); // excluidos de proposito nao contam
       if(missing.length&&(!best||missing.length>best.missing.length))best={i:i,date:s.date,missing:missing};
     }catch(e){}
   });
@@ -2431,15 +2636,13 @@ function switchLot(code){
   saveState();
 }
 
-function deleteLot(code){
-  var nPl=state.players.filter(function(p){return p.lotCode===code;}).length;
-  confirmThen({title:'Excluir o lote '+code+'?',html:'As cartelas deste lote'+(nPl?' e <b>'+nPl+' jogador'+(nPl>1?'es':'')+'</b>':'')+' ser\u00E3o removidos. Fica uma c\u00F3pia de seguran\u00E7a na tela Cartelas.',tone:'danger',confirmText:'Excluir lote'},function(){doDeleteLot(code);});
-}
+// Excluir lote: sempre pela janela com aviso explicito (openDeleteLotModal, na biblioteca)
 function doDeleteLot(code){
   state.deletedLots[code]=Date.now();
   try{takeSnapshot(localStorage.getItem('bmp3'));}catch(e){}
   state.players=state.players.filter(function(p){return p.lotCode!==code;});
   delete state.lots[code];
+  if(state.printLot===code)state.printLot=null;
   if(state.currentLot===code){
     var remaining=sortedLotKeys();
     state.currentLot=remaining.length?remaining[0]:null;
@@ -3331,69 +3534,50 @@ function renderTelao(){
 function renderWordLists(){}
 
 // ===== CARTELAS DO LOTE SELECIONADO =====
-// As cartelas ficam salvas em state.lots; aqui elas sao sempre redesenhadas a partir do lote atual,
-// para nao "sumirem" ao recarregar a pagina ou trocar de lote.
+// As cartelas ficam salvas em state.lots e sao sempre redesenhadas a partir do lote selecionado
+// na biblioteca (state.printLot). Ver renderLibrary / renderPrintArea.
 function lotCardsForPrint(){
   var lot=getPrintLot();
   if(!lot){lot=state.currentLot?state.lots[state.currentLot]:null;}
   if(lot&&lot.cards&&lot.cards.length)return lot.cards.map(function(c){return c.data;}).filter(Boolean);
   return state._lastCards||[];
 }
-function renderLotCards(){
-  var out=document.getElementById('cardsOutput');if(!out)return;
-  var lot=getPrintLot();
-  if(!lot){lot=state.currentLot?state.lots[state.currentLot]:null;}
-  if(!lot||!lot.cards||!lot.cards.length){out.innerHTML='';return;}
-  var layout=document.getElementById('printLayout').value;
-  var ct=lot.title&&lot.title!=='BINGO'?lot.title:'';
-  var html='<div class="cards-grid print-'+layout+'" id="cardsGrid">';
-  lot.cards.forEach(function(c,i){if(c.data)html+=renderCard(c.data,i,lot.gridSize,lot.mode,lot.hasFreeCell,ct,lot.code);});
-  html+='</div>';
-  var isSaved=lot.savedAt;
-  var saveBtn=isSaved
-    ?'<button class="btn btn-secondary btn-sm btn-saved" disabled><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 19H7a5 5 0 1 1 .9-9.9A6 6 0 0 1 19.5 11 4 4 0 0 1 17.5 19z"/></svg>Salvo ✓</button>'
-    :'<button class="btn btn-primary btn-sm" onclick="openSaveLotModal(\''+lot.code+'\')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 19H7a5 5 0 1 1 .9-9.9A6 6 0 0 1 19.5 11 4 4 0 0 1 17.5 19z"/><path d="M12 13v5M9.5 15.5 12 13l2.5 2.5"/></svg>Salvar cartelas</button>';
-  var reminder=isSaved?'':'<span class="save-reminder">Não salvo no histórico</span>';
-  out.innerHTML=
-    '<div class="cards-output-head no-print">'+
-    '<span class="lot-badge">Lote '+lot.code+'</span>'+
-    '<span style="font-size:14px;color:var(--text-secondary)"><strong style="color:var(--text)">'+escHtml(lot.title)+'</strong> · '+lot.cards.length+' cartelas · '+escHtml(lot.createdAt||'')+' '+reminder+'</span>'+
-    '<span style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap">'+
-    saveBtn+
-    '<button class="btn btn-secondary btn-sm" onclick="printCards()">Imprimir</button>'+
-    '<button class="btn btn-gold btn-sm" onclick="exportPDF()">Baixar PDF</button>'+
-    '<button class="btn btn-primary btn-sm" onclick="showPage(\'pagePlayers\')">Ir para Ao vivo</button></span>'+
-    '</div>'+html;
-}
-(function(){var pl=document.getElementById('printLayout');if(pl)pl.addEventListener('change',renderLotCards);})();
 
 // ===== PRINT & PDF =====
-function printCards(){
-  if(!document.getElementById('cardsGrid')){
-    var lot=getPrintLot();
-    if(!lot){notify('Gere ou selecione um lote de cartelas primeiro.','info','Nada para imprimir');return;}
-    renderLotCards();
-  }
+// Imprime o lote selecionado (ou so a cartela onlyIdx), sempre em tamanho real
+function printCards(onlyIdx){
+  var lot=getPrintLot();
+  if(!lot){notify('Gere ou selecione um lote de cartelas primeiro.','info','Nada para imprimir');return;}
+  renderPrintArea(typeof onlyIdx==='number'?onlyIdx:undefined);
   window.print();
 }
+window.addEventListener('afterprint',function(){renderPrintArea();});
 
-async function exportPDF(){
-  if(!lotCardsForPrint().length){notify('Gere ou selecione um lote de cartelas primeiro.','info','Nada para exportar');return;}
+async function exportPDF(onlyIdx,lotOverride){
+  var target=lotOverride||getPrintLot();
+  if(!target||!target.cards||!target.cards.some(function(c){return c&&c.data;})){notify('Gere ou selecione um lote de cartelas primeiro.','info','Nada para exportar');return;}
   if(typeof window.jspdf==='undefined'){notify('O gerador de PDF n\u00E3o carregou. Recarregue a p\u00E1gina e tente de novo.','danger','PDF indispon\u00EDvel');return;}
   var downloads=null;
   try{if(typeof claude!=='undefined'&&claude&&typeof claude.use==='function')downloads=await claude.use('downloads');}catch(e){downloads=null;}
-  await drawPDF(downloads);
+  await drawPDF(downloads,{lot:target,only:typeof onlyIdx==='number'?onlyIdx:null});
 }
 
-async function drawPDF(dl){
+async function drawPDF(dl,opts){
+  opts=opts||{};
   try{
     var jsPDF=window.jspdf.jsPDF;
     var pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
     var layout=parseInt(document.getElementById('printLayout').value);
-    var lot=getPrintLot();
+    var lot=opts.lot||getPrintLot();
     if(!lot){lot=state.currentLot?state.lots[state.currentLot]:null;}
     var lotCode=lot?lot.code:'????';
-    var cards=lotCardsForPrint();
+    var entries=[];
+    if(lot&&lot.cards&&lot.cards.length){
+      lot.cards.forEach(function(c,i){if(c&&c.data&&(opts.only==null||opts.only===i))entries.push({data:c.data,code:c.code||(lotCode+'-'+String(i+1).padStart(2,'0'))});});
+    }else{
+      lotCardsForPrint().forEach(function(d,i){entries.push({data:d,code:lotCode+'-'+String(i+1).padStart(2,'0')});});
+    }
+    var cards=entries.map(function(e){return e.data;});
     var gridSize=lot?lot.gridSize:parseInt(document.getElementById('gridSize').value);
     var mode=lot?lot.mode:'numbers';
     var hasFreeCell=lot?lot.hasFreeCell:document.getElementById('freeCell').checked;
@@ -3415,7 +3599,7 @@ async function drawPDF(dl){
       for(var i=start;i<end;i++){
         var card=cards[i];var idx=i-start;
         var cx=mg+(idx%cols)*(cW+gp);var cy=mg+Math.floor(idx/cols)*(cH+gp);
-        var cardCode=lotCode+'-'+String(i+1).padStart(2,'0');
+        var cardCode=entries[i].code;
 
         pdf.setDrawColor(180);pdf.setLineWidth(0.4);pdf.roundedRect(cx,cy,cW,cH,3,3,'S');
         var barSegW=cW/5;
@@ -3466,7 +3650,7 @@ async function drawPDF(dl){
     }
 
     var fname=customTitle?customTitle.replace(/[^a-zA-Z0-9\u00C0-\u024F\s-]/g,'').replace(/\s+/g,'_'):'bingo';
-    var filename=fname+'_'+lotCode+'_'+cards.length+'_cartelas.pdf';
+    var filename=opts.only!=null&&entries.length===1?fname+'_'+entries[0].code+'.pdf':fname+'_'+lotCode+'_'+cards.length+'_cartelas.pdf';
     if(dl&&typeof dl.save==='function'){
       var blob=pdf.output('blob');
       await dl.save({filename:filename,data:blob});
@@ -3476,9 +3660,46 @@ async function drawPDF(dl){
   }catch(e){console.error(e);if(e&&e.code==='declined'){return;}notify('N\u00E3o foi poss\u00EDvel gerar o PDF: '+(e.message||e.code||e),'danger','Erro no PDF');}
 }
 
-// ===== HISTORICO COMPARTILHADO DE CARTELAS SALVAS =====
-var sharedLots=[];
-var sharedLotsLoaded=false;
+// ===== BIBLIOTECA DE LOTES (tela Cartelas) =====
+// Uma lista unica: lotes deste aparelho (state.lots) + historico compartilhado (GET /api/lots),
+// sem duplicar por codigo. O lote selecionado na biblioteca e state.printLot: imprimir e PDF
+// sempre usam esse lote, com a configuracao do proprio lote.
+var SHARED_MAX=15;
+var sharedLots=[];          // lista do historico compartilhado
+var sharedLotsLoaded=false; // ja carregou com sucesso ao menos uma vez
+var sharedOk=null;          // null = carregando, true = conectado, false = indisponivel
+var sharedLastOk=0;         // horario da ultima leitura bem-sucedida
+var libSel=null;            // codigo do lote selecionado na lista
+var libFilter='all',libQuery='';
+var libLoading=null,libFailed={};
+var cardView='thumbs';
+try{if(localStorage.getItem('bmp3_cardView')==='full')cardView='full';}catch(e){}
+
+var LIB_ICONS={
+  pin:'<path d="M12 17v5M9 11V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v7M5 11h14l-1.5 6h-11z"/>',
+  edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+  send:'<path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/>',
+  copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+  trash:'<path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',
+  more:'<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>',
+  print:'<path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
+  download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/>',
+  upload:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/>',
+  play:'<circle cx="12" cy="12" r="10"/><path d="m10 8 6 4-6 4z"/>',
+  cloudUp:'<path d="M17.5 19H7a5 5 0 1 1 .9-9.9A6 6 0 0 1 19.5 11 4 4 0 0 1 17.5 19z"/><path d="M12 13v5M9.5 15.5 12 13l2.5 2.5"/>',
+  cloud:'<path d="M17.5 19H7a5 5 0 1 1 .9-9.9A6 6 0 0 1 19.5 11 4 4 0 0 1 17.5 19z"/>',
+  device:'<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/>',
+  back:'<path d="m15 18-6-6 6-6"/>',
+  link:'<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>',
+  share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/>',
+  chat:'<path d="M3 21l1.65-4.95A9 9 0 1 1 7.9 19.4z"/>',
+  warn:'<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/>',
+  sliders:'<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>',
+  x:'<path d="M18 6 6 18M6 6l12 12"/>'
+};
+function libIcon(n){return '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">'+(LIB_ICONS[n]||'')+'</svg>';}
+
+// ---------- API do historico compartilhado ----------
 function slRequest(method,path,body,headers){
   var opts={method:method,headers:Object.assign({'Content-Type':'application/json'},headers||{}),cache:'no-store'};
   if(body!==undefined)opts.body=JSON.stringify(body);
@@ -3486,386 +3707,915 @@ function slRequest(method,path,body,headers){
     return r.json().catch(function(){return{};}).then(function(j){return{status:r.status,body:j};});
   });
 }
+
+// ---------- Datas ----------
+function parseAnyDate(v){
+  if(!v)return 0;
+  if(typeof v==='number')return v;
+  var m=/^(\d{1,2})\/(\d{1,2})\/(\d{4}),?\s*(\d{1,2}):(\d{2})(?::(\d{2}))?/.exec(String(v));
+  if(m)return new Date(+m[3],+m[2]-1,+m[1],+m[4],+m[5],+(m[6]||0)).getTime();
+  var t=new Date(v).getTime();return isNaN(t)?0:t;
+}
+function p2(n){return String(n).padStart(2,'0');}
+function fmtShort(ts){if(!ts)return '';var d=new Date(ts);return p2(d.getDate())+'/'+p2(d.getMonth()+1)+' '+p2(d.getHours())+':'+p2(d.getMinutes());}
+function fmtLong(ts){if(!ts)return '';var d=new Date(ts);return p2(d.getDate())+'/'+p2(d.getMonth()+1)+'/'+d.getFullYear()+' '+p2(d.getHours())+':'+p2(d.getMinutes());}
+function agoText(ts){
+  if(!ts)return '';
+  var m=Math.floor((Date.now()-ts)/60000);
+  if(m<1)return 'atualizado agora';
+  if(m<60)return 'atualizado há '+m+' min';
+  return 'atualizado há '+Math.floor(m/60)+' h';
+}
+
+// ---------- Modelo unificado ----------
+function sharedByCode(code){for(var i=0;i<sharedLots.length;i++){if(sharedLots[i].code===code)return sharedLots[i];}return null;}
+function getLibraryLots(){
+  var map={},out=[];
+  Object.keys(state.lots).forEach(function(code){
+    var l=state.lots[code];if(!l||l.mode==='words')return;
+    var s=sharedOk===true?sharedByCode(code):null;
+    // Sem resposta do servidor, usa a ultima informacao salva no aparelho (lot.savedAt)
+    var inShared=sharedOk===true?!!s:!!l.savedAt;
+    var item={
+      code:code,title:(s&&s.title)||l.title||'BINGO',cardCount:(l.cards||[]).length,gridSize:l.gridSize||5,mode:l.mode||'numbers',
+      maxNum:l.maxNum||75,hasFreeCell:!!l.hasFreeCell&&(l.gridSize||5)===5,createdAt:lotTime(l),
+      savedAt:s?parseAnyDate(s.savedAt):parseAnyDate(l.savedAt),savedBy:s?(s.savedBy||''):(l.savedBy||''),
+      pinned:s?!!s.pinned:!!l.pinned,source:inShared?'both':'local',
+      hasCards:(l.cards||[]).some(function(c){return c&&c.data;})
+    };
+    map[code]=item;out.push(item);
+  });
+  if(sharedOk===true)sharedLots.forEach(function(s){
+    if(map[s.code])return;
+    out.push({code:s.code,title:s.title||'BINGO',cardCount:s.cardCount||0,gridSize:s.gridSize||5,mode:s.mode||'numbers',
+      maxNum:null,hasFreeCell:null,createdAt:parseAnyDate(s.createdAt),savedAt:parseAnyDate(s.savedAt),
+      savedBy:s.savedBy||'',pinned:!!s.pinned,source:'shared',hasCards:false});
+  });
+  out.sort(function(a,b){
+    if(a.pinned!==b.pinned)return a.pinned?-1:1;
+    return (b.savedAt||b.createdAt||0)-(a.savedAt||a.createdAt||0);
+  });
+  return out;
+}
+function libItemByCode(code){var all=getLibraryLots();for(var i=0;i<all.length;i++){if(all[i].code===code)return all[i];}return null;}
+function libMatches(x){
+  if(libFilter==='shared'&&x.source==='local')return false;
+  if(libFilter==='local'&&x.source==='shared')return false;
+  if(libFilter==='pinned'&&!x.pinned)return false;
+  if(libQuery){
+    var q=libQuery.toLowerCase();
+    if(x.code.toLowerCase().indexOf(q)<0&&String(x.title||'').toLowerCase().indexOf(q)<0)return false;
+  }
+  return true;
+}
+function sharedUnpinnedCount(){return sharedLots.filter(function(s){return !s.pinned;}).length;}
+
+// ---------- Carregar historico ----------
 function loadSharedLots(){
-  slRequest('GET','/lots').then(function(r){
-    if(r.status===200&&Array.isArray(r.body)){sharedLots=r.body;sharedLotsLoaded=true;renderSharedLots();}
-    else{document.getElementById('sharedLotsList').innerHTML='<p class="empty-inline">Não foi possível carregar o histórico.</p>';}
-  }).catch(function(){
-    document.getElementById('sharedLotsList').innerHTML='<p class="empty-inline">Sem conexão com o servidor.</p>';
-  });
+  if(typeof fetch!=='function'){sharedOk=false;renderLibrary();return Promise.resolve(false);}
+  return slRequest('GET','/lots').then(function(r){
+    if(r.status===200&&Array.isArray(r.body)){
+      sharedLots=r.body;sharedOk=true;sharedLotsLoaded=true;sharedLastOk=Date.now();
+      // Mantem as marcacoes locais coerentes com o servidor
+      var changed=false;
+      Object.keys(state.lots).forEach(function(code){
+        var l=state.lots[code],s=sharedByCode(code);
+        if(s){
+          if(!l.savedAt){l.savedAt=s.savedAt;changed=true;}
+          if(s.title&&s.title!==l.title){l.title=s.title;changed=true;}
+          if(!!l.pinned!==!!s.pinned){l.pinned=!!s.pinned;changed=true;}
+          if(s.savedBy&&l.savedBy!==s.savedBy){l.savedBy=s.savedBy;changed=true;}
+        }else if(l.savedAt){l.savedAt=null;changed=true;} // saiu do historico (limite ou excluido em outro aparelho)
+      });
+      if(changed){saveState();updateLotUI();renderLotButtonsOnly();}
+    }else{sharedOk=false;}
+    renderLibrary();
+    return sharedOk;
+  }).catch(function(){sharedOk=false;renderLibrary();return false;});
 }
-function renderSharedLots(){
-  var el=document.getElementById('sharedLotsList');if(!el)return;
-  var cap=document.getElementById('sharedCaption');
-  if(cap)cap.textContent='Compartilhado entre todos os aparelhos · '+sharedLots.length+' de 15';
-  if(!sharedLots.length){el.innerHTML='<p class="empty-inline">Nenhum lote salvo no histórico ainda.</p>';return;}
-  var h='<ul class="shared-list">';
-  sharedLots.forEach(function(lot){
-    var dt=lot.savedAt?new Date(lot.savedAt).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
-    var by=lot.savedBy?' · '+escHtml(lot.savedBy):'';
-    var pinCls=lot.pinned?' active':'';
-    h+='<li><div class="shared-item" onclick="openSharedLot(\''+lot.code+'\')">';
-    h+='<span class="lot-code">'+lot.code+'</span>';
-    h+='<span class="shared-item-text"><strong>'+escHtml(lot.title||'BINGO')+' · '+lot.cardCount+' cartelas</strong><small>'+dt+by+'</small></span>';
-    h+='<span class="shared-actions" onclick="event.stopPropagation()">';
-    h+='<button class="shared-pin'+pinCls+'" onclick="toggleSharedPin(\''+lot.code+'\','+(!lot.pinned)+')" title="'+(lot.pinned?'Desafixar':'Fixar')+'"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17v5M9 11V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v7M5 11h14l-1.5 6h-11z"/></svg></button>';
-    h+='<button class="shared-del" onclick="deleteSharedLot(\''+lot.code+'\')" title="Excluir"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>';
-    h+='</span></div></li>';
-  });
-  el.innerHTML=h+'</ul>';
-}
-function openSharedLot(code){
-  slRequest('GET','/lots/'+code).then(function(r){
-    if(r.status!==200){notify('Não foi possível abrir o lote '+code+'.','danger','Erro');return;}
-    var remote=r.body;
-    var data=remote.data;
-    if(!data||!data.cards||!data.cards.length){notify('Lote sem dados de cartelas.','info','Lote vazio');return;}
-    // importa no localStorage se nao existir
+// Baixa um lote do historico e guarda neste aparelho (sem apagar jogadores/sorteio locais)
+function ensureLocalLot(code){
+  if(state.lots[code])return Promise.resolve(state.lots[code]);
+  if(typeof fetch!=='function')return Promise.resolve(null);
+  return slRequest('GET','/lots/'+encodeURIComponent(code)).then(function(r){
+    var remote=r.body,data=remote&&remote.data;
+    if(r.status!==200||!data||!Array.isArray(data.cards)||!data.cards.length)return null;
     if(!state.lots[code]){
+      var gs=data.gridSize||5;
       state.lots[code]={
-        code:code,title:data.title||remote.title||'BINGO',mode:data.mode||'numbers',
-        gridSize:data.gridSize||5,maxNum:data.maxNum||75,hasFreeCell:data.hasFreeCell!==false&&(data.gridSize||5)===5,
-        cards:data.cards,drawnNumbers:[],createdAt:data.createdAt||'',createdTs:data.createdTs||Date.now(),
-        usedCards:[],prizes:data.prizes||{p1:{on:true,desc:'',type:'any'},p2:{on:false,desc:'',type:'any'},p3:{on:false,desc:'',type:'any'},full:{on:true,desc:''}},
-        prizeWinners:[],savedAt:remote.savedAt
+        code:code,title:remote.title||data.title||'BINGO',mode:data.mode||'numbers',
+        gridSize:gs,maxNum:data.maxNum||75,hasFreeCell:data.hasFreeCell!==false&&gs===5,
+        cards:data.cards,drawnNumbers:[],createdAt:data.createdAt||'',createdTs:data.createdTs||parseAnyDate(remote.createdAt)||Date.now(),
+        usedCards:[],prizes:data.prizes||undefined,prizeWinners:[],
+        savedAt:remote.savedAt||new Date().toISOString(),savedBy:remote.savedBy||'',pinned:!!remote.pinned
       };
-      normalizeState();
-      saveState();
+      if(state.deletedLots)delete state.deletedLots[code];
+      normalizeState();saveState();renderLotButtonsOnly();
     }
-    state.lots[code].savedAt=remote.savedAt;
-    state.printLot=code;
-    saveState();
-    showPage('pageCards');
-    renderLotCards();
-    renderRecentLots(Object.keys(state.lots));
-    notify('Lote '+code+' aberto do histórico.','success','Lote carregado');
-  }).catch(function(){notify('Sem conexão com o servidor.','danger','Erro de conexão');});
+    return state.lots[code];
+  }).catch(function(){return null;});
+}
+
+// ---------- Selecao ----------
+function isNarrow(){try{return window.matchMedia('(max-width:1024px)').matches;}catch(e){return false;}}
+function selectLibLot(code,openMobile){
+  libSel=code;
+  if(state.lots[code]){
+    if(state.printLot!==code){state.printLot=code;saveState();}
+    renderLibrary();
+  }else{
+    libLoading=code;delete libFailed[code];
+    renderLibrary();
+    ensureLocalLot(code).then(function(lot){
+      if(libLoading===code)libLoading=null;
+      if(!lot){libFailed[code]=true;notify('Não foi possível baixar o lote '+code+' do histórico.','danger','Erro ao abrir');}
+      else if(libSel===code){state.printLot=code;saveState();}
+      renderLibrary();
+    });
+  }
+  if(openMobile&&isNarrow())openMobileDetail();
+}
+function openMobileDetail(){
+  var l=document.getElementById('libLayout');if(!l)return;
+  l.classList.add('show-detail');document.body.classList.add('lib-lock');
+  var d=document.getElementById('libDetail');if(d)d.scrollTop=0;
+  setTimeout(function(){var b=document.querySelector('#libDetail .ld-back');if(b)b.focus();},60);
+}
+function closeMobileDetail(noFocus){
+  var l=document.getElementById('libLayout');if(!l||!l.classList.contains('show-detail'))return;
+  l.classList.remove('show-detail');document.body.classList.remove('lib-lock');
+  if(!noFocus&&libSel){var it=document.querySelector('[data-fk="item-'+libSel+'"]');if(it)it.focus();}
+}
+function useLotInGame(code){
+  if(!state.lots[code])return;
+  closeMobileDetail(true);
+  switchLot(code);
+  showPage('pagePlayers');
+  notify('Lote '+code+' em uso no jogo.','success','Pronto para jogar');
+}
+// Abre a tela Cartelas ja com um lote selecionado (usado por outras telas)
+function openLotCards(code){
+  showPage('pageCards');
+  selectLibLot(code,true);
+}
+
+// ---------- Desenho da biblioteca ----------
+function renderLibrary(){
+  renderHistStatus();
+  var empty=document.getElementById('libEmpty'),layout=document.getElementById('libLayout');
+  if(!empty||!layout)return;
+  var all=getLibraryLots();
+  var isEmpty=!all.length&&sharedOk!==null;
+  empty.hidden=!isEmpty;layout.hidden=isEmpty;
+  if(isEmpty){closeMobileDetail(true);renderPrintArea();return;}
+  // Selecao automatica: ultimo lote aberto ou o mais recente
+  if(!libSel||!all.some(function(x){return x.code===libSel;})){
+    var pick=null;
+    if(state.printLot)pick=all.filter(function(x){return x.code===state.printLot;})[0]||null;
+    if(!pick)pick=all[0]||null;
+    libSel=pick?pick.code:null;
+    if(pick&&state.lots[pick.code])state.printLot=pick.code;
+  }
+  var cur=libSel?all.filter(function(x){return x.code===libSel;})[0]:null;
+  if(cur&&cur.source==='shared'&&!state.lots[cur.code]&&libLoading!==cur.code&&!libFailed[cur.code]){
+    setTimeout(function(){if(libSel===cur.code&&!state.lots[cur.code])selectLibLot(cur.code);},0);
+  }
+  renderLibFilters(all);
+  renderLibItems(all);
+  renderLibFoot();
+  renderLibDetail(cur);
+  renderPrintArea();
+}
+function renderLibFilters(all){
+  var el=document.getElementById('libFilters');if(!el)return;
+  var nShared=all.filter(function(x){return x.source!=='local';}).length;
+  var nLocal=all.filter(function(x){return x.source!=='shared';}).length;
+  var nPin=all.filter(function(x){return x.pinned;}).length;
+  var f=[['all','Todos · '+all.length],['shared','No histórico · '+nShared],['local','Neste aparelho · '+nLocal],['pinned','Fixados'+(nPin?' · '+nPin:'')]];
+  el.innerHTML=f.map(function(x){return '<button type="button" class="lib-pill'+(libFilter===x[0]?' active':'')+'" data-filter="'+x[0]+'" aria-pressed="'+(libFilter===x[0])+'">'+x[1]+'</button>';}).join('');
+  var off=document.getElementById('libOffline');if(off)off.hidden=sharedOk!==false;
+}
+function libBadge(src){
+  return src==='local'
+    ?'<span class="lib-badge is-local">'+libIcon('device')+'Só neste aparelho</span>'
+    :'<span class="lib-badge is-shared">'+libIcon('cloud')+'No histórico compartilhado</span>';
+}
+function renderLibItems(all){
+  var el=document.getElementById('libItems');if(!el)return;
+  var focusKey=document.activeElement&&el.contains(document.activeElement)?document.activeElement.getAttribute('data-fk'):null;
+  var list=all.filter(libMatches);
+  if(!all.length&&sharedOk===null){el.innerHTML='<div class="ld-loading"><span class="ld-spin" aria-hidden="true"></span>Carregando lotes…</div>';return;}
+  if(!list.length){el.innerHTML='<p class="lib-none">'+(libQuery?'Nenhum lote encontrado para “'+escHtml(libQuery)+'”.':'Nenhum lote neste filtro.')+'</p>';return;}
+  el.innerHTML=list.map(function(x){
+    var sel=x.code===libSel;
+    var when=fmtShort(x.createdAt||x.savedAt);
+    var meta=x.cardCount+' cartela'+(x.cardCount===1?'':'s')+' · '+x.gridSize+'×'+x.gridSize+(when?' · '+when:'');
+    return '<div class="lib-item'+(sel?' is-sel':'')+'" data-code="'+x.code+'">'+
+      '<button type="button" class="lib-item-main" data-act="select" data-fk="item-'+x.code+'" aria-current="'+(sel?'true':'false')+'">'+
+        '<span class="lib-code">'+x.code+'</span>'+
+        '<span class="lib-item-text">'+
+          '<span class="lib-item-title">'+(x.pinned?'<svg class="ic" viewBox="0 0 24 24" role="img" aria-label="Fixado">'+LIB_ICONS.pin+'</svg>':'')+'<span class="t">'+escHtml(x.title)+'</span></span>'+
+          '<span class="lib-item-meta">'+meta+'</span>'+libBadge(x.source)+
+        '</span>'+
+      '</button>'+
+      '<button type="button" class="lib-more" data-act="more" data-fk="more-'+x.code+'" aria-label="Mais ações do lote '+x.code+'" aria-haspopup="menu" aria-expanded="false">'+libIcon('more')+'</button>'+
+    '</div>';
+  }).join('');
+  if(focusKey){var f=el.querySelector('[data-fk="'+focusKey+'"]');if(f)f.focus();}
+}
+function renderLibFoot(){
+  var el=document.getElementById('libFoot');if(!el)return;
+  if(sharedOk===true){
+    var n=sharedUnpinnedCount(),p=sharedLots.length-n;
+    el.textContent=n+' de '+SHARED_MAX+' lotes no histórico compartilhado'+(p?' · '+p+' fixado'+(p>1?'s':''):'');
+  }else if(sharedOk===false){el.textContent='Mostrando apenas os lotes deste aparelho';}
+  else el.textContent='Conectando ao histórico compartilhado…';
+}
+
+function playerNamesForCard(lotCode,cardCode){
+  return state.players.filter(function(p){return p.lotCode===lotCode&&(p.cardCodes||[]).indexOf(cardCode)>=0;}).map(function(p){return p.name;});
+}
+function thumbGridHTML(lot,card){
+  var gs=lot.gridSize,mid=Math.floor(gs/2);
+  var hd={3:['B','I','G'],4:['B','I','N','G'],5:['B','I','N','G','O']}[gs]||['B','I','N','G','O'];
+  var hc={3:['--col-b','--col-n','--col-g'],4:['--col-b','--col-i','--col-n','--col-g'],5:['--col-b','--col-i','--col-n','--col-g','--col-o']}[gs]||[];
+  var g='<span class="mini-grid g'+gs+'" aria-hidden="true">';
+  for(var h=0;h<gs;h++)g+='<span class="mini-grid-header" style="background:var('+hc[h]+')">'+hd[h]+'</span>';
+  for(var r=0;r<gs;r++)for(var c=0;c<gs;c++){
+    if(lot.hasFreeCell&&gs===5&&r===mid&&c===mid)g+='<span class="mini-grid-cell free">★</span>';
+    else g+='<span class="mini-grid-cell">'+escHtml(String(card.data[c][r]))+'</span>';
+  }
+  return g+'</span>';
+}
+function lotMetaLong(lot,item){
+  var parts=[lot.cards.length+' cartela'+(lot.cards.length===1?'':'s'),lot.gridSize+'×'+lot.gridSize,'números 1–'+(lot.maxNum||75)];
+  if(lot.hasFreeCell&&lot.gridSize===5)parts.push('espaço livre');
+  var created=lotTime(lot);if(created)parts.push('criado em '+fmtLong(created));
+  var s=parts.join(' · ');
+  if(item&&item.source!=='local'&&item.savedAt)s+=' · salvo'+(item.savedBy?' por '+escHtml(item.savedBy):' no histórico')+' em '+fmtShort(item.savedAt);
+  return s;
+}
+function renderLibDetail(item){
+  var el=document.getElementById('libDetail');if(!el)return;
+  var keepScroll=el.scrollTop;
+  if(!item){el.innerHTML='<div class="ld-card"><p class="lib-none">Selecione um lote na lista para ver as cartelas.</p></div>';return;}
+  var code=item.code,lot=state.lots[code];
+  var mtop='<div class="ld-mtop"><button type="button" class="btn btn-ghost btn-icon ld-back" onclick="closeMobileDetail()" aria-label="Voltar">'+libIcon('back')+'</button>'+
+    '<span class="lib-code">'+code+'</span><span class="ld-mtop-title">'+escHtml(item.title)+'</span>'+
+    '<button type="button" class="btn btn-ghost btn-icon" data-fk="mmore-'+code+'" onclick="openLotActions(\''+code+'\',this)" aria-label="Mais ações" aria-haspopup="menu" aria-expanded="false">'+libIcon('more')+'</button></div>';
+  if(!lot){
+    var failed=libFailed[code];
+    el.innerHTML=mtop+'<div class="ld-card"><div class="ld-loading">'+(failed
+      ?'<p>Não foi possível baixar o lote <b>'+code+'</b> do histórico compartilhado.</p><button type="button" class="btn btn-primary" onclick="selectLibLot(\''+code+'\')">Tentar de novo</button>'
+      :'<span class="ld-spin" aria-hidden="true"></span><p>Baixando o lote <b>'+code+'</b> do histórico compartilhado…</p>')+'</div></div>';
+    return;
+  }
+  var local=item.source==='local';
+  var saveBtn=local?'<button type="button" class="btn btn-success-soft btn-lg" onclick="openSaveLotModal(\''+code+'\')">'+libIcon('cloudUp')+'Salvar no histórico</button>':'';
+  var h=mtop+
+    '<section class="ld-card" aria-labelledby="ldTitle">'+
+      '<div class="ld-top"><div class="ld-id"><span class="ld-code">'+code+'</span><div style="min-width:0"><h2 class="ld-title" id="ldTitle">'+escHtml(item.title)+'</h2><p class="ld-meta">'+lotMetaLong(lot,item)+'</p></div></div>'+libBadge(item.source)+'</div>'+
+      '<div class="ld-actions">'+
+        '<button type="button" class="btn btn-primary btn-lg ld-main" onclick="printCards()">'+libIcon('print')+'Imprimir</button>'+
+        '<button type="button" class="btn btn-gold btn-lg ld-main" onclick="exportPDF()">'+libIcon('download')+'Baixar PDF</button>'+
+        '<button type="button" class="btn btn-secondary btn-lg ld-main" onclick="useLotInGame(\''+code+'\')">'+libIcon('play')+'Usar no jogo</button>'+
+        saveBtn+
+        '<button type="button" class="btn btn-secondary btn-lg btn-icon ld-more" data-fk="dmore-'+code+'" onclick="openLotActions(\''+code+'\',this)" aria-label="Mais ações" aria-haspopup="menu" aria-expanded="false">'+libIcon('more')+'</button>'+
+      '</div>'+
+    '</section>';
+  var cards=lot.cards.filter(function(c){return c&&c.data;});
+  var ct=lot.title&&lot.title!=='BINGO'?lot.title:'';
+  h+='<section class="ld-card ld-cards" aria-labelledby="ldCardsT">'+
+    '<div class="ld-cards-head"><div><h3 class="ld-cards-title" id="ldCardsT">'+cards.length+' cartela'+(cards.length===1?'':'s')+'</h3>'+
+    '<p class="card-sub">'+(cardView==='thumbs'?'Clique numa cartela para ampliar ou imprimir só ela':'Assim as cartelas saem na impressão')+'</p></div>'+
+    '<div class="seg seg-sm ld-view" role="radiogroup" aria-label="Visualização das cartelas">'+
+      '<button type="button" role="radio" data-view="thumbs" class="'+(cardView==='thumbs'?'active':'')+'" aria-checked="'+(cardView==='thumbs')+'">Miniaturas</button>'+
+      '<button type="button" role="radio" data-view="full" class="'+(cardView==='full'?'active':'')+'" aria-checked="'+(cardView==='full')+'">Tamanho real</button>'+
+    '</div></div>';
+  if(!cards.length)h+='<p class="lib-none">Este lote não possui dados de cartelas salvos.</p>';
+  else if(cardView==='thumbs'){
+    h+='<div class="thumbs">';
+    lot.cards.forEach(function(c,i){
+      if(!c||!c.data)return;
+      var cc=c.code||(code+'-'+p2(i+1));
+      var names=playerNamesForCard(code,cc);
+      h+='<button type="button" class="thumb" data-card="'+i+'" aria-label="Ampliar cartela '+cc+(names.length?', de '+escHtml(names.join(', ')):'')+'">'+
+        '<span class="thumb-head"><b>'+cc+'</b><span>'+(names.length?escHtml(names.join(', ')):'—')+'</span></span>'+thumbGridHTML(lot,c)+'</button>';
+    });
+    h+='</div>';
+  }else{
+    h+='<div class="cards-grid ld-full">';
+    lot.cards.forEach(function(c,i){if(c&&c.data)h+=renderCard(c.data,i,lot.gridSize,lot.mode,lot.hasFreeCell,ct,code);});
+    h+='</div>';
+  }
+  h+='</section>';
+  h+='<div class="ld-bottombar">'+
+    '<button type="button" class="btn btn-primary" onclick="printCards()">'+libIcon('print')+'Imprimir</button>'+
+    '<button type="button" class="btn btn-gold" onclick="exportPDF()">'+libIcon('download')+'PDF</button>'+
+    '<button type="button" class="btn btn-secondary" onclick="useLotInGame(\''+code+'\')">'+libIcon('play')+'Jogar</button></div>';
+  var focusKey=document.activeElement&&el.contains(document.activeElement)?document.activeElement.getAttribute('data-fk'):null;
+  el.innerHTML=h;
+  el.scrollTop=keepScroll;
+  if(focusKey){var f=el.querySelector('[data-fk="'+focusKey+'"]');if(f)f.focus();}
+}
+// Area de impressao: cartelas em tamanho real do lote selecionado (ou so uma)
+function renderPrintArea(onlyIdx){
+  var out=document.getElementById('cardsOutput');if(!out)return;
+  var lot=getPrintLot();
+  if(!lot){out.innerHTML='';return;}
+  var layout=document.getElementById('printLayout').value;
+  var ct=lot.title&&lot.title!=='BINGO'?lot.title:'';
+  var html='<div class="cards-grid print-'+layout+'" id="cardsGrid">';
+  lot.cards.forEach(function(c,i){
+    if(!c||!c.data)return;
+    if(typeof onlyIdx==='number'&&i!==onlyIdx)return;
+    html+=renderCard(c.data,i,lot.gridSize,lot.mode,lot.hasFreeCell,ct,lot.code);
+  });
+  out.innerHTML=html+'</div>';
+}
+// Mantido por compatibilidade: outras telas chamam renderLotCards() quando o lote muda
+function renderLotCards(){renderLibrary();}
+function renderLotButtonsOnly(){try{var keys=sortedLotKeys();renderLotMenu(keys);var c=document.getElementById('lotButtons');if(c)renderLotButtons();}catch(e){}}
+
+// ---------- Eventos da lista ----------
+(function(){
+  var items=document.getElementById('libItems');
+  if(items){
+    items.addEventListener('click',function(e){
+      var b=e.target.closest('[data-act]');if(!b)return;
+      var code=b.closest('.lib-item').dataset.code;
+      if(b.dataset.act==='select')selectLibLot(code,true);
+      else openLotActions(code,b);
+    });
+    items.addEventListener('keydown',function(e){
+      if(e.key!=='ArrowDown'&&e.key!=='ArrowUp'&&e.key!=='Home'&&e.key!=='End')return;
+      var mains=[].slice.call(items.querySelectorAll('.lib-item-main'));if(!mains.length)return;
+      var row=document.activeElement&&document.activeElement.closest('.lib-item');
+      var i=row?mains.indexOf(row.querySelector('.lib-item-main')):-1;
+      var n=e.key==='Home'?0:e.key==='End'?mains.length-1:e.key==='ArrowDown'?Math.min(mains.length-1,i+1):Math.max(0,i-1);
+      e.preventDefault();mains[n].focus();
+    });
+  }
+  var f=document.getElementById('libFilters');
+  if(f)f.addEventListener('click',function(e){var b=e.target.closest('[data-filter]');if(!b)return;libFilter=b.dataset.filter;renderLibrary();});
+  var s=document.getElementById('libSearch');
+  if(s)s.addEventListener('input',function(){libQuery=s.value.trim();renderLibItems(getLibraryLots());});
+  var d=document.getElementById('libDetail');
+  if(d)d.addEventListener('click',function(e){
+    var v=e.target.closest('[data-view]');
+    if(v){cardView=v.dataset.view;try{localStorage.setItem('bmp3_cardView',cardView);}catch(x){}renderLibDetail(libItemByCode(libSel));var nb=d.querySelector('[data-view="'+cardView+'"]');if(nb)nb.focus();return;}
+    var t=e.target.closest('.thumb');
+    if(t)openCardZoom(libSel,parseInt(t.dataset.card));
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='Escape')return;
+    var l=document.getElementById('libLayout');
+    if(!l||!l.classList.contains('show-detail')||_dd)return;
+    if(document.querySelector('.ui-overlay:not([hidden]),.nl-overlay:not([hidden]),.winner-overlay:not([hidden])'))return;
+    closeMobileDetail();
+  });
+})();
+
+// ---------- Menus suspensos ----------
+var _dd=null;
+function openDropdown(anchor,items,label){
+  closeDropdown();
+  var m=document.createElement('div');m.className='dd-menu no-print';m.setAttribute('role','menu');if(label)m.setAttribute('aria-label',label);
+  items.forEach(function(it){
+    if(it.sep){var s=document.createElement('div');s.className='dd-sep';s.setAttribute('role','separator');m.appendChild(s);return;}
+    var b=document.createElement('button');b.type='button';b.className='dd-item'+(it.danger?' is-danger':'');b.setAttribute('role','menuitem');b.tabIndex=-1;
+    b.innerHTML=(it.icon?libIcon(it.icon):'')+'<span>'+escHtml(it.label)+(it.desc?'<small>'+escHtml(it.desc)+'</small>':'')+'</span>';
+    b.addEventListener('click',function(){closeDropdown(true);it.fn();});
+    m.appendChild(b);
+  });
+  document.body.appendChild(m);
+  var r=anchor.getBoundingClientRect(),mw=m.offsetWidth,mh=m.offsetHeight,vw=window.innerWidth,vh=window.innerHeight;
+  var left=Math.min(Math.max(8,r.right-mw),vw-mw-8),top=r.bottom+6;
+  if(top+mh>vh-8)top=Math.max(8,r.top-mh-6);
+  m.style.left=left+'px';m.style.top=top+'px';
+  anchor.setAttribute('aria-expanded','true');
+  _dd={menu:m,anchor:anchor,fk:anchor.getAttribute('data-fk')};
+  var btns=[].slice.call(m.querySelectorAll('.dd-item'));
+  if(btns[0])btns[0].focus();
+  m.addEventListener('keydown',function(e){
+    var i=btns.indexOf(document.activeElement);
+    if(e.key==='ArrowDown'){e.preventDefault();btns[(i+1)%btns.length].focus();}
+    else if(e.key==='ArrowUp'){e.preventDefault();btns[(i-1+btns.length)%btns.length].focus();}
+    else if(e.key==='Home'){e.preventDefault();btns[0].focus();}
+    else if(e.key==='End'){e.preventDefault();btns[btns.length-1].focus();}
+    else if(e.key==='Escape'){e.preventDefault();e.stopPropagation();closeDropdown(true);}
+    else if(e.key==='Tab'){closeDropdown(false);}
+  });
+}
+function closeDropdown(returnFocus){
+  if(!_dd)return;
+  var a=_dd.anchor,fk=_dd.fk;_dd.menu.remove();_dd=null;
+  try{a.setAttribute('aria-expanded','false');}catch(e){}
+  if(returnFocus)restoreFocus(a,fk);
+}
+document.addEventListener('mousedown',function(e){if(_dd&&!_dd.menu.contains(e.target)&&!_dd.anchor.contains(e.target))closeDropdown(false);});
+document.addEventListener('click',function(e){if(_dd&&!_dd.menu.contains(e.target)&&!_dd.anchor.contains(e.target))closeDropdown(false);});
+window.addEventListener('resize',function(){closeDropdown(false);});
+document.addEventListener('scroll',function(e){if(_dd&&!_dd.menu.contains(e.target))closeDropdown(false);},true);
+
+function openLotActions(code,anchor){
+  if(_dd&&_dd.anchor===anchor){closeDropdown(true);return;}
+  var item=libItemByCode(code);if(!item)return;
+  openDropdown(anchor,[
+    {icon:'pin',label:item.pinned?'Desafixar':'Fixar no topo',fn:function(){togglePinLot(code);}},
+    {icon:'edit',label:'Renomear título',fn:function(){openRenameLot(code);}},
+    {icon:'send',label:'Enviar para outro aparelho',fn:function(){openSendLot(code);}},
+    {icon:'copy',label:'Gerar lote parecido',fn:function(){openNewLotPanel(code);}},
+    {sep:true},
+    {icon:'trash',label:'Excluir lote…',danger:true,fn:function(){openDeleteLotModal(code);}}
+  ],'Ações do lote '+code);
+}
+function toggleToolsMenu(btn){
+  if(_dd&&_dd.anchor===btn){closeDropdown(true);return;}
+  var pl=document.getElementById('printLayout').value;
+  openDropdown(btn,[
+    {icon:'download',label:'Exportar backup',desc:'Baixa um arquivo com todos os lotes deste aparelho',fn:exportBackup},
+    {icon:'upload',label:'Importar backup',desc:'Recupera lotes de um arquivo de backup',fn:function(){document.getElementById('backupFile').click();}},
+    {icon:'edit',label:'Cadastrar cartelas impressas',desc:'Recria um lote digitando os números do papel',fn:openManualLot},
+    {icon:'sliders',label:'Preferências de impressão',desc:pl+' cartelas por folha A4 ao imprimir e no PDF',fn:openPrintPrefs}
+  ],'Ferramentas');
+}
+
+// ---------- Janelas (foco preso, Esc fecha, foco volta para quem abriu) ----------
+function focusables(root){
+  return [].slice.call(root.querySelectorAll('button:not([disabled]),a[href],input:not([disabled]):not([type="hidden"]),select:not([disabled]):not(.native-select),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'))
+    .filter(function(el){return el.offsetParent!==null||el===document.activeElement;});
+}
+function trapTab(e,root){
+  var f=focusables(root);if(!f.length)return;
+  var i=f.indexOf(document.activeElement);e.preventDefault();
+  var n=e.shiftKey?(i<=0?f.length-1:i-1):(i>=f.length-1?0:i+1);
+  f[n].focus();
+}
+function restoreFocus(prev,fk){
+  try{
+    if(prev&&prev!==document.body&&document.contains(prev)&&prev.offsetParent!==null){prev.focus();return;}
+    if(fk){var el=document.querySelector('[data-fk="'+fk+'"]');if(el&&el.offsetParent!==null)el.focus();}
+  }catch(e){}
+}
+// Existe outra janela aberta por cima desta?
+function hasLaterOverlay(ov){
+  for(var n=ov.nextElementSibling;n;n=n.nextElementSibling){
+    if(n.hidden)continue;
+    if(n.classList.contains('ui-overlay')||n.classList.contains('nl-overlay')||n.classList.contains('winner-overlay'))return true;
+  }
+  return false;
+}
+function openDialog(o){
+  var ae=document.activeElement;
+  var prev=o.returnFocus||((!ae||ae===document.body)?_lastOpener:ae);
+  var fk=prev&&prev.getAttribute?prev.getAttribute('data-fk'):null;
+  var ov=document.createElement('div');ov.className='ui-overlay lib-modal no-print';
+  ov.innerHTML='<div class="ui-dialog '+(o.className||'')+'" role="'+(o.role||'dialog')+'" aria-modal="true" aria-labelledby="'+o.labelledby+'"'+(o.describedby?' aria-describedby="'+o.describedby+'"':'')+'>'+o.html+'</div>';
+  var closed=false;
+  function close(v){
+    if(closed)return;closed=true;
+    document.removeEventListener('keydown',onKey,true);ov.remove();
+    restoreFocus(prev,fk);
+    if(o.onClose)o.onClose(v);
+  }
+  function onKey(e){
+    if(hasLaterOverlay(ov))return;
+    if(e.key==='Escape'){e.preventDefault();e.stopPropagation();close(false);}
+    else if(e.key==='Tab')trapTab(e,ov);
+  }
+  ov.addEventListener('click',function(e){
+    if(e.target===ov){close(false);return;}
+    if(e.target.closest('[data-close]'))close(false);
+  });
+  document.addEventListener('keydown',onKey,true);
+  document.body.appendChild(ov);
+  setTimeout(function(){var f=o.initialFocus?ov.querySelector(o.initialFocus):focusables(ov)[0];if(f)f.focus();},30);
+  return{el:ov,close:close};
+}
+var _lastOpener=null;
+document.addEventListener('focusin',function(e){if(e.target&&e.target.getAttribute&&e.target.getAttribute('data-fk'))_lastOpener=e.target;});
+// Janelas fixas no HTML (painel Novo lote e Cadastrar cartelas impressas)
+function showStaticOverlay(ov,focusEl){
+  ov._prev=document.activeElement;ov._fk=ov._prev&&ov._prev.getAttribute?ov._prev.getAttribute('data-fk'):null;
+  ov.hidden=false;document.body.classList.add('nl-lock');
+  ov._onKey=function(e){
+    if(ov.hidden||hasLaterOverlay(ov))return;
+    if(e.key==='Escape'){e.preventDefault();e.stopPropagation();hideStaticOverlay(ov);}
+    else if(e.key==='Tab')trapTab(e,ov);
+  };
+  document.addEventListener('keydown',ov._onKey,true);
+  setTimeout(function(){if(focusEl)focusEl.focus();},60);
+}
+function hideStaticOverlay(ov,noFocus){
+  if(ov.hidden)return;
+  ov.hidden=true;document.body.classList.remove('nl-lock');
+  if(ov._onKey)document.removeEventListener('keydown',ov._onKey,true);
+  if(!noFocus)restoreFocus(ov._prev,ov._fk);
+}
+
+// ---------- Salvar no historico ----------
+function lotPayload(lot,savedBy){
+  return{code:lot.code,title:lot.title||'BINGO',savedBy:savedBy||'',
+    data:{cards:lot.cards,gridSize:lot.gridSize,mode:lot.mode||'numbers',maxNum:lot.maxNum||75,
+      hasFreeCell:lot.hasFreeCell,createdAt:lot.createdAt,createdTs:lot.createdTs,title:lot.title,prizes:lot.prizes}};
 }
 function openSaveLotModal(code){
-  var lot=state.lots[code];
-  if(!lot)return;
+  var lot=state.lots[code];if(!lot)return;
   var savedBy='';try{savedBy=localStorage.getItem('bmp3_savedBy')||'';}catch(e){}
-  var ov=document.createElement('div');ov.className='ui-overlay no-print';
-  ov.innerHTML='<div class="ui-dialog" role="dialog" aria-modal="true" aria-labelledby="slT">'+
-    '<div class="ui-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:28px;height:28px;color:var(--primary)"><path d="M17.5 19H7a5 5 0 1 1 .9-9.9A6 6 0 0 1 19.5 11 4 4 0 0 1 17.5 19z"/><path d="M12 13v5M9.5 15.5 12 13l2.5 2.5"/></svg></div>'+
-    '<h2 class="ui-title" id="slT">Salvar cartelas</h2>'+
-    '<p class="ui-msg">Salvar o lote <b>'+code+'</b> ('+escHtml(lot.title)+' · '+lot.cards.length+' cartelas) no histórico compartilhado?</p>'+
-    '<div class="field" style="margin-bottom:16px"><label for="slSavedBy">Salvo por (opcional)</label><input id="slSavedBy" placeholder="Seu nome" maxlength="40" value="'+escHtml(savedBy)+'"></div>'+
-    '<div class="ui-actions"><button type="button" class="btn btn-secondary" data-act="close">Cancelar</button><button type="button" class="btn btn-primary" id="slSaveBtn">Salvar</button></div>'+
-    '</div>';
-  function close(){document.removeEventListener('keydown',onKey,true);ov.remove();}
-  function onKey(e){if(e.key==='Escape'){e.preventDefault();close();}}
-  ov.addEventListener('click',function(e){if(e.target===ov||e.target.closest('[data-act="close"]'))close();});
-  document.addEventListener('keydown',onKey,true);
-  ov.querySelector('#slSaveBtn').addEventListener('click',function(){
-    var btn=this;btn.disabled=true;btn.textContent='Salvando…';
-    var name=ov.querySelector('#slSavedBy').value.trim().slice(0,40);
+  var d=openDialog({labelledby:'slT',initialFocus:'#slSavedBy',html:
+    '<div class="ui-ic" style="background:var(--success-light);color:var(--success)">'+libIcon('cloudUp')+'</div>'+
+    '<h2 class="ui-title" id="slT">Salvar no histórico</h2>'+
+    '<p class="ui-msg">O lote <b>'+code+'</b> ('+escHtml(lot.title)+' · '+lot.cards.length+' cartelas) ficará disponível para imprimir em qualquer aparelho.</p>'+
+    '<div class="field"><label for="slSavedBy">Salvo por (opcional)</label><input id="slSavedBy" placeholder="Seu nome" maxlength="40" autocomplete="name" value="'+escHtml(savedBy)+'"></div>'+
+    '<div class="ui-actions"><button type="button" class="btn btn-secondary" data-close>Cancelar</button><button type="button" class="btn btn-primary" id="slSaveBtn">Salvar</button></div>'});
+  var btn=d.el.querySelector('#slSaveBtn'),inp=d.el.querySelector('#slSavedBy');
+  function go(){
+    btn.disabled=true;btn.textContent='Salvando…';
+    var name=inp.value.trim().slice(0,40);
     try{localStorage.setItem('bmp3_savedBy',name);}catch(e){}
-    var payload={
-      code:lot.code,title:lot.title||'BINGO',savedBy:name,
-      data:{cards:lot.cards,gridSize:lot.gridSize,mode:lot.mode||'numbers',maxNum:lot.maxNum||75,
-        hasFreeCell:lot.hasFreeCell,createdAt:lot.createdAt,createdTs:lot.createdTs,
-        title:lot.title,prizes:lot.prizes}
-    };
-    doSaveLot(payload,false,btn,close);
-  });
-  document.body.appendChild(ov);
-  setTimeout(function(){ov.querySelector('#slSavedBy').focus();},30);
+    doSaveLot(lotPayload(lot,name),false,btn,d.close);
+  }
+  btn.addEventListener('click',go);
+  inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();go();}});
 }
-function doSaveLot(payload,replace,btn,closeFn){
+// Envia o lote ao historico. Em 409 (ja existe) pergunta se substitui, exceto no salvamento automatico.
+function doSaveLot(payload,replace,btn,closeFn,auto){
   var url='/lots'+(replace?'?replace=1':'');
-  slRequest('POST',url,payload).then(function(r){
+  return slRequest('POST',url,payload).then(function(r){
     if(r.status===200){
       var lot=state.lots[payload.code];
-      if(lot)lot.savedAt=new Date().toISOString();
-      saveState();renderLotCards();
-      closeFn();
-      notify('Lote '+payload.code+' salvo no histórico. Disponível em qualquer aparelho.','success','Salvo');
+      if(lot){lot.savedAt=new Date().toISOString();lot.savedBy=payload.savedBy||'';}
+      saveState();
+      if(closeFn)closeFn();
+      notify(auto?'Lote '+payload.code+' também foi salvo no histórico compartilhado.':'Lote '+payload.code+' salvo no histórico. Disponível em qualquer aparelho.','success','Salvo no histórico');
       if(r.body.removed&&r.body.removed.length){
-        r.body.removed.forEach(function(c){notify('O lote '+c+' saiu do histórico (limite de 15).','info','Limite atingido');});
+        r.body.removed.forEach(function(c){notify('O lote '+c+' saiu do histórico (limite de '+SHARED_MAX+').','info','Limite atingido');});
       }
-      loadSharedLots();
+      return loadSharedLots();
     }else if(r.status===409&&r.body.exists){
-      var dt=r.body.savedAt?new Date(r.body.savedAt).toLocaleString('pt-BR'):'';
-      confirmThen({title:'Lote já salvo',message:'O lote '+payload.code+' já está salvo desde '+dt+'. Substituir pela versão atual?',tone:'warn',confirmText:'Substituir'},function(){
+      if(auto){notify('Já existe um lote '+payload.code+' no histórico. Este lote ficou só neste aparelho.','warn','Não salvo no histórico');return;}
+      var dt=r.body.savedAt?fmtLong(parseAnyDate(r.body.savedAt)):'';
+      if(btn){btn.disabled=false;btn.textContent='Salvar';}
+      confirmThen({title:'Lote já salvo',message:'O lote '+payload.code+' já está no histórico'+(dt?' desde '+dt:'')+'. Substituir pela versão deste aparelho?',tone:'warn',confirmText:'Substituir'},function(){
         if(btn){btn.disabled=true;btn.textContent='Salvando…';}
         doSaveLot(payload,true,btn,closeFn);
       });
-      if(btn){btn.disabled=false;btn.textContent='Salvar';}
     }else{
       if(btn){btn.disabled=false;btn.textContent='Salvar';}
-      var msg=r.body.error==='storage_full'?'O histórico está cheio (máximo '+r.body.max+' lotes).':'Não foi possível salvar agora. Tente de novo.';
+      var msg=r.body.error==='storage_full'?'O histórico está cheio (máximo '+r.body.max+' lotes). Exclua ou desafixe algum lote.':'Não foi possível salvar agora. Tente de novo.';
       notify(msg,'danger','Erro ao salvar');
     }
   }).catch(function(){
     if(btn){btn.disabled=false;btn.textContent='Tentar de novo';}
-    notify('Não foi possível salvar agora. As cartelas continuam neste aparelho. Tente de novo.','danger','Sem conexão');
+    notify('Não foi possível salvar agora. As cartelas continuam neste aparelho.','danger','Sem conexão');
   });
 }
-function toggleSharedPin(code,pinned){
-  slRequest('PATCH','/lots/'+code,{pinned:pinned}).then(function(r){
-    if(r.status===200)loadSharedLots();
-    else notify('Não foi possível '+(pinned?'fixar':'desafixar')+' o lote.','danger','Erro');
-  }).catch(function(){notify('Sem conexão.','danger','Erro');});
+
+// ---------- Fixar / renomear / enviar ----------
+function patchShared(code,body){
+  return slRequest('PATCH','/lots/'+encodeURIComponent(code),body).then(function(r){return r.status===200;}).catch(function(){return false;});
 }
-function deleteSharedLot(code){
-  var ov=document.createElement('div');ov.className='ui-overlay no-print';
-  ov.innerHTML='<div class="ui-dialog" role="dialog" aria-modal="true" aria-labelledby="sdT">'+
-    '<div class="ui-ic" style="background:var(--danger-light)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:28px;height:28px;color:var(--danger)"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></div>'+
-    '<h2 class="ui-title" id="sdT">Excluir lote do histórico</h2>'+
-    '<p class="ui-msg">Isso remove o lote <b>'+code+'</b> do histórico compartilhado (não apaga do seu aparelho).<br>Para confirmar, digite o código do lote:</p>'+
-    '<div class="field" style="margin-bottom:16px"><input id="sdConfirm" placeholder="'+code+'" maxlength="12" style="text-transform:uppercase;text-align:center;font-family:var(--font-display);font-weight:700;letter-spacing:.1em"></div>'+
-    '<div class="ui-actions"><button type="button" class="btn btn-secondary" data-act="close">Cancelar</button><button type="button" class="btn btn-danger" id="sdDelBtn" disabled>Excluir</button></div>'+
-    '</div>';
-  function close(){document.removeEventListener('keydown',onKey,true);ov.remove();}
-  function onKey(e){if(e.key==='Escape'){e.preventDefault();close();}}
-  var inp=ov.querySelector('#sdConfirm'),btn=ov.querySelector('#sdDelBtn');
-  inp.addEventListener('input',function(){btn.disabled=inp.value.trim().toUpperCase()!==code;});
-  ov.addEventListener('click',function(e){if(e.target===ov||e.target.closest('[data-act="close"]'))close();});
-  document.addEventListener('keydown',onKey,true);
-  btn.addEventListener('click',function(){
-    btn.disabled=true;btn.textContent='Excluindo…';
-    slRequest('DELETE','/lots/'+code,undefined,{'X-Confirm-Code':code}).then(function(r){
-      if(r.status===200){close();notify('Lote '+code+' excluído do histórico.','success','Excluído');loadSharedLots();}
-      else{btn.disabled=false;btn.textContent='Excluir';notify('Não foi possível excluir.','danger','Erro');}
-    }).catch(function(){btn.disabled=false;btn.textContent='Excluir';notify('Sem conexão.','danger','Erro');});
+function togglePinLot(code){
+  var item=libItemByCode(code);if(!item)return;
+  var np=!item.pinned;
+  function done(){
+    if(state.lots[code]){state.lots[code].pinned=np;saveState();}
+    var s=sharedByCode(code);if(s)s.pinned=np;
+    renderLibrary();
+    notify(np?'Lote '+code+' fixado no topo.':'Lote '+code+' desafixado.','success',np?'Fixado':'Desafixado');
+  }
+  if(item.source==='local'){done();return;}
+  patchShared(code,{pinned:np}).then(function(ok){
+    if(ok)done();else notify('Não foi possível '+(np?'fixar':'desafixar')+' o lote agora.','danger','Erro');
   });
-  document.body.appendChild(ov);
-  setTimeout(function(){inp.focus();},30);
 }
-// Carrega ao abrir a tela Cartelas e ao voltar para a aba
+function openRenameLot(code){
+  var item=libItemByCode(code);if(!item)return;
+  var d=openDialog({labelledby:'rnT',initialFocus:'#rnInput',html:
+    '<div class="ui-ic">'+libIcon('edit')+'</div>'+
+    '<h2 class="ui-title" id="rnT">Renomear título</h2>'+
+    '<p class="ui-msg">O novo título aparece nas cartelas impressas e no PDF do lote <b>'+code+'</b>.</p>'+
+    '<div class="field"><label for="rnInput">Título impresso na cartela</label><input id="rnInput" maxlength="60" autocomplete="off" value="'+escHtml(item.title==='BINGO'?'':item.title)+'" placeholder="BINGO"></div>'+
+    '<p class="hint" id="rnCount" aria-live="polite"></p>'+
+    '<div class="ui-actions"><button type="button" class="btn btn-secondary" data-close>Cancelar</button><button type="button" class="btn btn-primary" id="rnSave">Salvar título</button></div>'});
+  var inp=d.el.querySelector('#rnInput'),cnt=d.el.querySelector('#rnCount'),btn=d.el.querySelector('#rnSave');
+  function upd(){cnt.textContent=inp.value.length+' de 60 caracteres';}
+  upd();inp.addEventListener('input',upd);
+  function go(){
+    var t=inp.value.trim().slice(0,60)||'BINGO';
+    btn.disabled=true;
+    function applyLocal(){
+      if(state.lots[code]){state.lots[code].title=t;saveState();}
+      var s=sharedByCode(code);if(s)s.title=t;
+      d.close();renderLibrary();updateLotUI();renderLotButtonsOnly();
+    }
+    if(item.source==='local'){applyLocal();notify('Título atualizado.','success','Renomeado');return;}
+    patchShared(code,{title:t}).then(function(ok){
+      if(ok){applyLocal();notify('Título atualizado neste aparelho e no histórico compartilhado.','success','Renomeado');}
+      else{btn.disabled=false;notify('Não foi possível renomear no histórico agora. Tente de novo.','danger','Erro');}
+    });
+  }
+  btn.addEventListener('click',go);
+  inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();go();}});
+}
+function lotLink(code){
+  var base=(location.protocol==='http:'||location.protocol==='https:')?location.origin:'https://bingo.vencerdigital.com.br';
+  return base+'/#abrir='+code;
+}
+function openSendLot(code){
+  var item=libItemByCode(code);if(!item)return;
+  if(item.source==='local'){
+    var d0=openDialog({labelledby:'snT',html:
+      '<div class="ui-ic">'+libIcon('send')+'</div>'+
+      '<h2 class="ui-title" id="snT">Enviar para outro aparelho</h2>'+
+      '<p class="ui-msg">Salve no histórico compartilhado para abrir em outro aparelho. O lote <b>'+code+'</b> está só neste aparelho.</p>'+
+      '<div class="ui-actions"><button type="button" class="btn btn-secondary" data-close>Agora não</button><button type="button" class="btn btn-primary" id="snSave">'+libIcon('cloudUp')+'Salvar agora</button></div>'});
+    d0.el.querySelector('#snSave').addEventListener('click',function(){d0.close();openSaveLotModal(code);});
+    return;
+  }
+  var link=lotLink(code);
+  var msg='Cartelas do bingo “'+item.title+'” (lote '+code+'): '+link;
+  var d=openDialog({labelledby:'snT',className:'dlg-md',html:
+    '<div class="ui-ic">'+libIcon('send')+'</div>'+
+    '<h2 class="ui-title" id="snT">Enviar para outro aparelho</h2>'+
+    '<p class="ui-msg">Abra este link no outro aparelho para ver, imprimir ou baixar o lote <b>'+code+'</b>.</p>'+
+    '<div class="link-box"><input id="snLink" readonly value="'+escHtml(link)+'" aria-label="Link do lote"></div>'+
+    '<div class="share-actions">'+
+      '<button type="button" class="btn btn-primary" id="snCopy">'+libIcon('link')+'Copiar link</button>'+
+      (navigator.share?'<button type="button" class="btn btn-secondary" id="snShare">'+libIcon('share')+'Compartilhar</button>':'')+
+      '<a class="btn btn-secondary" href="https://wa.me/?text='+encodeURIComponent(msg)+'" target="_blank" rel="noopener noreferrer">'+libIcon('chat')+'Enviar no WhatsApp</a>'+
+    '</div>'+
+    '<div class="ui-actions"><button type="button" class="btn btn-secondary" data-close>Fechar</button></div>'});
+  var inp=d.el.querySelector('#snLink');
+  inp.addEventListener('focus',function(){inp.select();});
+  d.el.querySelector('#snCopy').addEventListener('click',function(){
+    var b=this;
+    function ok(){b.innerHTML=libIcon('link')+'Link copiado';notify('Link do lote '+code+' copiado.','success','Copiado');}
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(link).then(ok,function(){inp.select();try{document.execCommand('copy');ok();}catch(e){}});
+    else{inp.select();try{document.execCommand('copy');ok();}catch(e){}}
+  });
+  var sh=d.el.querySelector('#snShare');
+  if(sh)sh.addEventListener('click',function(){navigator.share({title:'Lote '+code+' · '+item.title,text:'Cartelas do bingo “'+item.title+'” (lote '+code+')',url:link}).catch(function(){});});
+}
+// Abre o site com #abrir=CODIGO: vai para Cartelas e seleciona o lote
+function handleOpenHash(){
+  var m=/^#abrir=([A-Za-z0-9]{4,12})$/.exec(location.hash||'');if(!m)return;
+  var code=m[1].toUpperCase();
+  try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}
+  libFilter='all';libQuery='';var s=document.getElementById('libSearch');if(s)s.value='';
+  showPage('pageCards');
+  if(state.lots[code]){selectLibLot(code,true);return;}
+  libSel=code;libLoading=code;renderLibrary();
+  ensureLocalLot(code).then(function(lot){
+    libLoading=null;
+    if(!lot){libSel=null;notify('O lote '+code+' não foi encontrado no histórico compartilhado.','warn','Lote não encontrado');renderLibrary();return;}
+    selectLibLot(code,true);
+    notify('Lote '+code+' aberto do histórico compartilhado.','success','Lote carregado');
+    loadSharedLots();
+  });
+}
+window.addEventListener('hashchange',handleOpenHash);
+
+// ---------- Cartela ampliada ----------
+function openCardZoom(code,idx){
+  var lot=state.lots[code];if(!lot||!lot.cards[idx]||!lot.cards[idx].data)return;
+  var c=lot.cards[idx],cc=c.code||(code+'-'+p2(idx+1));
+  var ct=lot.title&&lot.title!=='BINGO'?lot.title:'';
+  var names=playerNamesForCard(code,cc);
+  var d=openDialog({labelledby:'czT',className:'zoom-dialog',html:
+    '<h2 class="ui-title" id="czT">Cartela '+cc+'</h2>'+
+    '<p class="ui-msg">'+(names.length?'Jogador: <b>'+escHtml(names.join(', '))+'</b>':'Nenhum jogador vinculado a esta cartela.')+'</p>'+
+    renderCard(c.data,idx,lot.gridSize,lot.mode,lot.hasFreeCell,ct,code)+
+    '<div class="ui-actions"><button type="button" class="btn btn-secondary" data-close>Fechar</button>'+
+    '<button type="button" class="btn btn-gold" id="czPdf">'+libIcon('download')+'Baixar PDF só desta</button>'+
+    '<button type="button" class="btn btn-primary" id="czPrint">'+libIcon('print')+'Imprimir só esta</button></div>'});
+  d.el.querySelector('#czPrint').addEventListener('click',function(){printCards(idx);});
+  d.el.querySelector('#czPdf').addEventListener('click',function(){exportPDF(idx);});
+}
+
+// ---------- Excluir lote (unico caminho de exclusao) ----------
+function deleteLot(code){openDeleteLotModal(code);}
+function deleteSharedLot(code){openDeleteLotModal(code);}
+function openDeleteLotModal(code){
+  var item=libItemByCode(code);
+  if(!item&&state.lots[code]){var l0=state.lots[code];item={code:code,title:l0.title,cardCount:l0.cards.length,source:'local',savedBy:'',savedAt:0};}
+  if(!item)return;
+  var inShared=item.source!=='local';
+  var nPl=state.players.filter(function(p){return p.lotCode===code;}).length;
+  var savedLine=inShared&&item.savedAt?'Salvo'+(item.savedBy?' por '+escHtml(item.savedBy):'')+' em '+fmtLong(item.savedAt):(state.lots[code]?'Criado em '+fmtLong(lotTime(state.lots[code])):'');
+  var text=inShared
+    ?'Este histórico é compartilhado. O lote será apagado do servidor e deixará de aparecer em todos os aparelhos de todas as pessoas que usam o Bingo Master.'
+    :'O lote e suas cartelas serão apagados deste aparelho.';
+  if(nPl)text+=' Os <b>'+nPl+' jogador'+(nPl>1?'es':'')+'</b> deste lote neste aparelho também serão removidos.';
+  var d=openDialog({role:'alertdialog',labelledby:'dlT',describedby:'dlM',className:'del-dialog',initialFocus:'#dlCancel',html:
+    '<div class="ui-ic">'+libIcon('warn')+'</div>'+
+    '<h2 class="ui-title" id="dlT">'+(inShared?'Excluir o lote '+code+' para todos?':'Excluir o lote '+code+' deste aparelho?')+'</h2>'+
+    '<div class="del-lot"><span class="lib-code">'+code+'</span><div><b>'+escHtml(item.title)+' · '+item.cardCount+' cartela'+(item.cardCount===1?'':'s')+'</b>'+(savedLine?'<small>'+savedLine+'</small>':'')+'</div></div>'+
+    '<p class="ui-msg" id="dlM">'+text+'</p>'+
+    '<div class="del-warn">Não dá para desfazer. Cartelas já impressas continuam valendo, mas não poderão mais ser reimpressas pelo sistema.</div>'+
+    '<button type="button" class="btn btn-gold" id="dlPdf">'+libIcon('download')+'Baixar PDF antes de excluir</button>'+
+    '<div class="field"><label for="dlInput">Para confirmar, digite o código do lote: <b>'+code+'</b></label><input id="dlInput" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="12"></div>'+
+    '<div class="ui-actions"><button type="button" class="btn btn-secondary" id="dlCancel" data-close>Cancelar</button><button type="button" class="btn btn-danger-solid" id="dlGo" disabled>'+libIcon('trash')+'Excluir definitivamente</button></div>'});
+  var inp=d.el.querySelector('#dlInput'),go=d.el.querySelector('#dlGo');
+  inp.addEventListener('input',function(){go.disabled=inp.value.trim().toUpperCase()!==code;});
+  inp.addEventListener('keydown',function(e){if(e.key==='Enter'&&!go.disabled){e.preventDefault();go.click();}});
+  d.el.querySelector('#dlPdf').addEventListener('click',function(){
+    var b=this;b.disabled=true;
+    ensureLocalLot(code).then(function(lot){
+      b.disabled=false;
+      if(!lot){notify('Não foi possível baixar as cartelas deste lote.','danger','Erro no PDF');return;}
+      exportPDF(null,lot);
+    });
+  });
+  go.addEventListener('click',function(){
+    if(inp.value.trim().toUpperCase()!==code)return;
+    go.disabled=true;go.innerHTML='Excluindo…';
+    performDeleteLot(code,inShared).then(function(ok){
+      if(ok)d.close(true);
+      else{go.disabled=false;go.innerHTML=libIcon('trash')+'Excluir definitivamente';}
+    });
+  });
+}
+function performDeleteLot(code,inShared){
+  var visible=getLibraryLots().filter(libMatches).map(function(x){return x.code;});
+  var i=visible.indexOf(code);
+  var next=visible[i+1]||visible[i-1]||null;
+  function finish(){
+    if(state.lots[code])doDeleteLot(code);
+    sharedLots=sharedLots.filter(function(s){return s.code!==code;});
+    if(libSel===code){libSel=next;if(next&&state.lots[next]){state.printLot=next;saveState();}}
+    renderLibrary();
+    if(!libSel)closeMobileDetail(true);
+    notify('Lote '+code+' excluído.','success','Excluído');
+    return true;
+  }
+  if(!inShared)return Promise.resolve(finish());
+  return slRequest('DELETE','/lots/'+encodeURIComponent(code),undefined,{'X-Confirm-Code':code}).then(function(r){
+    if(r.status===200||r.status===404){finish();loadSharedLots();return true;}
+    notify('Não foi possível excluir do histórico agora. Nada foi apagado.','danger','Erro ao excluir');return false;
+  }).catch(function(){notify('Sem conexão com o servidor. Nada foi apagado.','danger','Erro ao excluir');return false;});
+}
+
+// ---------- Painel Novo lote ----------
+function setSelectValue(id,v){var s=document.getElementById(id);if(s)s.value=String(v);}
+function openNewLotPanel(fromCode){
+  if(fromCode&&!state.lots[fromCode]){
+    ensureLocalLot(fromCode).then(function(l){if(l){renderLibrary();openNewLotPanel(fromCode);}else notify('Não foi possível ler a configuração do lote '+fromCode+'.','danger','Erro');});
+    return;
+  }
+  var ov=document.getElementById('newLotOverlay');if(!ov||!ov.hidden)return;
+  if(fromCode){
+    var lot=state.lots[fromCode];
+    document.getElementById('cardTitle').value=lot.title&&lot.title!=='BINGO'?lot.title:'';
+    setSelectValue('maxNum',lot.maxNum||75);
+    setSelectValue('gridSize',lot.gridSize||5);
+    document.getElementById('freeCell').checked=lot.gridSize===5?!!lot.hasFreeCell:true;
+    document.getElementById('cardQty').value=Math.min(50,Math.max(1,lot.cards.length||4));
+  }
+  var share=true;try{share=localStorage.getItem('bmp3_autoShare')!=='0';}catch(e){}
+  document.getElementById('nlShare').checked=share;
+  document.getElementById('nlTitle').textContent=fromCode?'Novo lote parecido com '+fromCode:'Novo lote de cartelas';
+  syncSegments();renderPreview();
+  showStaticOverlay(ov,document.getElementById('cardTitle'));
+}
+function closeNewLotPanel(noFocus){var ov=document.getElementById('newLotOverlay');if(ov)hideStaticOverlay(ov,noFocus);}
+(function(){
+  var ov=document.getElementById('newLotOverlay');
+  if(ov)ov.addEventListener('click',function(e){if(e.target===ov)closeNewLotPanel();});
+  var q=document.getElementById('nlQuick');
+  if(q)q.addEventListener('click',function(e){
+    var b=e.target.closest('[data-q]');if(!b)return;
+    var inp=document.getElementById('cardQty');inp.value=b.dataset.q;inp.dispatchEvent(new Event('input',{bubbles:true}));
+  });
+  var sh=document.getElementById('nlShare');
+  if(sh)sh.addEventListener('change',function(){try{localStorage.setItem('bmp3_autoShare',sh.checked?'1':'0');}catch(e){}});
+})();
+function submitNewLot(){
+  var share=document.getElementById('nlShare').checked;
+  try{localStorage.setItem('bmp3_autoShare',share?'1':'0');}catch(e){}
+  var qty=getQty();
+  generateCards();
+  var code=state.printLot;
+  closeNewLotPanel(true);
+  libSel=code;libFilter='all';libQuery='';
+  var s=document.getElementById('libSearch');if(s)s.value='';
+  showPage('pageCards');
+  renderLibrary();
+  if(isNarrow())openMobileDetail();
+  else{var it=document.querySelector('[data-fk="item-'+code+'"]');if(it){it.focus();}}
+  notify('Lote '+code+' criado com '+qty+' cartela'+(qty>1?'s':'')+'.','success','Lote criado');
+  if(share&&state.lots[code]){
+    var name='';try{name=localStorage.getItem('bmp3_savedBy')||'';}catch(e){}
+    doSaveLot(lotPayload(state.lots[code],name),false,null,null,true);
+  }
+}
+
+// ---------- Preferencias de impressao ----------
+function openPrintPrefs(){
+  openDialog({labelledby:'ppT',html:
+    '<div class="ui-ic">'+libIcon('print')+'</div>'+
+    '<h2 class="ui-title" id="ppT">Preferências de impressão</h2>'+
+    '<p class="ui-msg">Quantas cartelas por folha A4 ao imprimir e ao baixar o PDF.</p>'+
+    '<div class="seg" data-for="printLayout" role="radiogroup" aria-label="Cartelas por folha A4" style="margin-top:16px">'+
+      '<button type="button" data-value="4" role="radio">4 por folha</button><button type="button" data-value="6" role="radio">6 por folha</button></div>'+
+    '<p class="hint">4 por folha: cartelas maiores. 6 por folha: economiza papel.</p>'+
+    '<div class="ui-actions"><button type="button" class="btn btn-primary" data-close>Pronto</button></div>'});
+  syncSegments();
+}
+
+// ---------- Status do historico (barra lateral e topo no celular) ----------
+function renderHistStatus(){
+  var st=sharedOk===true?'on':sharedOk===false?'off':'wait';
+  var sub=sharedOk===true?sharedUnpinnedCount()+' de '+SHARED_MAX+' lotes · '+agoText(sharedLastOk):sharedOk===false?'Indisponível no momento':'Conectando…';
+  document.querySelectorAll('.hist-status').forEach(function(b){
+    b.dataset.status=st;
+    var s=b.querySelector('.hist-sub');if(s)s.textContent=sub;
+    b.setAttribute('aria-label','Histórico compartilhado: '+sub+'. Abrir lotes do histórico');
+  });
+}
+function goSharedFilter(){
+  libFilter='shared';libQuery='';var s=document.getElementById('libSearch');if(s)s.value='';
+  showPage('pageCards');renderLibrary();
+}
+setInterval(renderHistStatus,30000);
+setInterval(function(){if(document.visibilityState==='visible')loadSharedLots();},120000);
+
+// Atualiza a lista ao abrir a tela Cartelas e ao voltar para a aba
 (function(){
   var origShow=window.showPage;
   if(origShow){
-    window.showPage=function(p){origShow(p);if(p==='pageCards'&&!sharedLotsLoaded)loadSharedLots();};
+    window.showPage=function(p){
+      closeDropdown(false);
+      if(p!=='pageCards')closeMobileDetail(true);
+      origShow(p);
+      if(p==='pageCards'){renderLibrary();loadSharedLots();}
+    };
   }
-  document.addEventListener('visibilitychange',function(){
-    if(document.visibilityState==='visible'){var pg=document.querySelector('.page.active');if(pg&&pg.id==='pageCards')loadSharedLots();}
-  });
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')loadSharedLots();});
 })();
 
-// ===== NUVEM: conta + sincronizacao entre aparelhos =====
-// O navegador continua sendo a copia principal (funciona sem internet).
-// Com login, cada alteracao vai para o banco da hospedagem e os outros aparelhos recebem em segundos.
-var cloud={token:null,email:'',name:'',version:0,pending:false,status:'off',available:false,pushTimer:null,busy:false,applying:false,lastSync:null};
-(function(){try{var c=JSON.parse(localStorage.getItem('bmp3_cloud')||'null');if(c&&c.token){cloud.token=c.token;cloud.email=c.email||'';cloud.name=c.name||'';cloud.version=c.version||0;cloud.pending=!!c.pending;}}catch(e){}})();
-function cloudPersist(){
-  try{
-    if(cloud.token)localStorage.setItem('bmp3_cloud',JSON.stringify({token:cloud.token,email:cloud.email,name:cloud.name,version:cloud.version,pending:cloud.pending}));
-    else localStorage.removeItem('bmp3_cloud');
-  }catch(e){}
-}
-function cloudRequest(method,path,body){
-  var opts={method:method,headers:{'Content-Type':'application/json'},cache:'no-store'};
-  if(cloud.token)opts.headers.Authorization='Bearer '+cloud.token;
-  if(body!==undefined)opts.body=JSON.stringify(body);
-  return fetch('/api'+path,opts).then(function(r){
+// ===== MIGRACAO DA NUVEM ANTIGA (contas com login, v2.8) =====
+// Quem ainda tem uma sessao da nuvem antiga neste navegador recebe, uma unica vez, os lotes
+// guardados la: eles entram neste aparelho e os que faltam vao para o historico compartilhado
+// (respeitando o limite de 15). Nada e apagado do servidor.
+function migrateOldCloud(){
+  var c=null;try{c=JSON.parse(localStorage.getItem('bmp3_cloud')||'null');}catch(e){}
+  if(!c||!c.token||typeof fetch!=='function')return;
+  var auth={Authorization:'Bearer '+c.token};
+  fetch('/api/state',{headers:auth,cache:'no-store'}).then(function(r){
     return r.json().catch(function(){return{};}).then(function(j){return{status:r.status,body:j};});
-  });
-}
-// Dados que vao para a nuvem (sem o que e so desta tela)
-function cloudPayload(){
-  var d=JSON.parse(JSON.stringify(state));
-  delete d._lastCards;delete d._archivedNow;delete d.gameOver;
-  return d;
-}
-// Junta dois estados: nada criado em um aparelho se perde; exclusoes valem nos dois
-function mergeStates(server,local){
-  server=server||{};local=local||{};
-  var out=JSON.parse(JSON.stringify(server));
-  out.lots=out.lots||{};out.players=out.players||[];
-  var delL=Object.assign({},server.deletedLots||{},local.deletedLots||{});
-  var delP=Object.assign({},server.deletedPlayers||{},local.deletedPlayers||{});
-  Object.keys(local.lots||{}).forEach(function(code){
-    var l=local.lots[code],s=out.lots[code];
-    if(!s||((l._ts||0)>(s._ts||0)))out.lots[code]=JSON.parse(JSON.stringify(l));
-  });
-  Object.keys(delL).forEach(function(code){delete out.lots[code];});
-  var ids={};out.players.forEach(function(p){ids[p.id]=true;});
-  (local.players||[]).forEach(function(p){if(!ids[p.id]){out.players.push(JSON.parse(JSON.stringify(p)));ids[p.id]=true;}});
-  out.players=out.players.filter(function(p){return !delP[p.id]&&out.lots[p.lotCode];});
-  out.deletedLots=delL;out.deletedPlayers=delP;
-  out.wordLists=Object.assign({},local.wordLists||{},server.wordLists||{});
-  out.archivedWordLots=Object.assign({},local.archivedWordLots||{},server.archivedWordLots||{});
-  if(!out.prizeConfig&&local.prizeConfig)out.prizeConfig=local.prizeConfig;
-  // o lote aberto neste aparelho continua aberto
-  if(local.currentLot&&out.lots[local.currentLot])out.currentLot=local.currentLot;
-  else if(!out.lots[out.currentLot]){var ks=Object.keys(out.lots);out.currentLot=ks.length?ks[ks.length-1]:null;}
-  return out;
-}
-function sameData(a,b){return JSON.stringify(a)===JSON.stringify(b);}
-// Substitui o estado local e redesenha tudo
-function applyRemoteState(data){
-  cloud.applying=true;
-  try{
-    var keepLast=state._lastCards;
-    state=Object.assign({drawnNumbers:[],players:[],wordLists:{},maxNum:75,mode:'numbers',gridSize:5,lots:{},currentLot:null},data);
-    state._lastCards=keepLast||[];
-    normalizeState();
-    var lot=state.currentLot?state.lots[state.currentLot]:null;
-    state.drawnNumbers=lot&&Array.isArray(lot.drawnNumbers)?lot.drawnNumbers.slice():[];
-    if(lot)state.maxNum=lot.maxNum||75;
-    state.gameOver=false;
-    try{localStorage.setItem('bmp3',JSON.stringify(state));}catch(e){}
-    applyPrizeConfig();
-    initDrawBoard(state.maxNum);renderLotButtons();updateLotUI();
-  }finally{cloud.applying=false;}
-}
-function setCloudStatus(s){cloud.status=s;renderCloudUI();}
-function scheduleCloudPush(){
-  if(cloud.applying||!cloud.token)return;
-  cloud.pending=true;cloudPersist();
-  setCloudStatus('saving');
-  clearTimeout(cloud.pushTimer);
-  cloud.pushTimer=setTimeout(cloudPush,700);
-}
-function cloudPush(attempt){
-  attempt=attempt||0;
-  if(!cloud.token||!cloud.available)return Promise.resolve();
-  if(cloud.busy){clearTimeout(cloud.pushTimer);cloud.pushTimer=setTimeout(cloudPush,600);return Promise.resolve();}
-  cloud.busy=true;
-  var sent=cloudPayload();
-  return cloudRequest('PUT','/state',{data:sent,baseVersion:cloud.version}).then(function(r){
-    cloud.busy=false;
-    if(r.status===200){
-      cloud.version=r.body.version;cloud.lastSync=new Date();
-      cloud.pending=!sameData(sent,cloudPayload()); // mudou algo enquanto enviava?
-      cloudPersist();
-      if(cloud.pending)scheduleCloudPush();else setCloudStatus('synced');
-    }else if(r.status===409&&attempt<3){
-      // outro aparelho salvou antes: junta os dois e tenta de novo
-      var merged=mergeStates(r.body.data,cloudPayload());
-      cloud.version=r.body.version||0;
-      applyRemoteState(merged);
-      return cloudPush(attempt+1);
-    }else if(r.status===401){cloudSessionExpired();}
-    else{setCloudStatus('offline');cloud.pushTimer=setTimeout(cloudPush,15000);}
-  }).catch(function(){cloud.busy=false;setCloudStatus('offline');cloud.pushTimer=setTimeout(cloudPush,15000);});
-}
-// Busca alteracoes feitas em outro aparelho
-function cloudPull(initial){
-  if(!cloud.token||!cloud.available||cloud.busy)return Promise.resolve();
-  return cloudRequest('GET','/state').then(function(r){
-    if(r.status===401){cloudSessionExpired();return;}
-    if(r.status!==200){setCloudStatus('offline');return;}
-    var srv=r.body;
-    if(!srv.data){ // conta nova: envia o que ja existe neste navegador
-      cloud.version=0;cloudPersist();
-      if(Object.keys(state.lots).length){cloud.pending=true;return cloudPush().then(function(){if(initial)notify('Seus lotes deste navegador foram salvos na nuvem.','success','Tudo salvo');});}
-      setCloudStatus('synced');return;
+  }).then(function(r){
+    if(r.status===401){try{localStorage.removeItem('bmp3_cloud');}catch(e){}return;} // sessao expirada: nada para buscar
+    if(r.status!==200)return; // tenta de novo na proxima abertura
+    var data=r.body&&r.body.data,added=[],cloudCodes=[];
+    if(data&&data.lots&&typeof data.lots==='object'){
+      Object.keys(data.lots).forEach(function(code){
+        var l=data.lots[code];
+        if(!l||l.mode==='words'||!Array.isArray(l.cards)||!l.cards.length)return;
+        if(state.deletedLots&&state.deletedLots[code])return; // excluido de proposito neste aparelho
+        cloudCodes.push(code);
+        if(state.lots[code])return;
+        state.lots[code]=JSON.parse(JSON.stringify(l));added.push(code);
+      });
+      var ids={};state.players.forEach(function(p){ids[p.id]=true;});
+      (data.players||[]).forEach(function(p){if(p&&added.indexOf(p.lotCode)>=0&&!ids[p.id]){state.players.push(JSON.parse(JSON.stringify(p)));ids[p.id]=true;}});
+      if(added.length){normalizeState();saveState();renderLotButtons();updateLotUI();}
     }
-    if(initial||cloud.pending){
-      var local=cloudPayload(),merged=mergeStates(srv.data,local);
-      cloud.version=srv.version;
-      if(!sameData(merged,srv.data)){applyRemoteState(merged);cloud.pending=true;cloudPersist();return cloudPush();}
-      if(!sameData(merged,local))applyRemoteState(merged);
-      cloud.pending=false;cloud.lastSync=new Date();cloudPersist();setCloudStatus('synced');return;
-    }
-    if(srv.version!==cloud.version){
-      cloud.version=srv.version;cloud.lastSync=new Date();cloudPersist();
-      applyRemoteState(mergeStates(srv.data,{currentLot:state.currentLot}));
-    }
-    cloud.lastSync=new Date();setCloudStatus('synced');
-  }).catch(function(){setCloudStatus('offline');});
+    try{
+      localStorage.setItem('bmp3_cloud_migrated',JSON.stringify({at:new Date().toISOString(),account:c.email||'',lots:cloudCodes,addedLocal:added}));
+      localStorage.removeItem('bmp3_cloud');
+    }catch(e){}
+    fetch('/api/logout',{method:'POST',headers:auth}).catch(function(){});
+    return uploadMigratedLots(cloudCodes,c.name||'').then(function(res){
+      if(!cloudCodes.length)return;
+      var msg=cloudCodes.length+' lote(s) da nuvem antiga estão neste aparelho';
+      if(res.sent.length)msg+='; '+res.sent.length+' enviado(s) ao histórico compartilhado';
+      if(res.kept.length)msg+='; '+res.kept.length+' ficaram só neste aparelho (limite de '+SHARED_MAX+')';
+      notify(msg+'.','success','Lotes migrados');
+    });
+  }).catch(function(){});
 }
-function cloudSessionExpired(){
-  cloud.token=null;cloud.version=0;cloud.pending=false;cloudPersist();setCloudStatus('off');
-  notify('Sua sessão expirou. Entre de novo para continuar salvando na nuvem. Seus lotes continuam neste aparelho.','warn','Entre novamente');
-}
-function cloudLogout(){
-  var tk=cloud.token;
-  cloudRequest('POST','/logout').catch(function(){});
-  cloud.token=null;cloud.email='';cloud.name='';cloud.version=0;cloud.pending=false;cloudPersist();setCloudStatus('off');
-  notify('Você saiu da conta. Os lotes continuam neste aparelho.','info','Desconectado');
-  return tk;
-}
-// ---------- Tela de conta ----------
-var CLOUD_ERRORS={invalid_email:'Digite um e-mail válido.',weak_password:'A senha precisa ter pelo menos 6 caracteres.',email_taken:'Já existe uma conta com esse e-mail. Use Entrar.',bad_credentials:'E-mail ou senha incorretos.',too_many_attempts:'Muitas tentativas. Aguarde alguns minutos e tente de novo.',db_not_configured:'O salvamento na nuvem ainda não foi ativado no servidor.',db_starting:'O servidor está iniciando. Tente em alguns segundos.',db_error:'O banco de dados não respondeu. Tente mais tarde.',server_error:'Erro no servidor. Tente de novo.'};
-function openAccount(){
-  if(cloud.token){openAccountMenu();return;}
-  var ov=document.createElement('div');ov.className='ui-overlay no-print';
-  ov.innerHTML='<div class="ui-dialog acc-dialog" role="dialog" aria-modal="true" aria-labelledby="accT">'+
-    '<div class="ui-ic">'+CLOUD_ICON+'</div>'+
-    '<h2 class="ui-title" id="accT">Salvar na nuvem</h2>'+
-    '<p class="ui-msg">Entre para guardar seus lotes, jogadores e sorteios e acessá-los de qualquer aparelho.</p>'+
-    '<div class="seg acc-tabs" role="tablist"><button type="button" class="active" data-mode="login">Entrar</button><button type="button" data-mode="register">Criar conta</button></div>'+
-    '<form class="acc-form" novalidate>'+
-      '<div class="field acc-name" hidden><label for="accName">Seu nome</label><input id="accName" autocomplete="name" placeholder="Ex: Eduardo"></div>'+
-      '<div class="field"><label for="accEmail">E-mail</label><input id="accEmail" type="email" autocomplete="email" placeholder="voce@email.com" required></div>'+
-      '<div class="field"><label for="accPass">Senha</label><input id="accPass" type="password" autocomplete="current-password" placeholder="Mínimo 6 caracteres" required></div>'+
-      '<p class="acc-err" role="alert" hidden></p>'+
-      '<div class="ui-actions"><button type="button" class="btn btn-secondary" data-act="close">Agora não</button><button type="submit" class="btn btn-primary acc-submit">Entrar</button></div>'+
-    '</form></div>';
-  var mode='login';
-  var form=ov.querySelector('form'),err=ov.querySelector('.acc-err'),submit=ov.querySelector('.acc-submit');
-  function close(){document.removeEventListener('keydown',onKey,true);ov.remove();}
-  function onKey(e){if(e.key==='Escape'){e.preventDefault();close();}}
-  function setMode(m){
-    mode=m;
-    ov.querySelectorAll('.acc-tabs button').forEach(function(b){b.classList.toggle('active',b.dataset.mode===m);});
-    ov.querySelector('.acc-name').hidden=m!=='register';
-    ov.querySelector('#accPass').setAttribute('autocomplete',m==='register'?'new-password':'current-password');
-    submit.textContent=m==='register'?'Criar conta':'Entrar';err.hidden=true;
-  }
-  ov.querySelector('.acc-tabs').addEventListener('click',function(e){var b=e.target.closest('button');if(b)setMode(b.dataset.mode);});
-  ov.addEventListener('click',function(e){if(e.target===ov||e.target.closest('[data-act="close"]'))close();});
-  form.addEventListener('submit',function(e){
-    e.preventDefault();
-    var email=ov.querySelector('#accEmail').value.trim(),pass=ov.querySelector('#accPass').value,name=ov.querySelector('#accName').value.trim();
-    err.hidden=true;submit.disabled=true;submit.textContent='Aguarde…';
-    cloudRequest('POST',mode==='register'?'/register':'/login',{email:email,password:pass,name:name}).then(function(r){
-      submit.disabled=false;submit.textContent=mode==='register'?'Criar conta':'Entrar';
-      if(r.status!==200){err.textContent=CLOUD_ERRORS[r.body.error]||'Não foi possível entrar agora.';err.hidden=false;return;}
-      cloud.token=r.body.token;cloud.email=r.body.user.email;cloud.name=r.body.user.name||'';cloud.version=0;cloud.pending=true;cloudPersist();
-      close();
-      notify('Conectado como '+cloud.email+'. Sincronizando seus lotes…','success',mode==='register'?'Conta criada':'Bem-vindo');
-      setCloudStatus('saving');
-      cloudPull(true);
-    }).catch(function(){submit.disabled=false;submit.textContent=mode==='register'?'Criar conta':'Entrar';err.textContent='Sem conexão com o servidor.';err.hidden=false;});
+function uploadMigratedLots(codes,name){
+  var res={sent:[],kept:[]};
+  if(!codes.length)return Promise.resolve(res);
+  return loadSharedLots().then(function(ok){
+    if(!ok){res.kept=codes.slice();return res;}
+    var todo=codes.filter(function(c){return !sharedByCode(c)&&state.lots[c];})
+      .sort(function(a,b){return lotTime(state.lots[b])-lotTime(state.lots[a]);});
+    var free=SHARED_MAX-sharedUnpinnedCount();
+    var chain=Promise.resolve();
+    todo.forEach(function(code){
+      chain=chain.then(function(){
+        if(free<=0){res.kept.push(code);return;}
+        return slRequest('POST','/lots',lotPayload(state.lots[code],name)).then(function(r){
+          if(r.status===200){free--;res.sent.push(code);state.lots[code].savedAt=new Date().toISOString();state.lots[code].savedBy=name;}
+          else res.kept.push(code);
+        }).catch(function(){res.kept.push(code);});
+      });
+    });
+    return chain.then(function(){saveState();return loadSharedLots();}).then(function(){return res;});
   });
-  document.addEventListener('keydown',onKey,true);
-  document.body.appendChild(ov);
-  setTimeout(function(){ov.querySelector('#accEmail').focus();},30);
-}
-function openAccountMenu(){
-  var when=cloud.lastSync?cloud.lastSync.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}):'—';
-  var st={synced:'Tudo sincronizado',saving:'Salvando alterações…',offline:'Sem conexão — salvo neste aparelho e será enviado quando voltar'}[cloud.status]||'';
-  uiConfirm({title:'Sua conta',tone:'success',icon:'success',
-    html:'<b>'+escHtml(cloud.name||cloud.email)+'</b>'+(cloud.name?'<br>'+escHtml(cloud.email):'')+'<br><br>'+escHtml(st)+'<br>Última sincronização: '+when+'<br>Lotes na conta: <b>'+Object.keys(state.lots).length+'</b>',
-    confirmText:'Sincronizar agora',cancelText:'Sair da conta'}).then(function(ok){
-    if(ok){setCloudStatus('saving');cloudPull(true);}
-  });
-  // "Sair da conta" usa o botao cancelar: distinguimos o clique para nao deslogar com Esc
-  setTimeout(function(){
-    var b=document.querySelector('.ui-dialog [data-act="no"]');
-    if(b)b.addEventListener('click',function(){cloudLogout();},{once:true});
-  },0);
-}
-var CLOUD_ICON='<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 19H7a5 5 0 1 1 .9-9.9A6 6 0 0 1 19.5 11 4 4 0 0 1 17.5 19z"/></svg>';
-function renderCloudUI(){
-  var label={off:'Salvar na nuvem',synced:'Salvo na nuvem',saving:'Salvando…',offline:'Sem conexão'}[cloud.token?cloud.status:'off'];
-  var sub=cloud.token?(cloud.name||cloud.email):'Acesse de qualquer aparelho';
-  document.querySelectorAll('.cloud-btn').forEach(function(b){
-    b.hidden=!cloud.available;
-    b.dataset.status=cloud.token?cloud.status:'off';
-    var t=b.querySelector('.cloud-label');if(t)t.textContent=label;
-    var s=b.querySelector('.cloud-sub');if(s)s.textContent=sub;
-    b.setAttribute('aria-label',label+(cloud.token?' — '+sub:''));
-    b.title=label+(cloud.token?' · '+sub:'');
-  });
-}
-function cloudInit(){
-  renderCloudUI();
-  if(typeof fetch!=='function')return;
-  cloudRequest('GET','/health').then(function(r){
-    cloud.available=r.status===200&&!!r.body.cloud;
-    renderCloudUI();
-    if(cloud.available&&cloud.token){setCloudStatus('saving');cloudPull(true);}
-  }).catch(function(){cloud.available=false;renderCloudUI();});
-  // recebe alteracoes de outros aparelhos
-  setInterval(function(){if(document.visibilityState==='visible')cloudPull(false);},10000);
-  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')cloudPull(cloud.pending);});
-  window.addEventListener('online',function(){if(cloud.token){setCloudStatus('saving');cloudPull(true);}});
 }
 
 // ===== INIT =====
@@ -3877,11 +4627,12 @@ function cloudInit(){
   }
   applyPrizeConfig();syncRankViewSeg();renderWinnerHistory();
   initDrawBoard(state.maxNum);renderLotButtons();updateLotUI();
-  if(state.printLot&&state.lots[state.printLot])renderLotCards();
   syncSegments();renderPreview();kpSync();renderAbout();
   if(state._archivedNow){delete state._archivedNow;saveState();}
+  renderLibrary();
+  handleOpenHash();
   loadSharedLots();
-  cloudInit();
+  migrateOldCloud();
 })();
 </script>
 </body>
